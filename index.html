@@ -512,25 +512,46 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     return fetch("/api/vote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ fn: fn }, body || {})) })
       .then(function (r) { if (!r.ok) return r.text().then(function (t) { throw new Error(t || r.status); }); return r.text().then(function (t) { return t ? JSON.parse(t) : null; }); });
   }
-  function loadResults() {
-    return api("resultados").then(function (rows) {
-      var by = {}, t = 0;
-      (rows || []).forEach(function (r) { by[r.casa] = Number(r.n); t += Number(r.n); });
-      state.by = by; state.total = t; render();
-    });
+  state.seq = 0; state.inflight = 0; state.chain = Promise.resolve();
+  function applyState(res, mine) {
+    var by = {}, t = 0;
+    (res || []).forEach(function (r) { by[r.casa] = Number(r.n); t += Number(r.n); });
+    state.by = by; state.total = t;
+    if (mine !== undefined) state.mine = mine ? { casa: mine } : null;
+    render();
   }
-  function loadMine() {
-    return api("mi_voto", { p_dev: DEV }).then(function (c) { state.mine = c ? { casa: c } : null; render(); });
+  function loadState() {
+    return api("estado", { p_dev: DEV }).then(function (r) { if (!state.inflight) applyState(r.res, r.mine); });
+  }
+  function bump(casa, d) {
+    if (!casa) return;
+    state.by[casa] = Math.max(0, (state.by[casa] || 0) + d);
+    state.total = Math.max(0, state.total + d);
   }
 
+  // Interfície optimista: el vot es veu al moment i el servidor es posa al dia en segon pla.
   function castVote(id, ev) {
-    if (!state.canVote || state.busy) return;
-    var on = (state.mine || {}).casa !== id;
-    state.busy = true;
-    var p = on ? api("votar", { p_dev: DEV, p_casa: id }) : api("quitar_voto", { p_dev: DEV });
-    p.then(function () { state.mine = on ? { casa: id } : null; showNotice("", false); render(); if (on && ev) burst(ev.clientX, ev.clientY); return loadResults(); })
-     .catch(function (e) { showNotice(/massa/.test(String(e && e.message)) ? "Hi ha massa vots des d'aquesta connexió. Prova-ho amb dades mòbils." : "No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true); })
-     .then(function () { state.busy = false; });
+    if (!state.canVote) return;
+    var prev = state.mine;
+    var on = !prev || prev.casa !== id;
+    if (prev) bump(prev.casa, -1);
+    if (on) bump(id, 1);
+    state.mine = on ? { casa: id } : null;
+    showNotice("", false); render();
+    if (on && ev) burst(ev.clientX, ev.clientY);
+    var seq = ++state.seq;
+    state.inflight++;
+    state.chain = state.chain
+      .then(function () { return on ? api("votar", { p_dev: DEV, p_casa: id }) : api("quitar_voto", { p_dev: DEV }); })
+      .then(function (r) { if (seq === state.seq && r && r.res) applyState(r.res); return false; })
+      .catch(function (e) {
+        showNotice(/massa/.test(String(e && e.message)) ? "Hi ha massa vots des d'aquesta connexió. Prova-ho amb dades mòbils." : "No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true);
+        return true;
+      })
+      .then(function (failed) {
+        state.inflight = Math.max(0, state.inflight - 1);
+        if (failed) return loadState().catch(function () {});
+      });
   }
   HOUSES.forEach(buildP); HOUSES.forEach(buildD);
   if (!configured) {
@@ -538,9 +559,8 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     render();
   } else {
     state.canVote = true; render();
-    loadResults().catch(function () { showNotice("No s'han pogut carregar els vots.", true); });
-    loadMine().catch(function () {});
-    setInterval(function () { if (!document.hidden && !state.busy) loadResults().catch(function () {}); }, 15000);
+    loadState().catch(function () { showNotice("No s'han pogut carregar els vots.", true); });
+    setInterval(function () { if (!document.hidden && !state.inflight) loadState().catch(function () {}); }, 15000);
   }
 })();
 </script>

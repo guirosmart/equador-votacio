@@ -21,7 +21,9 @@ Limitacions: es pot votar més d'un cop esborrant les dades del navegador, amb u
 
 ```
 vercel deploy --prod              # desplegar els canvis
+vercel env pull .env.local        # un cop, per tenir el token del Blob en local
 vercel blob list                  # veure els vots (un arxiu per vot)
-vercel blob empty-store           # esborrar tots els vots (a l'store connectat)
+vercel blob empty-store           # esborrar tots els vots
 ```
+No pugis mai `.env.local` a GitHub (ja és al `.gitignore`).
 Per canviar preus, textos o fotos, edita `index.html` (les dades de les cases són a dalt del bloc `<script>`) i torna a desplegar.
