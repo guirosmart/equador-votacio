@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Votació Pas d'Equador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&display=swap">
+<style>
+[hidden]{display:none!important}img{max-width:100%}
+/* Concepte: nit d'estiu a la finca. Foto a sang amb el sol de l'equador a l'horitzó, titular condensat gegant, panells de vidre sobre blau nit, vots en directe i comparativa cara a cara. */
+:root {
+  --bg: #090f1d;
+  --bg2: #0e182b;
+  --panel: rgba(255,255,255,.055);
+  --panel2: rgba(255,255,255,.1);
+  --line: rgba(255,255,255,.13);
+  --ink: #f5f3ec;
+  --muted: #9aa8bf;
+  --accent: #ffd24a;
+  --grad: linear-gradient(135deg, #ffe375 0%, #ffb02e 55%, #ff8a1f 100%);
+  --grad-ink: #2a1800;
+  --grad-text: linear-gradient(135deg, #ffe375 0%, #ffb02e 55%, #ff8a1f 100%);
+  --glow: 0 10px 40px -8px rgba(255,176,46,.45);
+  --ok: #55e8b0; --ok-bg: rgba(85,232,176,.14);
+  --warn: #ffbf5e; --warn-bg: rgba(255,191,94,.14);
+  --shadow: 0 24px 60px -20px rgba(0,0,0,.7);
+  --nav: rgba(9,15,29,.72);
+  --font-display: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eef2f9; --bg2: #e2e9f5; --panel: rgba(255,255,255,.78); --panel2: #ffffff; --line: rgba(16,26,46,.12);
+    --ink: #101a2e; --muted: #56627a; --accent: #b25e00; --glow: 0 10px 30px -10px rgba(255,138,31,.55);
+    --grad-text: linear-gradient(135deg, #e48a00 0%, #cc5a00 100%);
+    --ok: #0f7a52; --ok-bg: rgba(15,122,82,.12); --warn: #8f5a05; --warn-bg: rgba(143,90,5,.12);
+    --shadow: 0 20px 50px -24px rgba(16,26,46,.35); --nav: rgba(238,242,249,.78);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eef2f9; --bg2: #e2e9f5; --panel: rgba(255,255,255,.78); --panel2: #ffffff; --line: rgba(16,26,46,.12);
+  --ink: #101a2e; --muted: #56627a; --accent: #b25e00; --glow: 0 10px 30px -10px rgba(255,138,31,.55);
+  --grad-text: linear-gradient(135deg, #e48a00 0%, #cc5a00 100%);
+  --ok: #0f7a52; --ok-bg: rgba(15,122,82,.12); --warn: #8f5a05; --warn-bg: rgba(143,90,5,.12);
+  --shadow: 0 20px 50px -24px rgba(16,26,46,.35); --nav: rgba(238,242,249,.78);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55; overflow-x: hidden; }
+h1, h2, h3, h4, p { margin: 0; }
+button { font: inherit; cursor: pointer; }
+a { color: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.page { width: 100%; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { width: 100%; max-width: 1240px; margin-inline: auto; }
+.sec { padding-block: clamp(36px, 6vw, 72px) 0; }
+.dots { position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px); background-size: 26px 26px; opacity: .8; }
+:root[data-theme="light"] .dots { background-image: radial-gradient(rgba(16,26,46,.08) 1px, transparent 1px); }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .dots { background-image: radial-gradient(rgba(16,26,46,.08) 1px, transparent 1px); } }
+
+.eyebrow { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+.eyebrow::before { content: ""; width: 34px; height: 2px; background: var(--grad); border-radius: 2px; flex: none; }
+.title { font-family: var(--font-display); font-weight: 800; line-height: .92; letter-spacing: -0.05em; font-size: clamp(40px, 7vw, 84px); text-wrap: balance; }
+.sec .sechead { border-top: 1px solid var(--line); padding-top: 16px; }
+.lead-p { color: var(--muted); max-width: 52ch; font-size: 15px; }
+.sechead { display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px; }
+
+/* nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: var(--nav); border-bottom: 1px solid var(--line); }
+.nav::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--nav); z-index: 31; }
+.nav .wrap { display: flex; align-items: center; gap: 22px; height: 62px; }
+.logo { font-family: var(--font-display); font-weight: 800; font-size: 21px; letter-spacing: -0.05em; text-decoration: none; white-space: nowrap; }
+.logo b { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.links { display: flex; gap: 22px; font-size: 13px; font-weight: 400; }
+.links a { text-decoration: none; color: var(--muted); }
+.links a:hover { color: var(--ink); }
+.sp { flex: 1; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 24px; border-radius: 999px; border: 0; font-weight: 600; font-size: 14px; text-decoration: none; background: var(--grad); color: var(--grad-ink); box-shadow: var(--glow); white-space: nowrap; transition: transform .12s, box-shadow .2s; }
+.btn:hover { box-shadow: 0 14px 46px -8px rgba(255,176,46,.65); }
+.btn:active { transform: scale(.97); }
+.btn.line { background: transparent; color: var(--ink); border: 1.5px solid var(--line); box-shadow: none; }
+.btn.line:hover { border-color: var(--accent); }
+.btn.sm { min-height: 40px; padding: 0 18px; font-size: 13px; }
+@media (max-width: 700px) { .links { display: none; } }
+
+.notice { margin-top: 14px; border-radius: 14px; padding: 12px 16px; background: var(--panel2); border: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+.notice.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+
+/* hero */
+.hero { position: relative; isolation: isolate; margin-top: 14px; border-radius: 28px; overflow: hidden; min-height: clamp(520px, 62vw, 760px); display: flex; align-items: flex-end; border: 1px solid var(--line); }
+.hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -2; background: linear-gradient(180deg, rgba(9,15,29,.25) 0%, rgba(9,15,29,.55) 55%, rgba(9,15,29,.96) 100%); }
+.hero::after { content: ""; position: absolute; left: 50%; bottom: -34%; width: 120%; aspect-ratio: 1; transform: translateX(-50%); z-index: -1; background: radial-gradient(circle, rgba(255,176,46,.5) 0%, rgba(255,138,31,.16) 30%, transparent 62%); }
+.hero .in { width: 100%; padding: clamp(20px, 4vw, 52px); display: flex; flex-direction: column; gap: 22px; color: #f5f3ec; }
+.hero .eyebrow { color: #ffd24a; font-weight: 600; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
+.hero h1 { font-family: var(--font-display); font-weight: 900; line-height: .8; letter-spacing: -0.065em; font-size: clamp(60px, 18vw, 230px); }
+.hero h1 span { display: block; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .22em; margin-bottom: -.16em; }
+.hero h1 small { display: block; font-size: .36em; font-weight: 300; letter-spacing: -0.04em; color: #f5f3ec; margin-bottom: .14em; }
+.hero p { max-width: 50ch; font-size: 15px; font-weight: 300; color: #dfe5f1; }
+.hero .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.chipdate { position: absolute; top: 18px; right: 18px; padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 500; background: rgba(9,15,29,.55); border: 1px solid rgba(255,255,255,.25); color: #fff; backdrop-filter: blur(8px); }
+
+/* countdown */
+.cd { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 560px; }
+.cd div { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(10px); border-radius: 18px; padding: 12px 6px 9px; text-align: center; }
+.cd b { display: block; font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 6vw, 52px); line-height: 1; font-variant-numeric: tabular-nums; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cd span { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #c3cde0; }
+
+/* panels */
+.glass { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); }
+.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 760px) { .how { grid-template-columns: 1fr; } }
+.step { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.step i { font-style: normal; font-family: var(--font-display); font-weight: 900; font-size: 44px; line-height: 1; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.step h4 { font-size: 17px; font-weight: 600; }
+.step p { font-size: 13.5px; color: var(--muted); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+.stat { padding: 18px 12px; text-align: center; }
+.stat b { display: block; font-family: var(--font-display); font-weight: 900; font-size: clamp(34px, 6vw, 56px); line-height: 1; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* photo cards */
+.pcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 1000px) { .pcards { grid-template-columns: 1fr; } .pcard { aspect-ratio: 16 / 10; } }
+.pcard { position: relative; isolation: isolate; border-radius: 26px; overflow: hidden; aspect-ratio: 4 / 5; display: flex; flex-direction: column; justify-content: flex-end; color: #f5f3ec; background: var(--bg2); box-shadow: var(--shadow); transition: transform .25s; }
+.pcard:hover { transform: translateY(-4px); }
+.pcard > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform .6s; }
+.pcard:hover > img { transform: scale(1.04); }
+.pcard::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9,15,29,.0) 25%, rgba(9,15,29,.92) 82%); }
+.pcard.mine::after { content: ""; position: absolute; inset: 0; border-radius: 26px; padding: 3px; background: var(--grad); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+.pt { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.badge { font-size: 11px; font-weight: 500; padding: 6px 12px; border-radius: 999px; background: rgba(9,15,29,.6); border: 1px solid rgba(255,255,255,.22); backdrop-filter: blur(8px); color: #fff; }
+.badge { background: rgba(9,15,29,.78); }
+.badge.ok { background: rgba(5,50,36,.82); border-color: rgba(85,232,176,.6); color: #b8f7de; }
+.badge.wait { background: rgba(62,40,4,.85); border-color: rgba(255,191,94,.6); color: #ffe2b0; }
+.pb { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.pb h3 { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 3.4vw, 40px); line-height: .94; letter-spacing: -0.05em; }
+.pb .meta { font-size: 12.5px; font-weight: 300; color: #d4dcec; }
+.lead { align-self: flex-start; font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; background: var(--grad); color: var(--grad-ink); }
+.row { display: flex; align-items: center; gap: 12px; }
+.num { font-family: var(--font-display); font-weight: 900; font-size: 44px; line-height: 1; min-width: 1.1em; font-variant-numeric: tabular-nums; }
+.bar { flex: 1; height: 8px; border-radius: 999px; background: rgba(255,255,255,.2); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--grad); border-radius: 999px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.vote { min-height: 50px; border: 0; border-radius: 999px; font-weight: 600; font-size: 15px; background: rgba(255,255,255,.95); color: #14203a; transition: transform .12s, background .2s; }
+.vote:active { transform: scale(.98); }
+.vote[aria-pressed="true"] { background: var(--grad); color: var(--grad-ink); box-shadow: var(--glow); }
+.vote:disabled { opacity: .55; cursor: not-allowed; }
+.tot { color: var(--muted); font-size: 14px; }
+
+/* compare */
+.cmp { overflow-x: auto; padding: 6px; }
+.cmp table { width: 100%; min-width: 620px; border-collapse: separate; border-spacing: 0; font-size: 14px; font-variant-numeric: tabular-nums; }
+.cmp th, .cmp td { padding: 14px 16px; text-align: left; border-top: 1px solid var(--line); }
+.cmp thead th { border-top: 0; font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.04em; }
+.cmp tbody th { font-weight: 400; color: var(--muted); font-size: 13px; width: 26%; }
+.cmp td { font-weight: 500; }
+.cmp td.best { color: var(--ok); background: var(--ok-bg); font-weight: 600; }
+.cmp td.best::after { content: " ▲"; font-size: 10px; }
+.cmpnote { margin-top: 12px; color: var(--muted); font-size: 12.5px; }
+
+/* details */
+.dcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; align-items: start; }
+.dcard { overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.pic { position: relative; }
+.strip { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; background: var(--bg2); }
+.strip::-webkit-scrollbar { display: none; }
+.strip .ph { flex: 0 0 100%; scroll-snap-align: center; aspect-ratio: 4 / 3; position: relative; }
+.strip img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.count { position: absolute; right: 12px; bottom: 12px; background: rgba(9,15,29,.7); color: #fff; font-size: 11px; padding: 4px 11px; border-radius: 999px; backdrop-filter: blur(6px); }
+.rm { position: absolute; top: 10px; right: 10px; border: 0; background: rgba(9,15,29,.8); color: #fff; border-radius: 8px; padding: 4px 9px; font-size: 12px; }
+.upload { display: flex; align-items: center; gap: 8px; padding: 10px 18px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.upload input { max-width: 100%; font-size: 12px; }
+.dbody { padding: 22px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.dbody .place { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+.dbody h3 { font-family: var(--font-display); font-weight: 800; font-size: 36px; line-height: .94; letter-spacing: -0.05em; }
+.pricebox { background: var(--grad); color: var(--grad-ink); border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; box-shadow: var(--glow); }
+.pricebox .big { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: .9; }
+.pricebox .small { font-size: 13px; font-weight: 500; line-height: 1.35; }
+dl { margin: 0; display: flex; flex-direction: column; font-size: 13.5px; }
+dl > div { display: grid; grid-template-columns: 78px 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+dl > div:first-child { border-top: 0; }
+dt { color: var(--muted); }
+dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.pc { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 13px; }
+.pc ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.pc li { padding-left: 16px; position: relative; }
+.pc li::before { content: ""; position: absolute; left: 0; top: .55em; width: 7px; height: 7px; border-radius: 50%; }
+.pc .pro li::before { background: var(--ok); } .pc .con li::before { background: var(--warn); }
+.pc h4 { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+.pc .pro h4 { color: var(--ok); } .pc .con h4 { color: var(--warn); }
+@media (max-width: 440px) { .pc { grid-template-columns: 1fr; } }
+.cost { border: 1px solid var(--line); border-radius: 16px; overflow-x: auto; }
+.cost table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.cost th, .cost td { padding: 9px 14px; text-align: right; white-space: nowrap; }
+.cost th:first-child, .cost td:first-child { text-align: left; }
+.cost thead th { color: var(--muted); font-weight: 400; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; }
+.cost tbody td { border-top: 1px solid var(--line); }
+.cost tr.live td { background: var(--ok-bg); color: var(--ok); font-weight: 600; }
+.extra { font-size: 13px; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; padding: 10px 14px; margin-top: -6px; }
+.num, .stat b, .cd b, .step i, .pricebox .big { letter-spacing: -0.05em; }
+.eyebrow { letter-spacing: .14em; font-weight: 500; }
+.foot { margin-top: 28px; color: var(--muted); font-size: 12px; max-width: 80ch; }
+footer { padding-block: 40px 56px; }
+canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .pcard, .pcard > img, .bar i, .btn, .vote { transition: none; } }
+@media (max-width: 640px) {
+  .nav .wrap { height: 56px; }
+  .hero { border-radius: 22px; min-height: 560px; }
+  .chipdate { top: 12px; right: 12px; font-size: 11px; padding: 6px 12px; }
+  .cd { gap: 8px; }
+  .btns .btn { flex: 1 1 auto; }
+  .pcard { aspect-ratio: 4 / 5; }
+  .dbody { padding: 18px; }
+  .stats { gap: 10px; }
+}
+.namebox { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-width: 560px; }
+.namebox label { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.namebox input { font: inherit; font-size: 17px; padding: 13px 16px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 100%; }
+.namebox input:focus { border-color: var(--accent); outline: none; }
+.namebox p { font-size: 12.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+
+<div class="dots" aria-hidden="true"></div>
+<canvas class="conf" id="conf" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <div class="page"><div class="wrap">
+    <a class="logo" href="#top">Pas d'<b>Equador</b></a>
+    <nav class="links"><a href="#detalls">Les cases</a><a href="#cara">Cara a cara</a><a href="#cases">Vota</a></nav>
+    <span class="sp"></span>
+    <a class="btn sm" href="#cases">Vota ara</a>
+  </div></div>
+</header>
+
+<main class="page" id="top">
+  <div class="wrap">
+    <div id="notice" class="notice" hidden></div>
+
+    <section class="hero">
+      <img src="img/aliberch-1.jpg" alt="" fetchpriority="high">
+      <span class="chipdate">Dissabte 30 de gener de 2027</span>
+      <div class="in">
+        <p class="eyebrow">3r de Publicitat i RRPP · UAB</p>
+        <h1><small>Pas d'</small><span>Equador</span></h1>
+        <p>Tres cases, una nit i una decisió. Mira les fotos i les condicions i vota la que et fa més gràcia. Un vot per persona, el pots canviar quan vulguis.</p>
+        <div class="cd" id="cd" aria-label="Temps que falta"><div><b id="cd-d">--</b><span>dies</span></div><div><b id="cd-h">--</b><span>hores</span></div><div><b id="cd-m">--</b><span>min</span></div><div><b id="cd-s">--</b><span>seg</span></div></div>
+        <div class="btns"><a class="btn" href="#cases">Vota la teva casa</a><a class="btn line" style="color:#f5f3ec;border-color:rgba(255,255,255,.4)" href="#cara">Compara-les</a></div>
+      </div>
+    </section>
+
+    <section class="sec" id="detalls">
+      <div class="sechead"><p class="eyebrow">Les tres cases</p><h2 class="title">Mira-les una per una</h2><p class="lead-p">Dades segons el que ens han contestat. Preus amb IVA.</p></div>
+      <div class="dcards" id="dcards"></div>
+      <p class="foot">Les fiances es tornen el dia de marxar si no hi ha desperfectes. Fotos de les webs de cada casa (molinoucalabuig.cat, casacolonies.com i calgort.cat).</p>
+    </section>
+
+    <section class="sec" id="cara">
+      <div class="sechead"><p class="eyebrow">Cara a cara</p><h2 class="title">Com es comparen</h2><p class="lead-p" id="cmpsub"></p></div>
+      <div class="glass cmp"><table id="cmp"></table></div>
+      <p class="cmpnote">En verd, la casa que va per davant en cada fila.</p>
+    </section>
+
+    <section class="sec">
+      <div class="sechead"><p class="eyebrow">Com funciona</p><h2 class="title">Tres passos, un sol vot</h2></div>
+      <div class="how">
+        <div class="glass step"><i>1</i><h4>Mira les cases</h4><p>Fotos, preu, fiança, horaris i com és la festa a cadascuna.</p></div>
+        <div class="glass step"><i>2</i><h4>Vota la que vols</h4><p>Un vot per persona. Qui vota compta com a assistent. El pots treure o canviar.</p></div>
+        <div class="glass step"><i>3</i><h4>Reservem la guanyadora</h4><p>El preu per persona es recalcula amb la gent que va votant.</p></div>
+      </div>
+      <div class="stats">
+        <div class="glass stat"><b>3</b><span>cases</span></div>
+        <div class="glass stat"><b>1</b><span>nit</span></div>
+        <div class="glass stat"><b id="nvot">0</b><span>votants</span></div>
+      </div>
+    </section>
+
+    <section class="sec" id="cases">
+      <div class="sechead"><p class="eyebrow">Votació en directe</p><h2 class="title">Quina casa triem?</h2><p class="tot" id="totalv"></p></div>
+      <div class="glass namebox"><label for="nom">El teu nom</label><input id="nom" type="text" maxlength="40" autocomplete="name" placeholder="Nom i cognom" enterkeyhint="done"><p>Només serveix perquè comptem un sol vot per persona. No es mostra enlloc. Si tornes a entrar amb el mateix nom, podràs canviar o treure el teu vot.</p></div>
+      <div class="pcards" id="pcards"></div>
+    </section>
+  </div>
+</main>
+<footer></footer>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  "use strict";
+  var HOUSES = [
+    {
+      id: "calgort", name: "Cal Gort", place: "Lleida", drive: "1 h 24 min en cotxe", pill: "24 € per pers.", driveMin: 84,
+      photos: ["img/calgort-cap.webp", "img/calgort-1.jpg", "img/calgort-2.jpg", "img/calgort-4.jpg", "img/calgort-sala.png"],
+      status: "ok", statusText: "Disponible el 30",
+      priceBig: "24 €", priceSmall: "per persona",
+      extra: "A part, 75 € per la sala de festa. És un únic pagament per a tot el grup, no per persona.",
+      calc: function (n) { return 24 * n + 75; },
+      cmp: { fianca: 200, minP: 0, festaCasa: false, sortida: "17 o 18 h" },
+      info: [["Fiança", "200 € en efectiu"], ["Entrada", "Cap a les 12:00"], ["Sortida", "A les 17 o 18 h"], ["Festa", "Sala de l'ajuntament a prop de la casa, amb lavabo. Fins a les 6:00"], ["Sala", "75 € en total pel grup"], ["Cuina", "Dret a cuina"]],
+      pros: ["La més barata", "Horari d'entrada i sortida còmode", "Permeten música i festa", "Cuina disponible"],
+      cons: ["La festa no és a la casa", "Cal desplaçar-se entre la casa i la sala", "La més lluny de la uni"]
+    },
+    {
+      id: "aliberch", name: "Mas Aliberch", place: "Muntanyola, Barcelona", drive: "1 h en cotxe", pill: "30 € per pers.", driveMin: 60,
+      photos: ["img/aliberch-1.jpg", "img/aliberch-3.jpg", "img/aliberch-4.jpg"],
+      status: "ok", statusText: "Disponible",
+      priceBig: "30 €", priceSmall: "per persona, mínim 40 persones",
+      calc: function (n) { return 30 * Math.max(n, 40); },
+      cmp: { fianca: 400, minP: 40, festaCasa: true, sortida: "Diumenge 15:00" },
+      info: [["Fiança", "400 € en efectiu"], ["Entrada", "A partir de les 15:00"], ["Sortida", "Diumenge a les 15:00"], ["Festa", "Sala de música a la mateixa casa, amb altaveu i llums de festa"], ["Capacitat", "109 places"]],
+      pros: ["Tot en un sol lloc, sense desplaçaments", "Sala de música, altaveu i llums inclosos", "Horari de sortida llarg", "Si som molts més de 40, abaixen el preu"],
+      cons: ["La més cara per persona", "Fiança de 400 €", "Demanen el DNI per davant i darrere per reservar"]
+    },
+    {
+      id: "molinou", name: "Molí Nou de Calabuig", place: "Girona", drive: "1 h 11 min en cotxe", pill: "29 € per pers.", driveMin: 71,
+      photos: ["img/molinou-2.jpg", "img/molinou-5.jpg", "img/molinou-1.jpg", "img/molinou-4.jpg", "img/molinou-3.jpg"],
+      status: "wait", statusText: "Pendent de confirmar",
+      priceBig: "29 €", priceSmall: "per persona, mínim 50 persones",
+      calc: function (n) { return 29 * Math.max(n, 50); },
+      cmp: { fianca: null, minP: 50, festaCasa: true, sortida: "17:00" },
+      info: [["Fiança", "Per confirmar"], ["Entrada", "A les 10:00"], ["Sortida", "A les 17:00"], ["Festa", "Sala de 230 m² sense columnes. Música a l'interior fins que surti el sol, amb volum moderat"], ["Dormir", "Fins a 83 persones. Habitacions de 4, 8, 10 i 12 places, lavabos fora de les habitacions"], ["Cuina", "Dret a cuina. Podem portar càtering"]],
+      pros: ["Sala enorme dins de la mateixa casa", "Permeten música fins l'hora que vulguem", "Cuina disponible", "Espais exteriors i capella"],
+      cons: ["Mínim de 50: si som menys, paguem igualment com si fóssim 50", "Encara no està confirmada, hi ha un altre grup esperant", "Prohibits confeti i petards"]
+    }
+  ];
+  var SIZES = [40, 45, 50];
+  var state = { canVote: false, canEdit: false, by: {}, total: 0, mine: null, busy: false, nombre: "" };
+  var $ = function (id) { return document.getElementById(id); };
+  var el = { pcards: $("pcards"), dcards: $("dcards"), notice: $("notice"), totalv: $("totalv"), nvot: $("nvot"), cmp: $("cmp"), cmpsub: $("cmpsub") };
+  var P = {}, D = {};
+
+  function fmt(n) { return Math.round(n).toLocaleString("ca-ES"); }
+  function h(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function showNotice(msg, warn) { el.notice.textContent = msg; el.notice.className = "notice" + (warn ? " warn" : ""); el.notice.hidden = !msg; }
+
+  // compte enrere
+  (function () {
+    var target = new Date(2027, 0, 30, 18, 0, 0).getTime();
+    var d = $("cd-d"), hh = $("cd-h"), m = $("cd-m"), s = $("cd-s");
+    function two(n) { return n < 10 ? "0" + n : String(n); }
+    function tick() {
+      var left = Math.max(0, target - Date.now()) / 1000;
+      d.textContent = String(Math.floor(left / 86400));
+      hh.textContent = two(Math.floor(left % 86400 / 3600));
+      m.textContent = two(Math.floor(left % 3600 / 60));
+      s.textContent = two(Math.floor(left % 60));
+    }
+    tick(); setInterval(tick, 1000);
+  })();
+
+  function buildP(hs) {
+    var c = h("article", "pcard"); var r = {};
+    r.img = document.createElement("img"); r.img.alt = "Foto de " + hs.name; r.img.loading = "lazy"; c.appendChild(r.img);
+    var pt = h("div", "pt");
+    pt.appendChild(h("span", "badge " + hs.status, hs.statusText));
+    pt.appendChild(h("span", "badge", hs.pill));
+    c.appendChild(pt);
+    var pb = h("div", "pb");
+    r.lead = h("span", "lead", "Va al davant"); r.lead.hidden = true; pb.appendChild(r.lead);
+    pb.appendChild(h("h3", null, hs.name));
+    pb.appendChild(h("p", "meta", hs.place + " · " + hs.drive));
+    var row = h("div", "row");
+    r.num = h("span", "num", "0");
+    var bar = h("div", "bar"); r.fill = document.createElement("i"); bar.appendChild(r.fill);
+    row.appendChild(r.num); row.appendChild(bar); pb.appendChild(row);
+    r.btn = h("button", "vote", "Voto aquesta casa"); r.btn.type = "button"; r.btn.setAttribute("aria-pressed", "false");
+    r.btn.addEventListener("click", function (e) { castVote(hs.id, e); });
+    pb.appendChild(r.btn);
+    c.appendChild(pb);
+    r.card = c; P[hs.id] = r; el.pcards.appendChild(c);
+  }
+
+  function buildD(hs) {
+    var c = h("article", "glass dcard"); var r = {};
+    r.pic = h("div", "pic"); c.appendChild(r.pic);
+    var b = h("div", "dbody");
+    var hd = h("div"); hd.appendChild(h("p", "place", hs.place)); hd.appendChild(h("h3", null, hs.name)); b.appendChild(hd);
+    var pb = h("div", "pricebox"); pb.appendChild(h("span", "big", hs.priceBig)); pb.appendChild(h("span", "small", hs.priceSmall)); b.appendChild(pb);
+    if (hs.extra) b.appendChild(h("p", "extra", hs.extra));
+    var dl = document.createElement("dl");
+    hs.info.forEach(function (x) { var d = document.createElement("div"); d.appendChild(h("dt", null, x[0])); d.appendChild(h("dd", null, x[1])); dl.appendChild(d); });
+    b.appendChild(dl);
+    var pc = h("div", "pc");
+    var pro = h("div", "pro"); pro.appendChild(h("h4", null, "Avantatges")); var u1 = document.createElement("ul"); hs.pros.forEach(function (t) { u1.appendChild(h("li", null, t)); }); pro.appendChild(u1);
+    var con = h("div", "con"); con.appendChild(h("h4", null, "Inconvenients")); var u2 = document.createElement("ul"); hs.cons.forEach(function (t) { u2.appendChild(h("li", null, t)); }); con.appendChild(u2);
+    pc.appendChild(pro); pc.appendChild(con); b.appendChild(pc);
+    r.cost = h("div", "cost"); b.appendChild(r.cost);
+    c.appendChild(b);
+    D[hs.id] = r; el.dcards.appendChild(c);
+  }
+
+  function counts() {
+    var by = {};
+    HOUSES.forEach(function (x) { by[x.id] = state.by[x.id] || 0; });
+    return { by: by, total: state.total };
+  }
+  function srcsFor(hs) { return { ids: [], srcs: hs.photos }; }
+  function renderPic(hs) {
+    var r = D[hs.id], s = srcsFor(hs);
+    var key = s.srcs.join("|") + "|" + state.canEdit;
+    if (r.key === key) return;
+    r.key = key; r.pic.textContent = "";
+    var strip = h("div", "strip");
+    s.srcs.forEach(function (src, idx) {
+      var w = h("div", "ph"), img = document.createElement("img");
+      img.src = src; img.alt = "Foto de " + hs.name; img.loading = idx ? "lazy" : "eager"; w.appendChild(img);
+      if (state.canEdit && s.ids.length) { var rm = h("button", "rm", "Treu"); rm.type = "button"; rm.addEventListener("click", function () { removePhoto(hs.id, s.ids[idx]); }); w.appendChild(rm); }
+      strip.appendChild(w);
+    });
+    r.pic.appendChild(strip);
+    if (s.srcs.length > 1) r.pic.appendChild(h("span", "count", s.srcs.length + " fotos · llisca"));
+  }
+  function renderCost(hs, n) {
+    var r = D[hs.id], t = document.createElement("table");
+    var th = document.createElement("thead"), tr = document.createElement("tr");
+    ["Persones", "Total", "Per persona"].forEach(function (x) { tr.appendChild(h("th", null, x)); });
+    th.appendChild(tr); t.appendChild(th);
+    var tb = document.createElement("tbody");
+    function row(k, live) {
+      var tot = hs.calc(k), r2 = document.createElement("tr"); if (live) r2.className = "live";
+      r2.appendChild(h("td", null, live ? k + " (votants)" : String(k)));
+      r2.appendChild(h("td", null, fmt(tot) + " €")); r2.appendChild(h("td", null, fmt(tot / k) + " €")); tb.appendChild(r2);
+    }
+    SIZES.forEach(function (k) { row(k, false); });
+    if (n > 0 && SIZES.indexOf(n) === -1) row(n, true);
+    t.appendChild(tb); r.cost.textContent = ""; r.cost.appendChild(t);
+  }
+
+  function renderCompare(total) {
+    var n = total >= 30 ? total : 45;
+    el.cmpsub.textContent = total >= 30 ? "Càlculs amb els " + total + " votants actuals." : "Càlculs amb 45 persones, perquè encara hi ha pocs vots.";
+    var rows = [
+      { label: "Preu per persona", best: "min", vals: HOUSES.map(function (x) { var v = x.calc(n) / n; return { t: fmt(v) + " €", n: v }; }) },
+      { label: "Fiança", best: "min", vals: HOUSES.map(function (x) { var f = x.cmp.fianca; return f == null ? { t: "Per confirmar", n: null } : { t: f + " €", n: f }; }) },
+      { label: "Mínim de persones", best: "min", vals: HOUSES.map(function (x) { var m = x.cmp.minP; return { t: m ? String(m) : "Cap", n: m }; }) },
+      { label: "Distància a la uni", best: "min", vals: HOUSES.map(function (x) { return { t: x.drive.replace(" en cotxe", ""), n: x.driveMin }; }) },
+      { label: "Festa dins la casa", best: "max", vals: HOUSES.map(function (x) { return { t: x.cmp.festaCasa ? "Sí" : "No", n: x.cmp.festaCasa ? 1 : 0 }; }) },
+      { label: "Sortida", best: null, vals: HOUSES.map(function (x) { return { t: x.cmp.sortida, n: null }; }) }
+    ];
+    var t = el.cmp; t.textContent = "";
+    var thead = document.createElement("thead"), hr = document.createElement("tr");
+    hr.appendChild(h("th", null, ""));
+    HOUSES.forEach(function (x) { hr.appendChild(h("th", null, x.name)); });
+    thead.appendChild(hr); t.appendChild(thead);
+    var tb = document.createElement("tbody");
+    rows.forEach(function (row) {
+      var tr = document.createElement("tr");
+      var th = h("th", null, row.label); th.scope = "row"; tr.appendChild(th);
+      var nums = row.vals.map(function (v) { return v.n; }).filter(function (v) { return v != null; });
+      var bestV = null;
+      if (row.best && nums.length) { bestV = row.best === "min" ? Math.min.apply(null, nums) : Math.max.apply(null, nums); if (nums.every(function (v) { return v === nums[0]; })) bestV = null; }
+      row.vals.forEach(function (v) { tr.appendChild(h("td", bestV != null && v.n === bestV ? "best" : "", v.t)); });
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb);
+  }
+
+  function render() {
+    var c = counts(), me = state.mine || {};
+    var max = 0; HOUSES.forEach(function (x) { if (c.by[x.id] > max) max = c.by[x.id]; });
+    var leaders = HOUSES.filter(function (x) { return max > 0 && c.by[x.id] === max; });
+    el.nvot.textContent = String(c.total);
+    el.totalv.textContent = c.total ? c.total + (c.total === 1 ? " persona ha votat" : " persones han votat") : "Encara no hi ha vots. Sigues el primer!";
+    HOUSES.forEach(function (hs) {
+      var p = P[hs.id], n = c.by[hs.id], mine = me.casa === hs.id;
+      var first = srcsFor(hs).srcs[0];
+      if (p.img.getAttribute("src") !== first) p.img.src = first;
+      p.card.className = "pcard" + (mine ? " mine" : "");
+      p.num.textContent = String(n);
+      p.fill.style.width = (max ? Math.round(n * 100 / max) : 0) + "%";
+      p.lead.hidden = !(leaders.length === 1 && leaders[0].id === hs.id);
+      p.btn.setAttribute("aria-pressed", String(mine));
+      p.btn.textContent = mine ? "El teu vot ✓ · toca per treure'l" : "Voto aquesta casa";
+      p.btn.disabled = !state.canVote;
+      renderPic(hs); renderCost(hs, c.total >= 30 ? c.total : 0);
+    });
+    renderCompare(c.total);
+  }
+
+  var conf = $("conf"), cctx = conf.getContext && conf.getContext("2d"), parts = [], raf = 0;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function burst(x, y) {
+    if (reduce || !cctx) return;
+    conf.width = innerWidth; conf.height = innerHeight;
+    var cols = ["#ffd24a", "#ff9f1c", "#ffffff", "#55e8b0"];
+    for (var i = 0; i < 70; i++) { var a = Math.random() * 6.283, s = 3 + Math.random() * 7; parts.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 4, r: 3 + Math.random() * 4, c: cols[i % 4], life: 60 + Math.random() * 30 }); }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  function tick() {
+    cctx.clearRect(0, 0, conf.width, conf.height);
+    parts = parts.filter(function (p) { return p.life > 0; });
+    parts.forEach(function (p) { p.x += p.vx; p.y += p.vy; p.vy += .28; p.vx *= .99; p.life--; cctx.fillStyle = p.c; cctx.globalAlpha = Math.min(1, p.life / 25); cctx.fillRect(p.x, p.y, p.r, p.r * 1.6); });
+    cctx.globalAlpha = 1;
+    if (parts.length) raf = requestAnimationFrame(tick); else { raf = 0; cctx.clearRect(0, 0, conf.width, conf.height); }
+  }
+
+  var CFG = window.CONFIG || {};
+  var configured = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
+  var nameInput = $("nom");
+
+  function api(fn, body) {
+    var headers = { "Content-Type": "application/json", "apikey": CFG.SUPABASE_ANON_KEY };
+    if (/^eyJ/.test(CFG.SUPABASE_ANON_KEY)) headers["Authorization"] = "Bearer " + CFG.SUPABASE_ANON_KEY;
+    return fetch(CFG.SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/rpc/" + fn, { method: "POST", headers: headers, body: JSON.stringify(body || {}) })
+      .then(function (r) { if (!r.ok) return r.text().then(function (t) { throw new Error(t || r.status); }); return r.text().then(function (t) { return t ? JSON.parse(t) : null; }); });
+  }
+  function loadResults() {
+    return api("resultados").then(function (rows) {
+      var by = {}, t = 0;
+      (rows || []).forEach(function (r) { by[r.casa] = Number(r.n); t += Number(r.n); });
+      state.by = by; state.total = t; render();
+    });
+  }
+  function loadMine() {
+    if (!state.nombre) { state.mine = null; render(); return Promise.resolve(); }
+    return api("mi_voto", { p_nombre: state.nombre }).then(function (c) { state.mine = c ? { casa: c } : null; render(); });
+  }
+  function cleanName(v) { return String(v || "").replace(/\s+/g, " ").trim().slice(0, 40); }
+  function setName(v) {
+    state.nombre = cleanName(v);
+    try { localStorage.setItem("eq_nom", state.nombre); } catch (e) {}
+    if (configured) loadMine().catch(function () {});
+  }
+  nameInput.addEventListener("change", function () { setName(nameInput.value); });
+
+  function castVote(id, ev) {
+    if (!state.canVote || state.busy) return;
+    setNameFromInput();
+    if (state.nombre.length < 2) { showNotice("Escriu el teu nom abans de votar, així comptem un sol vot per persona.", true); nameInput.focus(); return; }
+    var on = (state.mine || {}).casa !== id;
+    state.busy = true;
+    var p = on ? api("votar", { p_nombre: state.nombre, p_casa: id }) : api("quitar_voto", { p_nombre: state.nombre });
+    p.then(function () { state.mine = on ? { casa: id } : null; showNotice("", false); render(); if (on && ev) burst(ev.clientX, ev.clientY); return loadResults(); })
+     .catch(function () { showNotice("No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true); })
+     .then(function () { state.busy = false; });
+  }
+  function setNameFromInput() { var v = cleanName(nameInput.value); if (v !== state.nombre) setName(v); }
+
+  HOUSES.forEach(buildP); HOUSES.forEach(buildD);
+  try { state.nombre = cleanName(localStorage.getItem("eq_nom")); } catch (e) {}
+  nameInput.value = state.nombre;
+  if (!configured) {
+    showNotice("La votació encara no està configurada (falta la base de dades). Mentrestant pots mirar les cases.", true);
+    render();
+  } else {
+    state.canVote = true; render();
+    loadResults().catch(function () { showNotice("No s'han pogut carregar els vots.", true); });
+    loadMine().catch(function () {});
+    setInterval(function () { if (!document.hidden && !state.busy) loadResults().catch(function () {}); }, 15000);
+  }
+})();
+</script>
+
+</body>
+</html>
