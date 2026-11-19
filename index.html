@@ -279,7 +279,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 
     <section class="sec" id="cases">
       <div class="sechead"><p class="eyebrow">Votació en directe</p><h2 class="title">Quina casa triem?</h2><p class="tot" id="totalv"></p></div>
-      <p class="anon">Vot anònim, sense nom ni compte. Només compta un vot per connexió a internet (adreça IP): si algú de la teva mateixa wifi ja ha votat, el teu vot substitueix el seu.</p>
+      <p class="anon">Vot anònim, sense nom ni compte. Es compta un vot per dispositiu: el pots canviar o treure des del mateix mòbil o ordinador.</p>
       <div class="pcards" id="pcards"></div>
     </section>
   </div>
@@ -499,6 +499,16 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 
   var CFG = window.CONFIG || {};
   var configured = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
+  // Identificador aleatori d'aquest dispositiu (sense dades personals). Un vot per identificador.
+  var DEV = (function () {
+    var k = "eq_dev", v = "";
+    try { v = localStorage.getItem(k) || ""; } catch (e) {}
+    if (v.length < 16) {
+      v = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2) + String(Date.now()) + String(Math.random()).slice(2);
+      try { localStorage.setItem(k, v); } catch (e) {}
+    }
+    return v;
+  })();
 
   function api(fn, body) {
     var headers = { "Content-Type": "application/json", "apikey": CFG.SUPABASE_ANON_KEY };
@@ -514,16 +524,16 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     });
   }
   function loadMine() {
-    return api("mi_voto").then(function (c) { state.mine = c ? { casa: c } : null; render(); });
+    return api("mi_voto", { p_dev: DEV }).then(function (c) { state.mine = c ? { casa: c } : null; render(); });
   }
 
   function castVote(id, ev) {
     if (!state.canVote || state.busy) return;
     var on = (state.mine || {}).casa !== id;
     state.busy = true;
-    var p = on ? api("votar", { p_casa: id }) : api("quitar_voto");
+    var p = on ? api("votar", { p_dev: DEV, p_casa: id }) : api("quitar_voto", { p_dev: DEV });
     p.then(function () { state.mine = on ? { casa: id } : null; showNotice("", false); render(); if (on && ev) burst(ev.clientX, ev.clientY); return loadResults(); })
-     .catch(function () { showNotice("No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true); })
+     .catch(function (e) { showNotice(/massa/.test(String(e && e.message)) ? "Hi ha massa vots des d'aquesta connexió. Prova-ho amb dades mòbils." : "No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true); })
      .then(function () { state.busy = false; });
   }
   HOUSES.forEach(buildP); HOUSES.forEach(buildD);

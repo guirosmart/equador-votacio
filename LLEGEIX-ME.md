@@ -5,14 +5,15 @@ Els vots es guarden a Supabase (pla gratuït). El vot és **anònim**: no es dem
 
 ## Com funciona el vot
 
-- Es compta **un sol vot per adreça IP**. Si dues persones voten des de la mateixa IP, només en queda un (l'últim). L'IP no es guarda en clar, només un hash.
-- Si algú torna a entrar des de la mateixa connexió, veu el seu vot marcat i el pot canviar o treure.
+- Es compta **un vot per dispositiu**: el navegador guarda un identificador aleatori (sense dades personals) i la base de dades només en desa un hash.
+- Funciona igual des de la wifi de la uni, de casa o amb dades: no depèn de l'IP.
+- Si algú torna a entrar des del mateix mòbil o ordinador, veu el seu vot marcat i el pot canviar o treure.
+- Per frenar abusos hi ha un **tope de 40 vots per adreça IP**: prou alt perquè una classe sencera voti des de la wifi de la uni. Es canvia a `supabase.sql` (busca `>= 40`).
 - La web no pot llegir ni escriure la taula directament: només pot cridar les funcions `votar`, `quitar_voto`, `mi_voto` i `resultados`.
 
 Limitacions que cal saber:
-- Companys que votin des de la **mateixa wifi** (casa, residència, campus) comparteixen IP i només comptaran com un. Si algú diu que no li deixa votar, que ho faci amb dades mòbils: el seu vot substituirà el de l'altre si ja n'hi havia.
-- Qui tingui dades mòbils i wifi pot votar dues vegades (una per cada IP). No hi ha manera de saber-ho sense comptes.
-- Qualsevol de la mateixa IP pot treure el vot de l'altre.
+- Algú pot votar més d'un cop si esborra les dades del navegador, usa una finestra d'incògnit o vota des d'un altre aparell. Sense comptes no hi ha manera d'evitar-ho.
+- Si algú canvia de mòbil, el vot antic continua comptant i en pot fer un de nou.
 
 ## Posar en marxa la base de dades (5 minuts)
 
