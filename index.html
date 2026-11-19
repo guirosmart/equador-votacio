@@ -217,11 +217,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
   .dbody { padding: 18px; }
   .stats { gap: 10px; }
 }
-.namebox { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-width: 560px; }
-.namebox label { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
-.namebox input { font: inherit; font-size: 17px; padding: 13px 16px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 100%; }
-.namebox input:focus { border-color: var(--accent); outline: none; }
-.namebox p { font-size: 12.5px; color: var(--muted); }
+.anon { color: var(--muted); font-size: 13px; max-width: 62ch; margin: -8px 0 20px; }
 </style>
 </head>
 <body>
@@ -283,7 +279,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 
     <section class="sec" id="cases">
       <div class="sechead"><p class="eyebrow">Votació en directe</p><h2 class="title">Quina casa triem?</h2><p class="tot" id="totalv"></p></div>
-      <div class="glass namebox"><label for="nom">El teu nom</label><input id="nom" type="text" maxlength="40" autocomplete="name" placeholder="Nom i cognom" enterkeyhint="done"><p>Només serveix perquè comptem un sol vot per persona. No es mostra enlloc. Si tornes a entrar amb el mateix nom, podràs canviar o treure el teu vot.</p></div>
+      <p class="anon">Vot anònim, sense nom ni compte. Només compta un vot per connexió a internet (adreça IP): si algú de la teva mateixa wifi ja ha votat, el teu vot substitueix el seu.</p>
       <div class="pcards" id="pcards"></div>
     </section>
   </div>
@@ -503,7 +499,6 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 
   var CFG = window.CONFIG || {};
   var configured = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
-  var nameInput = $("nom");
 
   function api(fn, body) {
     var headers = { "Content-Type": "application/json", "apikey": CFG.SUPABASE_ANON_KEY };
@@ -519,33 +514,19 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     });
   }
   function loadMine() {
-    if (!state.nombre) { state.mine = null; render(); return Promise.resolve(); }
-    return api("mi_voto", { p_nombre: state.nombre }).then(function (c) { state.mine = c ? { casa: c } : null; render(); });
+    return api("mi_voto").then(function (c) { state.mine = c ? { casa: c } : null; render(); });
   }
-  function cleanName(v) { return String(v || "").replace(/\s+/g, " ").trim().slice(0, 40); }
-  function setName(v) {
-    state.nombre = cleanName(v);
-    try { localStorage.setItem("eq_nom", state.nombre); } catch (e) {}
-    if (configured) loadMine().catch(function () {});
-  }
-  nameInput.addEventListener("change", function () { setName(nameInput.value); });
 
   function castVote(id, ev) {
     if (!state.canVote || state.busy) return;
-    setNameFromInput();
-    if (state.nombre.length < 2) { showNotice("Escriu el teu nom abans de votar, així comptem un sol vot per persona.", true); nameInput.focus(); return; }
     var on = (state.mine || {}).casa !== id;
     state.busy = true;
-    var p = on ? api("votar", { p_nombre: state.nombre, p_casa: id }) : api("quitar_voto", { p_nombre: state.nombre });
+    var p = on ? api("votar", { p_casa: id }) : api("quitar_voto");
     p.then(function () { state.mine = on ? { casa: id } : null; showNotice("", false); render(); if (on && ev) burst(ev.clientX, ev.clientY); return loadResults(); })
      .catch(function () { showNotice("No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true); })
      .then(function () { state.busy = false; });
   }
-  function setNameFromInput() { var v = cleanName(nameInput.value); if (v !== state.nombre) setName(v); }
-
   HOUSES.forEach(buildP); HOUSES.forEach(buildD);
-  try { state.nombre = cleanName(localStorage.getItem("eq_nom")); } catch (e) {}
-  nameInput.value = state.nombre;
   if (!configured) {
     showNotice("La votació encara no està configurada (falta la base de dades). Mentrestant pots mirar les cases.", true);
     render();
