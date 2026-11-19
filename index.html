@@ -286,7 +286,6 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 </main>
 <footer></footer>
 
-<script src="config.js"></script>
 <script>
 (function () {
   "use strict";
@@ -497,8 +496,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     if (parts.length) raf = requestAnimationFrame(tick); else { raf = 0; cctx.clearRect(0, 0, conf.width, conf.height); }
   }
 
-  var CFG = window.CONFIG || {};
-  var configured = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
+  var configured = true;
   // Identificador aleatori d'aquest dispositiu (sense dades personals). Un vot per identificador.
   var DEV = (function () {
     var k = "eq_dev", v = "";
@@ -511,9 +509,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
   })();
 
   function api(fn, body) {
-    var headers = { "Content-Type": "application/json", "apikey": CFG.SUPABASE_ANON_KEY };
-    if (/^eyJ/.test(CFG.SUPABASE_ANON_KEY)) headers["Authorization"] = "Bearer " + CFG.SUPABASE_ANON_KEY;
-    return fetch(CFG.SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/rpc/" + fn, { method: "POST", headers: headers, body: JSON.stringify(body || {}) })
+    return fetch("/api/vote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ fn: fn }, body || {})) })
       .then(function (r) { if (!r.ok) return r.text().then(function (t) { throw new Error(t || r.status); }); return r.text().then(function (t) { return t ? JSON.parse(t) : null; }); });
   }
   function loadResults() {

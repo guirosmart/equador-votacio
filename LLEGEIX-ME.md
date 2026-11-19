@@ -1,30 +1,27 @@
 # Votació del Pas d'Equador
 
-Web estàtica (HTML, CSS i JS) desplegada a Vercel: https://equador-uab.vercel.app
-Els vots es guarden a Supabase (pla gratuït). El vot és **anònim**: no es demana cap nom.
+Tot a Vercel, sense serveis externs: https://equador-uab.vercel.app
+
+- La web és estàtica (`index.html` i `img/`).
+- Els vots els gestiona una funció de Vercel (`api/vote.js`) i es guarden en un Vercel Blob privat (`equador-votos`, regió fra1), connectat al projecte `equador-uab`.
+- Pla Hobby gratuït. Cap clau a posar a mà: Vercel injecta el token del Blob.
 
 ## Com funciona el vot
 
-- Es compta **un vot per dispositiu**: el navegador guarda un identificador aleatori (sense dades personals) i la base de dades només en desa un hash.
-- Funciona igual des de la wifi de la uni, de casa o amb dades: no depèn de l'IP.
+- Vot anònim: no es demana cap nom ni compte.
+- **Un vot per dispositiu.** El navegador guarda un identificador aleatori (sense dades personals) i el servidor en desa només un hash.
+- Funciona igual des de la wifi de la uni, de casa o amb dades.
 - Si algú torna a entrar des del mateix mòbil o ordinador, veu el seu vot marcat i el pot canviar o treure.
-- Per frenar abusos hi ha un **tope de 40 vots per adreça IP**: prou alt perquè una classe sencera voti des de la wifi de la uni. Es canvia a `supabase.sql` (busca `>= 40`).
-- La web no pot llegir ni escriure la taula directament: només pot cridar les funcions `votar`, `quitar_voto`, `mi_voto` i `resultados`.
+- **Tope de 40 vots per IP** per frenar abusos (`MAX_PER_IP` a `api/vote.js`). Prou alt perquè una classe sencera voti des de la wifi de la uni.
+- Cada vot és un arxiu buit al Blob, amb el nom `v/<hash dispositiu>.<casa>.<hash IP>`. La web no pot llegir el Blob directament, només parlar amb `/api/vote`.
 
-Limitacions que cal saber:
-- Algú pot votar més d'un cop si esborra les dades del navegador, usa una finestra d'incògnit o vota des d'un altre aparell. Sense comptes no hi ha manera d'evitar-ho.
-- Si algú canvia de mòbil, el vot antic continua comptant i en pot fer un de nou.
+Limitacions: es pot votar més d'un cop esborrant les dades del navegador, amb una finestra d'incògnit o des d'un altre aparell. Sense comptes no hi ha manera d'evitar-ho.
 
-## Posar en marxa la base de dades (5 minuts)
-
-1. A https://supabase.com crea un projecte nou (pla Free).
-2. **SQL Editor > New query**: enganxa tot `supabase.sql` i prem **Run**. Ha de dir "Success". Només cal fer-ho una vegada.
-3. **Project Settings > API**: copia la **Project URL** i la clau **publishable** (o *anon*). Mai la *secret* ni *service_role*.
-4. Enganxa-les a `config.js` i torna a desplegar (`vercel deploy --prod`).
-
-## Desplegar
+## Operacions útils
 
 ```
-vercel deploy --prod
+vercel deploy --prod              # desplegar els canvis
+vercel blob list                  # veure els vots (un arxiu per vot)
+vercel blob empty-store           # esborrar tots els vots (a l'store connectat)
 ```
-(projecte `equador-uab`). Per canviar preus, textos o fotos, edita `index.html`: les dades de les cases són a dalt del bloc `<script>`.
+Per canviar preus, textos o fotos, edita `index.html` (les dades de les cases són a dalt del bloc `<script>`) i torna a desplegar.
