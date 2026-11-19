@@ -27,3 +27,7 @@ vercel blob empty-store           # esborrar tots els vots
 ```
 No pugis mai `.env.local` a GitHub (ja és al `.gitignore`).
 Per canviar preus, textos o fotos, edita `index.html` (les dades de les cases són a dalt del bloc `<script>`) i torna a desplegar.
+
+## Bústia
+
+Les propostes es guarden al mateix Blob (arxius `s/...json`). Per moderar, obre el web amb `#admin=LA_CLAU` (la clau és la variable d'entorn `ADMIN_KEY` de Vercel, no és al repositori) i apareixerà un botó "Esborra" a cada proposta.

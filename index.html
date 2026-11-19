@@ -224,6 +224,32 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
   .stats { gap: 10px; }
 }
 .anon { color: var(--muted); font-size: 13px; max-width: 62ch; margin: -8px 0 20px; }
+.mail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .mail { grid-template-columns: 1fr; } }
+.mailform { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.mailform label { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-top: 4px; }
+.mailform textarea, .mailform input { font: inherit; font-size: 16px; padding: 13px 15px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 100%; resize: vertical; }
+.mailform textarea:focus, .mailform input:focus { border-color: var(--accent); outline: none; }
+.chips2 { display: flex; flex-wrap: wrap; gap: 8px; }
+.chipsel { border: 1.5px solid var(--line); background: transparent; color: var(--ink); padding: 9px 15px; border-radius: 999px; font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer; }
+.chipsel[aria-pressed="true"] { background: var(--grad); color: var(--grad-ink); border-color: transparent; font-weight: 600; }
+.mailrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+.mailrow span { color: var(--muted); font-size: 12.5px; }
+.mailrow .btn { border: 0; cursor: pointer; }
+.mailrow .btn:disabled { opacity: .6; cursor: wait; }
+.mailmsg { font-size: 13.5px; color: var(--ok); }
+.mailmsg.bad { color: var(--warn); }
+.ideas { display: flex; flex-direction: column; gap: 12px; max-height: 660px; overflow-y: auto; padding-right: 4px; }
+@media (max-width: 860px) { .ideas { max-height: none; } }
+.idea { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.ideatop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tagi { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); }
+.tagi.aporto { background: var(--ok-bg); color: var(--ok); border-color: transparent; }
+.tagi.idea { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.when { color: var(--muted); font-size: 12px; }
+.ideatext { font-size: 15px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.ideaby { color: var(--muted); font-size: 13px; }
+.idea .del { align-self: flex-start; border: 1px solid var(--warn); color: var(--warn); background: transparent; border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 12.5px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -235,7 +261,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 <header class="nav">
   <div class="page"><div class="wrap">
     <a class="logo" href="#top">Pas d'<b>Equador</b></a>
-    <nav class="links"><a href="#detalls">Les cases</a><a href="#cara">Cara a cara</a><a href="#cases">Vota</a></nav>
+    <nav class="links"><a href="#detalls">Les cases</a><a href="#cara">Cara a cara</a><a href="#cases">Vota</a><a href="#butlleti">Bústia</a></nav>
     <span class="sp"></span>
     <a class="btn sm" href="#cases">Vota ara</a>
   </div></div>
@@ -287,6 +313,26 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
       <div class="sechead"><p class="eyebrow">Votació en directe</p><h2 class="title">Quina casa triem?</h2><p class="tot" id="totalv"></p></div>
       <p class="anon">Vot anònim, sense nom ni compte. Es compta un vot per dispositiu: el pots canviar o treure des del mateix mòbil o ordinador.</p>
       <div class="pcards" id="pcards"></div>
+    </section>
+
+    <section class="sec" id="butlleti">
+      <div class="sechead"><p class="eyebrow">Bústia</p><h2 class="title">Què hi aportes?</h2><p class="lead-p">Deixa una idea per a la festa o digues què saps fer i et ve de gust fer a la casa: punxar, cuinar, portar jocs, un altaveu, fer fotos... El nom és opcional.</p></div>
+      <div class="mail">
+        <form class="glass mailform" id="ideaform" autocomplete="off">
+          <div class="chips2" role="group" aria-label="Tipus de proposta">
+            <button type="button" class="chipsel" data-t="aporto" aria-pressed="true">Jo puc fer…</button>
+            <button type="button" class="chipsel" data-t="idea" aria-pressed="false">Idea per a la festa</button>
+            <button type="button" class="chipsel" data-t="altres" aria-pressed="false">Altres</button>
+          </div>
+          <label for="idea-text">El teu missatge</label>
+          <textarea id="idea-text" maxlength="400" rows="4" placeholder="Per exemple: sé punxar i porto el meu equip"></textarea>
+          <label for="idea-nom">El teu nom (opcional)</label>
+          <input id="idea-nom" type="text" maxlength="40" placeholder="Si ho deixes buit, serà anònim">
+          <div class="mailrow"><span id="idea-count">0 / 400</span><button class="btn" type="submit">Envia a la bústia</button></div>
+          <p class="mailmsg" id="idea-msg" hidden></p>
+        </form>
+        <div class="ideas" id="ideas" aria-live="polite"><p class="tot">Carregant propostes…</p></div>
+      </div>
     </section>
   </div>
 </main>
@@ -585,6 +631,72 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     loadState().catch(function () { showNotice("No s'han pogut carregar els vots.", true); });
     setInterval(function () { if (!document.hidden && !state.inflight) loadState().catch(function () {}); }, 15000);
   }
+
+  // ---------- Bústia de propostes ----------
+  var ideaState = { list: [], tipus: "aporto", admin: "" };
+  var TIPUS_TXT = { aporto: "Jo puc fer", idea: "Idea", altres: "Altres" };
+  try {
+    var mAdm = /admin=([A-Za-z0-9_-]+)/.exec(location.hash);
+    if (mAdm) { sessionStorage.setItem("eq_admin", mAdm[1]); history.replaceState(null, "", location.pathname + location.search); }
+    ideaState.admin = sessionStorage.getItem("eq_admin") || "";
+  } catch (e) {}
+  var elIdeas = $("ideas"), elForm = $("ideaform"), elText = $("idea-text"), elNom = $("idea-nom"), elCount = $("idea-count"), elMsg = $("idea-msg");
+  function ago(t) {
+    var s = Math.max(0, (Date.now() - t) / 1000);
+    if (s < 60) return "ara mateix";
+    if (s < 3600) return "fa " + Math.floor(s / 60) + " min";
+    if (s < 86400) return "fa " + Math.floor(s / 3600) + " h";
+    var d = Math.floor(s / 86400);
+    return "fa " + d + (d === 1 ? " dia" : " dies");
+  }
+  function ideaMsg(txt, bad) { elMsg.textContent = txt; elMsg.hidden = !txt; elMsg.className = "mailmsg" + (bad ? " bad" : ""); }
+  function renderIdeas() {
+    elIdeas.textContent = "";
+    if (!ideaState.list.length) { elIdeas.appendChild(h("p", "tot", "Encara no hi ha cap proposta. Sigues el primer! Per exemple: «sé punxar» o «porto un altaveu».")); return; }
+    ideaState.list.forEach(function (it) {
+      var c = h("article", "glass idea");
+      var top = h("div", "ideatop");
+      top.appendChild(h("span", "tagi " + it.tipus, TIPUS_TXT[it.tipus] || "Altres"));
+      top.appendChild(h("span", "when", ago(it.t)));
+      c.appendChild(top);
+      c.appendChild(h("p", "ideatext", it.text));
+      c.appendChild(h("p", "ideaby", it.nom ? "— " + it.nom : "— Anònim"));
+      if (ideaState.admin) {
+        var b = h("button", "del", "Esborra"); b.type = "button";
+        b.addEventListener("click", function () { esborraIdea(it.id); });
+        c.appendChild(b);
+      }
+      elIdeas.appendChild(c);
+    });
+  }
+  function loadIdeas() { return api("ideas_llistar").then(function (r) { ideaState.list = (r && r.idees) || []; renderIdeas(); }); }
+  function esborraIdea(id) {
+    api("idea_esborrar", { id: id, key: ideaState.admin })
+      .then(function () { ideaState.list = ideaState.list.filter(function (x) { return x.id !== id; }); renderIdeas(); })
+      .catch(function () { ideaMsg("No s'ha pogut esborrar (clau incorrecta?).", true); });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".chipsel"), function (b) {
+    b.addEventListener("click", function () {
+      ideaState.tipus = b.getAttribute("data-t");
+      Array.prototype.forEach.call(document.querySelectorAll(".chipsel"), function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    });
+  });
+  elText.addEventListener("input", function () { elCount.textContent = elText.value.length + " / 400"; });
+  elForm.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var text = elText.value.trim();
+    if (text.length < 3) { ideaMsg("Escriu una mica més, si us plau.", true); elText.focus(); return; }
+    var btn = elForm.querySelector("button[type=submit]"); btn.disabled = true; ideaMsg("", false);
+    api("idea_nova", { p_dev: DEV, tipus: ideaState.tipus, text: text, nom: elNom.value.trim() })
+      .then(function (r) {
+        if (r && r.idea) ideaState.list.unshift(r.idea);
+        renderIdeas(); elText.value = ""; elCount.textContent = "0 / 400";
+        ideaMsg("Gràcies! La teva proposta ja és a la bústia.", false);
+      })
+      .catch(function (e) { ideaMsg(/massa/.test(String(e && e.message)) ? "Has enviat moltes propostes. Prova-ho més tard." : "No s'ha pogut enviar. Torna-ho a provar.", true); })
+      .then(function () { btn.disabled = false; });
+  });
+  loadIdeas().catch(function () { elIdeas.textContent = ""; elIdeas.appendChild(h("p", "tot", "No s'han pogut carregar les propostes.")); });
 })();
 </script>
 
