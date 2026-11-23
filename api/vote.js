@@ -4,7 +4,7 @@
 const { put, list, del, get } = require("@vercel/blob");
 const crypto = require("crypto");
 
-const CASAS = ["calgort", "aliberch", "molinou"];
+const CASAS = ["aliberch", "molinou"];
 const TIPUS = ["aporto", "idea", "altres"];
 const MAX_PER_IP = 40;
 const MAX_IDEES_PER_DISPOSITIU = 8;

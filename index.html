@@ -124,7 +124,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .stat span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
 /* photo cards */
-.pcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.pcards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 @media (max-width: 1000px) { .pcards { grid-template-columns: 1fr; } .pcard { aspect-ratio: 16 / 10; } }
 .pcard { position: relative; isolation: isolate; border-radius: 26px; overflow: hidden; aspect-ratio: 4 / 5; display: flex; flex-direction: column; justify-content: flex-end; color: #f5f3ec; background: var(--bg2); box-shadow: var(--shadow); transition: transform .25s; }
 .pcard:hover { transform: translateY(-4px); }
@@ -277,16 +277,16 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
       <div class="in">
         <p class="eyebrow">3r de Publicitat i RRPP · UAB</p>
         <h1><small>Pas d'</small><span>Equador</span></h1>
-        <p>Tres cases, una nit i una decisió. Mira les fotos i les condicions i vota la que et fa més gràcia. Un vot per persona, el pots canviar quan vulguis.</p>
+        <p>Dues cases, una nit i una decisió. Mira les fotos i les condicions i vota la que et fa més gràcia. Un vot per persona, el pots canviar quan vulguis.</p>
         <div class="cd" id="cd" aria-label="Temps que falta"><div><b id="cd-d">--</b><span>dies</span></div><div><b id="cd-h">--</b><span>hores</span></div><div><b id="cd-m">--</b><span>min</span></div><div><b id="cd-s">--</b><span>seg</span></div></div>
         <div class="btns"><a class="btn" href="#cases">Vota la teva casa</a><a class="btn line" style="color:#f5f3ec;border-color:rgba(255,255,255,.4)" href="#cara">Compara-les</a></div>
       </div>
     </section>
 
     <section class="sec" id="detalls">
-      <div class="sechead"><p class="eyebrow">Les tres cases</p><h2 class="title">Mira-les una per una</h2><p class="lead-p">Dades segons el que ens han contestat. Preus amb IVA.</p></div>
+      <div class="sechead"><p class="eyebrow">Les dues cases</p><h2 class="title">Mira-les una per una</h2><p class="lead-p">Dades segons el que ens han contestat. Preus amb IVA.</p></div>
       <div class="dcards" id="dcards"></div>
-      <p class="foot">Les fiances es tornen el dia de marxar si no hi ha desperfectes. Fotos de les webs de cada casa (molinoucalabuig.cat, casacolonies.com i calgort.cat).</p>
+      <p class="foot">Les fiances es tornen el dia de marxar si no hi ha desperfectes. Fotos de les webs de cada casa (molinoucalabuig.cat i casacolonies.com).</p>
     </section>
 
     <section class="sec" id="cara">
@@ -303,7 +303,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
         <div class="glass step"><i>3</i><h4>Reservem la guanyadora</h4><p>El preu per persona es recalcula amb la gent que va votant.</p></div>
       </div>
       <div class="stats">
-        <div class="glass stat"><b>3</b><span>cases</span></div>
+        <div class="glass stat"><b>2</b><span>cases</span></div>
         <div class="glass stat"><b>1</b><span>nit</span></div>
         <div class="glass stat"><b id="nvot">0</b><span>votants</span></div>
       </div>
@@ -342,18 +342,6 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 (function () {
   "use strict";
   var HOUSES = [
-    {
-      id: "calgort", name: "Cal Gort", place: "Lleida", drive: "1 h 24 min en cotxe", pill: "24 € per pers.", driveMin: 84,
-      photos: ["img/calgort-cap.webp", "img/calgort-1.jpg", "img/calgort-2.jpg", "img/calgort-4.jpg", "img/calgort-sala.png"],
-      status: "ok", statusText: "Disponible el 30",
-      priceBig: "24 €", priceSmall: "per persona",
-      extra: "A part, 75 € per la sala de festa. És un únic pagament per a tot el grup, no per persona.",
-      calc: function (n) { return 24 * n + 75; },
-      cmp: { fianca: 200, minP: 0, festaCasa: false, sortida: "17 o 18 h" },
-      info: [["Fiança", "200 € en efectiu"], ["Entrada", "Cap a les 12:00"], ["Sortida", "A les 17 o 18 h"], ["Festa", "Sala de l'ajuntament a prop de la casa, amb lavabo. Fins a les 6:00"], ["Sala", "75 € en total pel grup"], ["Cuina", "Dret a cuina"]],
-      pros: ["La més barata", "Horari d'entrada i sortida còmode", "Permeten música i festa", "Cuina disponible"],
-      cons: ["La festa no és a la casa", "Cal desplaçar-se entre la casa i la sala", "La més lluny de la uni"]
-    },
     {
       id: "aliberch", name: "Mas Aliberch", place: "Muntanyola, Barcelona", drive: "1 h en cotxe", pill: "30 € per pers.", driveMin: 60,
       photos: ["img/aliberch-1.jpg", "img/aliberch-3.jpg", "img/aliberch-4.jpg"],
