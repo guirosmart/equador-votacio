@@ -80,11 +80,13 @@ async function llegirIdea(b) {
   return o ? { id: b.pathname, tipus: o.tipus, text: o.text, nom: o.nom || "", t: o.t } : null;
 }
 
+// La clau no distingeix majúscules (el mòbil sol posar la primera en majúscula) i es frena una mica cada error.
 function claueCorrecta(k) {
-  const real = process.env.ADMIN_KEY || "";
-  const a = Buffer.from(String(k || "")), b = Buffer.from(real);
-  return real.length >= 16 && a.length === b.length && crypto.timingSafeEqual(a, b);
+  const real = String(process.env.ADMIN_KEY || "").trim().toLowerCase();
+  const a = Buffer.from(String(k || "").trim().toLowerCase()), b = Buffer.from(real);
+  return real.length >= 6 && a.length === b.length && crypto.timingSafeEqual(a, b);
 }
+const esperaSiFalla = (ok) => ok ? Promise.resolve() : new Promise((r) => setTimeout(r, 1200));
 
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
@@ -101,7 +103,7 @@ module.exports = async (req, res) => {
       return;
     }
     if (fn === "idea_esborrar") {
-      if (!claueCorrecta(body.key)) { res.status(403).json({ error: "no autoritzat" }); return; }
+      if (!claueCorrecta(body.key)) { await esperaSiFalla(false); res.status(403).json({ error: "no autoritzat" }); return; }
       const id = String(body.id || "");
       if (!/^s\/[0-9]+\.[0-9a-f]+\.[0-9a-z]+\.json$/.test(id)) { res.status(400).json({ error: "id no valid" }); return; }
       await del(id);
@@ -129,7 +131,7 @@ module.exports = async (req, res) => {
 
     // ---------- Organitzador (necessita la clau) ----------
     if (typeof fn === "string" && fn.indexOf("admin_") === 0) {
-      if (!claueCorrecta(body.key)) { res.status(403).json({ error: "no autoritzat" }); return; }
+      if (!claueCorrecta(body.key)) { await esperaSiFalla(false); res.status(403).json({ error: "no autoritzat" }); return; }
 
       if (fn === "admin_votants") {
         const blobs = (await llistar("v/")).filter((b) => CASAS.includes(parts(b)[1]));
