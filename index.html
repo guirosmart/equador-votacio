@@ -233,6 +233,22 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
   .dbody { padding: 18px; }
   .stats { gap: 10px; }
 }
+.namebox { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-width: 560px; }
+.namebox label { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.namebox input { font: inherit; font-size: 17px; padding: 13px 16px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 100%; }
+.namebox input:focus { border-color: var(--accent); outline: none; }
+.namebox input[readonly] { opacity: .75; }
+.namebox p { font-size: 12.5px; color: var(--muted); }
+.adm { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+.adm h3 { font-size: 22px; }
+.adm textarea { font: inherit; font-size: 14px; padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 100%; min-height: 110px; resize: vertical; }
+.admcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+.admlist { display: flex; flex-direction: column; gap: 6px; max-height: 360px; overflow-y: auto; font-size: 14px; }
+.admrow { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: var(--panel2); border: 1px solid var(--line); }
+.admrow small { color: var(--muted); }
+.admrow button { border: 1px solid var(--warn); color: var(--warn); background: transparent; border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 12px; cursor: pointer; }
+.adm h4 { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+.adm .ok { color: var(--ok); }
 .anon { color: var(--muted); font-size: 13px; max-width: 62ch; margin: -8px 0 20px; }
 .mail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; align-items: start; }
 @media (max-width: 860px) { .mail { grid-template-columns: 1fr; } }
@@ -321,7 +337,11 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 
     <section class="sec" id="cases">
       <div class="sechead"><p class="eyebrow">Votació en directe</p><h2 class="title">Quina casa triem?</h2><p class="tot" id="totalv"></p></div>
-      <p class="anon">Vot anònim, sense nom ni compte. Es compta un vot per dispositiu: el pots canviar o treure des del mateix mòbil o ordinador.</p>
+      <div class="glass namebox">
+        <label for="nom">El teu nom i cognoms</label>
+        <input id="nom" type="text" maxlength="60" autocomplete="name" placeholder="Nom i cognoms" enterkeyhint="done">
+        <p id="nomhint">Només l'organitzador sap qui ha votat: el nom no es mostra a ningú ni es veu què has votat. Un vot per persona.</p>
+      </div>
       <div class="pcards" id="pcards"></div>
     </section>
 
@@ -564,6 +584,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
       p.btn.disabled = !state.canVote;
       renderPic(hs); renderCost(hs, c.total >= 30 ? c.total : 0);
     });
+    if (nameInput) { nameInput.readOnly = !!(state.mine && state.nom); if (state.mine && state.nom) nameInput.value = state.nom; }
     renderCompare(c.total);
   }
 
@@ -585,6 +606,12 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
   }
 
   var configured = true;
+  var nameInput = $("nom");
+  function cleanNom(v) { return String(v || "").replace(/\s+/g, " ").trim().slice(0, 60); }
+  function nomOk(v) { var w = cleanNom(v).split(" ").filter(function (x) { return x.length >= 2; }); return w.length >= 2; }
+  try { state.nom = cleanNom(localStorage.getItem("eq_nom")); } catch (e) { state.nom = ""; }
+  nameInput.value = state.nom;
+  nameInput.addEventListener("input", function () { if (!nameInput.readOnly) state.nom = cleanNom(nameInput.value); });
   // Identificador aleatori d'aquest dispositiu (sense dades personals). Un vot per identificador.
   var DEV = (function () {
     var k = "eq_dev", v = "";
@@ -622,6 +649,11 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     if (!state.canVote) return;
     var prev = state.mine;
     var on = !prev || prev.casa !== id;
+    if (on) {
+      var nm = cleanNom(nameInput.value || state.nom);
+      if (!nomOk(nm)) { showNotice("Escriu el teu nom i cognoms abans de votar.", true); nameInput.focus(); return; }
+      state.nom = nm;
+    }
     if (prev) bump(prev.casa, -1);
     if (on) bump(id, 1);
     state.mine = on ? { casa: id } : null;
@@ -629,11 +661,22 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     if (on && ev) burst(ev.clientX, ev.clientY);
     var seq = ++state.seq;
     state.inflight++;
+    var nomEnviat = state.nom;
     state.chain = state.chain
-      .then(function () { return on ? api("votar", { p_dev: DEV, p_casa: id }) : api("quitar_voto", { p_dev: DEV }); })
-      .then(function (r) { if (seq === state.seq && r && r.res) applyState(r.res); return false; })
+      .then(function () { return on ? api("votar", { p_dev: DEV, p_casa: id, nom: nomEnviat }) : api("quitar_voto", { p_dev: DEV }); })
+      .then(function (r) {
+        if (on) { try { localStorage.setItem("eq_nom", nomEnviat); } catch (e) {} }
+        if (seq === state.seq && r && r.res) applyState(r.res);
+        return false;
+      })
       .catch(function (e) {
-        showNotice(/massa/.test(String(e && e.message)) ? "Hi ha massa vots des d'aquesta connexió. Prova-ho amb dades mòbils." : "No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true);
+        var m = String(e && e.message);
+        showNotice(
+          /nom_ja_votat/.test(m) ? "Aquest nom ja ha votat des d'un altre dispositiu. Si ets tu, parla amb l'organitzador perquè t'ho desbloquegi." :
+          /dispositiu_ja_votat/.test(m) ? "Aquest dispositiu ja ha votat amb un altre nom. Si t'has equivocat, treu primer el teu vot tocant la mateixa casa." :
+          /nom_no_valid/.test(m) ? "Escriu el teu nom i cognoms, només amb lletres." :
+          /massa/.test(m) ? "Hi ha massa vots des d'aquesta connexió. Prova-ho amb dades mòbils." :
+          "No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true);
         return true;
       })
       .then(function (failed) {
@@ -716,6 +759,66 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
       .then(function () { btn.disabled = false; });
   });
   loadIdeas().catch(function () { elIdeas.textContent = ""; elIdeas.appendChild(h("p", "tot", "No s'han pogut carregar les propostes.")); });
+
+  // ---------- Panell de l'organitzador (només amb la clau) ----------
+  if (ideaState.admin) {
+    var admSec = h("section", "sec"); admSec.id = "admin";
+    var admBox = h("div", "glass adm");
+    admBox.appendChild(h("h3", null, "Panell de l'organitzador"));
+    admBox.appendChild(h("p", "tot", "Només el veus tu. Mostra qui ha votat, però no què ha votat cada persona."));
+    var admTa = document.createElement("textarea"); admTa.id = "adm-llista";
+    admTa.placeholder = "Enganxa aquí la llista de la classe, un nom per línia, per saber qui falta";
+    var admBtn = h("button", "btn", "Desa la llista i comprova"); admBtn.type = "button";
+    var admMsg = h("p", "tot"); admMsg.setAttribute("aria-live", "polite");
+    var admCols = h("div", "admcols");
+    admBox.appendChild(admTa); admBox.appendChild(admBtn); admBox.appendChild(admMsg); admBox.appendChild(admCols);
+    admSec.appendChild(admBox);
+    document.querySelector("main .wrap").appendChild(admSec);
+
+    var admKey = ideaState.admin;
+    var quand = function (t) { return t ? new Date(t).toLocaleString("ca-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : ""; };
+    var admCol = function (titol, files) {
+      var c = h("div"); c.appendChild(h("h4", null, titol));
+      var l = h("div", "admlist");
+      if (!files.length) l.appendChild(h("p", "tot", "Ningú."));
+      files.forEach(function (f) { l.appendChild(f); });
+      c.appendChild(l); return c;
+    };
+    var admFila = function (nom, sub, id) {
+      var r = h("div", "admrow"), t = h("span", null, nom);
+      if (sub) { t.appendChild(document.createTextNode(" ")); t.appendChild(h("small", null, sub)); }
+      r.appendChild(t);
+      if (id) {
+        var b = h("button", null, "Esborra"); b.type = "button";
+        b.addEventListener("click", function () {
+          api("admin_esborrar_vot", { key: admKey, id: id }).then(admCarrega).catch(function () { admMsg.textContent = "No s'ha pogut esborrar."; });
+        });
+        r.appendChild(b);
+      }
+      return r;
+    };
+    var admPinta = function (d) {
+      admCols.textContent = "";
+      if (!admTa.value && d.noms && d.noms.length) admTa.value = d.noms.join("\n");
+      var sense = {}; (d.senseCoincidencia || []).forEach(function (id) { sense[id] = true; });
+      admMsg.textContent = d.votants.length + " votant" + (d.votants.length === 1 ? "" : "s") + (d.noms.length ? " de " + d.noms.length + " a la llista." : ". Enganxa la llista de la classe per veure qui falta.");
+      admCols.appendChild(admCol("Han votat (" + d.votants.length + ")", d.votants.map(function (v) { return admFila(v.nom, quand(v.t), v.id); })));
+      if (d.noms.length) {
+        admCols.appendChild(admCol("Falten per votar (" + d.falten.length + ")", d.falten.map(function (n) { return admFila(n); })));
+        var sc = d.votants.filter(function (v) { return sense[v.id]; });
+        admCols.appendChild(admCol("Han votat però no surten a la llista (" + sc.length + ")", sc.map(function (v) { return admFila(v.nom, quand(v.t), v.id); })));
+      }
+    };
+    var admCarrega = function () {
+      return api("admin_votants", { key: admKey }).then(admPinta).catch(function (e) { admMsg.textContent = /403|autoritzat/.test(String(e && e.message)) ? "Clau incorrecta." : "No s'ha pogut carregar el panell."; });
+    };
+    admBtn.addEventListener("click", function () {
+      var noms = admTa.value.split(/\n+/).map(function (x) { return x.trim(); }).filter(Boolean);
+      admBtn.disabled = true;
+      api("admin_roster_desar", { key: admKey, noms: noms }).then(admCarrega).catch(function () { admMsg.textContent = "No s'ha pogut desar la llista."; }).then(function () { admBtn.disabled = false; });
+    });
+    admCarrega();
+  }
 })();
 </script>
 

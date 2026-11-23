@@ -1,6 +1,11 @@
-// Votació anònima + bústia de propostes del Pas d'Equador, guardades a Vercel Blob (store privat).
-// Vots:       arxiu buit amb el nom  v/<hash-dispositiu>.<casa>.<hash-ip>   (un vot per dispositiu, tope per IP)
-// Propostes:  arxiu JSON amb el nom  s/<marca-de-temps>.<hash-dispositiu>.<aleatori>.json
+// Votació + bústia de propostes del Pas d'Equador, guardades a Vercel Blob (store privat).
+//
+// Vots:       arxiu  v/<hash-nom>.<casa>.<hash-dispositiu>.<hash-ip>   amb el nom escrit a dins (només el veu l'organitzador)
+//             - un vot per nom (el nom queda lligat al primer dispositiu que vota)
+//             - un vot per dispositiu
+//             - tope de vots per IP perquè ningú pugui inundar la votació
+// Propostes:  arxiu JSON  s/<marca-de-temps>.<hash-dispositiu>.<aleatori>.json
+// Organitzador (clau ADMIN_KEY): veure qui ha votat, comparar amb la llista de la classe, esborrar vots.
 const { put, list, del, get } = require("@vercel/blob");
 const crypto = require("crypto");
 
@@ -21,12 +26,21 @@ async function llistar(prefix) {
   return out;
 }
 
-// Vots per casa a partir dels noms dels arxius.
+async function llegirJson(pathname) {
+  try {
+    const r = await get(pathname, { access: "private" });
+    if (!r) return null;
+    return JSON.parse(await new Response(r.stream).text());
+  } catch (e) { return null; }
+}
+
+// Vots per casa a partir dels noms dels arxius (v/<nom>.<casa>.<dispositiu>.<ip>).
 function filas(pathnames) {
   const n = {};
   pathnames.forEach((p) => { const c = p.split(".")[1]; if (CASAS.includes(c)) n[c] = (n[c] || 0) + 1; });
   return Object.keys(n).map((c) => ({ casa: c, n: n[c] }));
 }
+const parts = (b) => b.pathname.split(".");
 
 function ipDe(req) {
   const xf = String(req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || "");
@@ -35,13 +49,35 @@ function ipDe(req) {
 
 const neteja = (s, max) => String(s || "").replace(/[\u0000-\u001f\u007f]+/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 
+// Nom normalitzat: sense accents ni majúscules, només lletres i espais. "Núria  Pérez-Vila" -> "nuria perez vila"
+const norma = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+  .replace(/[^a-z]+/g, " ").replace(/\s+/g, " ").trim();
+const nomValid = (n) => { const w = n.split(" ").filter(Boolean); return w.length >= 2 && w.every((x) => x.length >= 2) && n.length <= 80; };
+
+function lev(a, b) {
+  const m = a.length, n = b.length;
+  if (!m) return n; if (!n) return m;
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) {
+    const cur = [i];
+    for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[n];
+}
+// Dos noms són "el mateix" si un conté les paraules de l'altre (Anna Garcia ~ Anna Garcia Puig) o hi ha com a molt 2 lletres de diferència.
+function coincideix(a, b) {
+  const ta = norma(a).split(" ").filter(Boolean), tb = norma(b).split(" ").filter(Boolean);
+  if (!ta.length || !tb.length) return false;
+  const [pet, gran] = ta.length <= tb.length ? [ta, tb] : [tb, ta];
+  if (pet.length >= 2 && pet.every((w) => gran.includes(w))) return true;
+  return lev(ta.slice().sort().join(" "), tb.slice().sort().join(" ")) <= 2;
+}
+
+// ---------- Bústia ----------
 async function llegirIdea(b) {
-  try {
-    const r = await get(b.pathname, { access: "private" });
-    if (!r) return null;
-    const o = JSON.parse(await new Response(r.stream).text());
-    return { id: b.pathname, tipus: o.tipus, text: o.text, nom: o.nom || "", t: o.t };
-  } catch (e) { return null; }
+  const o = await llegirJson(b.pathname);
+  return o ? { id: b.pathname, tipus: o.tipus, text: o.text, nom: o.nom || "", t: o.t } : null;
 }
 
 function claueCorrecta(k) {
@@ -91,17 +127,54 @@ module.exports = async (req, res) => {
       return;
     }
 
+    // ---------- Organitzador (necessita la clau) ----------
+    if (typeof fn === "string" && fn.indexOf("admin_") === 0) {
+      if (!claueCorrecta(body.key)) { res.status(403).json({ error: "no autoritzat" }); return; }
+
+      if (fn === "admin_votants") {
+        const blobs = (await llistar("v/")).filter((b) => CASAS.includes(parts(b)[1]));
+        const votants = (await Promise.all(blobs.map(async (b) => {
+          const o = await llegirJson(b.pathname);
+          return { id: b.pathname, nom: o && o.nom ? o.nom : "(sense nom)", t: o && o.t ? o.t : 0 };
+        }))).sort((a, b) => a.t - b.t);
+        const rost = await llegirJson("admin/roster.json");
+        const noms = rost && Array.isArray(rost.noms) ? rost.noms : [];
+        let falten = [], senseCoincidencia = [];
+        if (noms.length) {
+          falten = noms.filter((n) => !votants.some((v) => coincideix(n, v.nom)));
+          senseCoincidencia = votants.filter((v) => !noms.some((n) => coincideix(n, v.nom))).map((v) => v.id);
+        }
+        res.status(200).json({ votants, noms, falten, senseCoincidencia });
+        return;
+      }
+      if (fn === "admin_roster_desar") {
+        const noms = (Array.isArray(body.noms) ? body.noms : []).map((n) => neteja(n, 80)).filter((n) => n.length >= 3).slice(0, 400);
+        await put("admin/roster.json", JSON.stringify({ noms }), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json" });
+        res.status(200).json({ ok: true, n: noms.length });
+        return;
+      }
+      if (fn === "admin_esborrar_vot") {
+        const id = String(body.id || "");
+        if (!/^v\/[0-9a-f]{32}\.[a-z]+\.[0-9a-f]{32}\.[0-9a-f]{32}$/.test(id)) { res.status(400).json({ error: "id no valid" }); return; }
+        await del(id);
+        res.status(200).json({ ok: true });
+        return;
+      }
+      res.status(400).json({ error: "funcio desconeguda" });
+      return;
+    }
+
     // ---------- Votació ----------
     const dev = String(body.p_dev || "");
     if (dev.length < 16 || dev.length > 80) { res.status(400).json({ error: "dispositiu no valid" }); return; }
     const d = sha(dev);
     const blobs = await llistar("v/");
-    const mine = blobs.filter((b) => b.pathname.startsWith("v/" + d + "."));
-    const others = blobs.filter((b) => !b.pathname.startsWith("v/" + d + "."));
+    const mine = blobs.filter((b) => parts(b)[2] === d);
+    const others = blobs.filter((b) => parts(b)[2] !== d);
 
-    // Resultats + el vot d'aquest dispositiu, en una sola petició.
+    // Resultats + el vot d'aquest dispositiu, en una sola petició. Els resultats no inclouen cap nom.
     if (fn === "estado") {
-      res.status(200).json({ res: filas(blobs.map((b) => b.pathname)), mine: mine.length ? mine[0].pathname.split(".")[1] : null });
+      res.status(200).json({ res: filas(blobs.map((b) => b.pathname)), mine: mine.length ? parts(mine[0])[1] : null });
       return;
     }
     if (fn === "quitar_voto") {
@@ -112,15 +185,23 @@ module.exports = async (req, res) => {
     if (fn === "votar") {
       const casa = String(body.p_casa || "");
       if (!CASAS.includes(casa)) { res.status(400).json({ error: "casa no valida" }); return; }
+      const nomEscrit = neteja(body.nom, 60), n = norma(nomEscrit);
+      if (!nomValid(n)) { res.status(400).json({ error: "nom_no_valid" }); return; }
+      const nh = sha("nom:" + n);
+      // El nom ja ha votat des d'un altre dispositiu?
+      const mateixNom = blobs.filter((b) => parts(b)[0] === "v/" + nh);
+      if (mateixNom.length && parts(mateixNom[0])[2] !== d) { res.status(409).json({ error: "nom_ja_votat" }); return; }
+      // Aquest dispositiu ja ha votat amb un altre nom?
+      if (mine.length && parts(mine[0])[0] !== "v/" + nh) { res.status(409).json({ error: "dispositiu_ja_votat" }); return; }
       const i = sha(ipDe(req));
-      if (!mine.length && blobs.filter((b) => b.pathname.endsWith("." + i)).length >= MAX_PER_IP) {
+      if (!mine.length && blobs.filter((b) => parts(b)[3] === i).length >= MAX_PER_IP) {
         res.status(429).json({ error: "massa vots des d'aquesta connexio" });
         return;
       }
-      const pathname = "v/" + d + "." + casa + "." + i;
+      const pathname = "v/" + nh + "." + casa + "." + d + "." + i;
       const old = mine.filter((b) => b.pathname !== pathname);
       await Promise.all([
-        put(pathname, "1", { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "text/plain" }),
+        put(pathname, JSON.stringify({ nom: nomEscrit, t: Date.now() }), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json" }),
         old.length ? del(old.map((b) => b.url)) : Promise.resolve()
       ]);
       res.status(200).json({ res: filas(others.map((b) => b.pathname).concat(pathname)) });
