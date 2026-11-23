@@ -683,7 +683,12 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     state.inflight++;
     var nomEnviat = state.nom;
     state.chain = state.chain
-      .then(function () { return on ? api("votar", { p_dev: DEV, p_casa: id, nom: nomEnviat }) : api("quitar_voto", { p_dev: DEV }); })
+      .then(function () {
+        var crida = function () { return on ? api("votar", { p_dev: DEV, p_casa: id, nom: nomEnviat }) : api("quitar_voto", { p_dev: DEV }); };
+        // Si hi ha molta gent votant alhora, el servidor pot respondre "ocupat": es torna a provar sol.
+        var prova = function (n) { return crida().catch(function (e) { if (n < 3 && /ocupat/.test(String(e && e.message))) return new Promise(function (r) { setTimeout(r, 1200 * (n + 1)); }).then(function () { return prova(n + 1); }); throw e; }); };
+        return prova(0);
+      })
       .then(function (r) {
         if (on) { try { localStorage.setItem("eq_nom", nomEnviat); } catch (e) {} }
         if (seq === state.seq && r && r.res) applyState(r.res);
@@ -711,7 +716,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
   } else {
     state.canVote = true; render();
     loadState().catch(function () { showNotice("No s'han pogut carregar els vots.", true); });
-    setInterval(function () { if (!document.hidden && !state.inflight) loadState().catch(function () {}); }, 15000);
+    setInterval(function () { if (!document.hidden && !state.inflight) loadState().catch(function () {}); }, 30000);
   }
 
   // ---------- Bústia de propostes ----------

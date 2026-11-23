@@ -1,12 +1,14 @@
 // Votació + bústia de propostes del Pas d'Equador, guardades a Vercel Blob (store privat).
 //
-// Vots:       arxiu  v/<hash-nom>.<casa>.<hash-dispositiu>.<hash-ip>   amb el nom escrit a dins (només el veu l'organitzador)
-//             - un vot per nom (el nom queda lligat al primer dispositiu que vota)
-//             - un vot per dispositiu
-//             - tope de vots per IP perquè ningú pugui inundar la votació
-// Propostes:  arxiu JSON  s/<marca-de-temps>.<hash-dispositiu>.<aleatori>.json
-// Organitzador (clau ADMIN_KEY): veure qui ha votat, comparar amb la llista de la classe, esborrar vots.
-const { put, list, del, get } = require("@vercel/blob");
+// El pla gratuït de Blob només inclou 2.000 operacions "avançades" (llistar, pujar) i 10.000 de "simples" (llegir)
+// al mes, i si se superen el Blob deixa de funcionar durant 30 dies. Per això tot viu en pocs arxius JSON petits:
+//   data/votes.json   { v: { <hash-nom>: { casa, d: <hash-dispositiu>, i: <hash-ip>, nom, t } } }
+//   data/ideas.json   { list: [ { id, tipus, text, nom, t, d } ] }          (la més nova, primer)
+//   data/roster.json  { noms: [...] }                                       (llista de la classe, només l'organitzador)
+// Llegir = 1 operació simple. Escriure = 1 lectura + 1 pujada, amb control de concurrència (ifMatch/ETag) i reintents.
+//
+// Regles de vot: un vot per nom, un nom només des d'un dispositiu, un dispositiu només amb un nom, tope de vots per IP.
+const { put, get } = require("@vercel/blob");
 const crypto = require("crypto");
 
 const CASAS = ["aliberch", "molinou"];
@@ -14,41 +16,46 @@ const TIPUS = ["aporto", "idea", "altres"];
 const MAX_PER_IP = 40;
 const MAX_IDEES_PER_DISPOSITIU = 8;
 const MAX_IDEES = 300;
+const VOTES = "data/votes.json", IDEAS = "data/ideas.json", ROSTER = "data/roster.json";
 const sha = (s) => crypto.createHash("sha256").update(s + ":equador-uab").digest("hex").slice(0, 32);
 
-async function llistar(prefix) {
-  let cursor, out = [];
-  do {
-    const r = await list({ prefix, cursor, limit: 1000 });
-    out = out.concat(r.blobs);
-    cursor = r.hasMore ? r.cursor : undefined;
-  } while (cursor);
-  return out;
+// ---------- Emmagatzematge ----------
+const cache = {}; // memòria de la instància, per no llegir el Blob a cada petició
+const CACHE_MS = 6000;
+
+async function llegir(path, fresc) {
+  const c = cache[path];
+  if (!fresc && c && Date.now() - c.t < CACHE_MS) return c;
+  const r = await get(path, { access: "private", useCache: false });
+  let obj = null, etag = null;
+  if (r && r.statusCode === 200) { obj = JSON.parse(await new Response(r.stream).text()); etag = String(r.blob.etag).replace(/^W\//, ""); }  // get() dona un ETag "dèbil" (W/"..."); put() espera el fort
+  cache[path] = { obj, etag, t: Date.now() };
+  return cache[path];
 }
 
-async function llegirJson(pathname) {
-  try {
-    const r = await get(pathname, { access: "private" });
-    if (!r) return null;
-    return JSON.parse(await new Response(r.stream).text());
-  } catch (e) { return null; }
+// Llegeix, aplica el canvi i desa només si ningú més ha escrit mentrestant (si no, ho torna a provar).
+async function actualitza(path, buit, canvi) {
+  for (let intent = 0; intent < 30; intent++) {
+    const { obj, etag } = await llegir(path, true);
+    const base = obj || buit();
+    const retorn = canvi(base);
+    const opts = { access: "private", addRandomSuffix: false, contentType: "application/json" };
+    if (etag) opts.ifMatch = etag;
+    try {
+      await put(path, JSON.stringify(base), opts);
+      delete cache[path];
+      return retorn;
+    } catch (e) {
+      if (/precondition|already exists|etag|conflict|412|409/i.test(String(e && (e.message || e.name)))) { await new Promise((r) => setTimeout(r, 40 + Math.random() * (150 + intent * 60))); continue; }
+      throw e;
+    }
+  }
+  const err = new Error("conflicte"); err.http = 503; err.codi = "ocupat"; throw err;
 }
+const falla = (http, codi) => { const e = new Error(codi); e.http = http; e.codi = codi; return e; };
 
-// Vots per casa a partir dels noms dels arxius (v/<nom>.<casa>.<dispositiu>.<ip>).
-function filas(pathnames) {
-  const n = {};
-  pathnames.forEach((p) => { const c = p.split(".")[1]; if (CASAS.includes(c)) n[c] = (n[c] || 0) + 1; });
-  return Object.keys(n).map((c) => ({ casa: c, n: n[c] }));
-}
-const parts = (b) => b.pathname.split(".");
-
-function ipDe(req) {
-  const xf = String(req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || "");
-  return xf.split(",")[0].trim() || "desconeguda";
-}
-
+// ---------- Utilitats ----------
 const neteja = (s, max) => String(s || "").replace(/[\u0000-\u001f\u007f]+/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
-
 // Nom normalitzat: sense accents ni majúscules, només lletres i espais. "Núria  Pérez-Vila" -> "nuria perez vila"
 const norma = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
   .replace(/[^a-z]+/g, " ").replace(/\s+/g, " ").trim();
@@ -74,19 +81,26 @@ function coincideix(a, b) {
   return lev(ta.slice().sort().join(" "), tb.slice().sort().join(" ")) <= 2;
 }
 
-// ---------- Bústia ----------
-async function llegirIdea(b) {
-  const o = await llegirJson(b.pathname);
-  return o ? { id: b.pathname, tipus: o.tipus, text: o.text, nom: o.nom || "", t: o.t } : null;
+function filas(v) {
+  const n = {};
+  Object.keys(v).forEach((k) => { const c = v[k].casa; if (CASAS.includes(c)) n[c] = (n[c] || 0) + 1; });
+  return Object.keys(n).map((c) => ({ casa: c, n: n[c] }));
 }
 
-// La clau no distingeix majúscules (el mòbil sol posar la primera en majúscula) i es frena una mica cada error.
+function ipDe(req) {
+  const xf = String(req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || "");
+  return xf.split(",")[0].trim() || "desconeguda";
+}
+
 function claueCorrecta(k) {
   const real = String(process.env.ADMIN_KEY || "").trim().toLowerCase();
   const a = Buffer.from(String(k || "").trim().toLowerCase()), b = Buffer.from(real);
   return real.length >= 6 && a.length === b.length && crypto.timingSafeEqual(a, b);
 }
-const esperaSiFalla = (ok) => ok ? Promise.resolve() : new Promise((r) => setTimeout(r, 1200));
+const esperaSiFalla = () => new Promise((r) => setTimeout(r, 1200));
+
+const vuitVots = () => ({ v: {} });
+const vuitIdees = () => ({ list: [] });
 
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
@@ -97,17 +111,9 @@ module.exports = async (req, res) => {
 
     // ---------- Bústia de propostes ----------
     if (fn === "ideas_llistar") {
-      const blobs = (await llistar("s/")).sort((a, b) => (a.pathname < b.pathname ? 1 : -1)).slice(0, 100);
-      const idees = (await Promise.all(blobs.map(llegirIdea))).filter(Boolean);
+      const { obj } = await llegir(IDEAS);
+      const idees = ((obj && obj.list) || []).slice(0, 100).map((x) => ({ id: x.id, tipus: x.tipus, text: x.text, nom: x.nom, t: x.t }));
       res.status(200).json({ idees });
-      return;
-    }
-    if (fn === "idea_esborrar") {
-      if (!claueCorrecta(body.key)) { await esperaSiFalla(false); res.status(403).json({ error: "no autoritzat" }); return; }
-      const id = String(body.id || "");
-      if (!/^s\/[0-9]+\.[0-9a-f]+\.[0-9a-z]+\.json$/.test(id)) { res.status(400).json({ error: "id no valid" }); return; }
-      await del(id);
-      res.status(200).json({ ok: true });
       return;
     }
     if (fn === "idea_nova") {
@@ -117,28 +123,24 @@ module.exports = async (req, res) => {
       if (text.length < 3) { res.status(400).json({ error: "missatge massa curt" }); return; }
       if (!TIPUS.includes(tipus)) { res.status(400).json({ error: "tipus no valid" }); return; }
       const d12 = sha(dev).slice(0, 12);
-      const existents = await llistar("s/");
-      if (existents.length >= MAX_IDEES || existents.filter((b) => b.pathname.split(".")[1] === d12).length >= MAX_IDEES_PER_DISPOSITIU) {
-        res.status(429).json({ error: "massa propostes" });
-        return;
-      }
       const t = Date.now();
-      const pathname = "s/" + String(t).padStart(13, "0") + "." + d12 + "." + crypto.randomBytes(3).toString("hex") + ".json";
-      await put(pathname, JSON.stringify({ tipus, text, nom, t }), { access: "private", addRandomSuffix: false, contentType: "application/json" });
-      res.status(200).json({ idea: { id: pathname, tipus, text, nom, t } });
+      const idea = { id: String(t) + crypto.randomBytes(3).toString("hex"), tipus, text, nom, t, d: d12 };
+      await actualitza(IDEAS, vuitIdees, (b) => {
+        if (b.list.length >= MAX_IDEES || b.list.filter((x) => x.d === d12).length >= MAX_IDEES_PER_DISPOSITIU) throw falla(429, "massa propostes");
+        b.list.unshift(idea);
+      });
+      res.status(200).json({ idea: { id: idea.id, tipus, text, nom, t } });
       return;
     }
 
     // ---------- Organitzador (necessita la clau) ----------
-    if (typeof fn === "string" && fn.indexOf("admin_") === 0) {
-      if (!claueCorrecta(body.key)) { await esperaSiFalla(false); res.status(403).json({ error: "no autoritzat" }); return; }
+    if ((typeof fn === "string" && fn.indexOf("admin_") === 0) || fn === "idea_esborrar") {
+      if (!claueCorrecta(body.key)) { await esperaSiFalla(); res.status(403).json({ error: "no autoritzat" }); return; }
 
       if (fn === "admin_votants") {
-        const blobs = (await llistar("v/")).filter((b) => CASAS.includes(parts(b)[1]));
-        const votants = (await Promise.all(blobs.map(async (b) => {
-          const o = await llegirJson(b.pathname);
-          return { id: b.pathname, nom: o && o.nom ? o.nom : "(sense nom)", t: o && o.t ? o.t : 0, ip: parts(b)[3] };
-        }))).sort((a, b) => a.t - b.t);
+        const { obj } = await llegir(VOTES);
+        const v = (obj && obj.v) || {};
+        const votants = Object.keys(v).map((k) => ({ id: k, nom: v[k].nom || "(sense nom)", t: v[k].t || 0, ip: v[k].i })).sort((a, b) => a.t - b.t);
         // Vots que surten de la mateixa connexió (no és prova de frau: la wifi de la uni la comparteix tothom). Es marquen amb una lletra, sense mostrar l'IP.
         const perIp = {};
         votants.forEach((x) => { perIp[x.ip] = (perIp[x.ip] || 0) + 1; });
@@ -147,26 +149,34 @@ module.exports = async (req, res) => {
           if (perIp[x.ip] > 1) { if (!lletres[x.ip]) lletres[x.ip] = String.fromCharCode(65 + (nl++ % 26)); x.xarxa = lletres[x.ip]; x.xarxaN = perIp[x.ip]; }
           delete x.ip;
         });
-        const rost = await llegirJson("admin/roster.json");
+        const rost = (await llegir(ROSTER)).obj;
         const noms = rost && Array.isArray(rost.noms) ? rost.noms : [];
         let falten = [], senseCoincidencia = [];
         if (noms.length) {
-          falten = noms.filter((n) => !votants.some((v) => coincideix(n, v.nom)));
-          senseCoincidencia = votants.filter((v) => !noms.some((n) => coincideix(n, v.nom))).map((v) => v.id);
+          falten = noms.filter((n) => !votants.some((x) => coincideix(n, x.nom)));
+          senseCoincidencia = votants.filter((x) => !noms.some((n) => coincideix(n, x.nom))).map((x) => x.id);
         }
         res.status(200).json({ votants, noms, falten, senseCoincidencia });
         return;
       }
       if (fn === "admin_roster_desar") {
         const noms = (Array.isArray(body.noms) ? body.noms : []).map((n) => neteja(n, 80)).filter((n) => n.length >= 3).slice(0, 400);
-        await put("admin/roster.json", JSON.stringify({ noms }), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json" });
+        await put(ROSTER, JSON.stringify({ noms }), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json" });
+        delete cache[ROSTER];
         res.status(200).json({ ok: true, n: noms.length });
         return;
       }
       if (fn === "admin_esborrar_vot") {
         const id = String(body.id || "");
-        if (!/^v\/[0-9a-f]{32}\.[a-z]+\.[0-9a-f]{32}\.[0-9a-f]{32}$/.test(id)) { res.status(400).json({ error: "id no valid" }); return; }
-        await del(id);
+        if (!/^[0-9a-f]{32}$/.test(id)) { res.status(400).json({ error: "id no valid" }); return; }
+        await actualitza(VOTES, vuitVots, (b) => { delete b.v[id]; });
+        res.status(200).json({ ok: true });
+        return;
+      }
+      if (fn === "idea_esborrar") {
+        const id = String(body.id || "");
+        if (!/^[0-9]{10,}[0-9a-f]{6}$/.test(id)) { res.status(400).json({ error: "id no valid" }); return; }
+        await actualitza(IDEAS, vuitIdees, (b) => { b.list = b.list.filter((x) => x.id !== id); });
         res.status(200).json({ ok: true });
         return;
       }
@@ -178,18 +188,21 @@ module.exports = async (req, res) => {
     const dev = String(body.p_dev || "");
     if (dev.length < 16 || dev.length > 80) { res.status(400).json({ error: "dispositiu no valid" }); return; }
     const d = sha(dev);
-    const blobs = await llistar("v/");
-    const mine = blobs.filter((b) => parts(b)[2] === d);
-    const others = blobs.filter((b) => parts(b)[2] !== d);
 
     // Resultats + el vot d'aquest dispositiu, en una sola petició. Els resultats no inclouen cap nom.
     if (fn === "estado") {
-      res.status(200).json({ res: filas(blobs.map((b) => b.pathname)), mine: mine.length ? parts(mine[0])[1] : null });
+      const { obj } = await llegir(VOTES);
+      const v = (obj && obj.v) || {};
+      const meu = Object.keys(v).filter((k) => v[k].d === d)[0];
+      res.status(200).json({ res: filas(v), mine: meu ? v[meu].casa : null });
       return;
     }
     if (fn === "quitar_voto") {
-      if (mine.length) await del(mine.map((b) => b.url));
-      res.status(200).json({ res: filas(others.map((b) => b.pathname)) });
+      const r = await actualitza(VOTES, vuitVots, (b) => {
+        Object.keys(b.v).forEach((k) => { if (b.v[k].d === d) delete b.v[k]; });
+        return filas(b.v);
+      });
+      res.status(200).json({ res: r });
       return;
     }
     if (fn === "votar") {
@@ -198,27 +211,21 @@ module.exports = async (req, res) => {
       const nomEscrit = neteja(body.nom, 60), n = norma(nomEscrit);
       if (!nomValid(n)) { res.status(400).json({ error: "nom_no_valid" }); return; }
       const nh = sha("nom:" + n);
-      // El nom ja ha votat des d'un altre dispositiu?
-      const mateixNom = blobs.filter((b) => parts(b)[0] === "v/" + nh);
-      if (mateixNom.length && parts(mateixNom[0])[2] !== d) { res.status(409).json({ error: "nom_ja_votat" }); return; }
-      // Aquest dispositiu ja ha votat amb un altre nom?
-      if (mine.length && parts(mine[0])[0] !== "v/" + nh) { res.status(409).json({ error: "dispositiu_ja_votat" }); return; }
       const i = sha(ipDe(req));
-      if (!mine.length && blobs.filter((b) => parts(b)[3] === i).length >= MAX_PER_IP) {
-        res.status(429).json({ error: "massa vots des d'aquesta connexio" });
-        return;
-      }
-      const pathname = "v/" + nh + "." + casa + "." + d + "." + i;
-      const old = mine.filter((b) => b.pathname !== pathname);
-      await Promise.all([
-        put(pathname, JSON.stringify({ nom: nomEscrit, t: Date.now() }), { access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json" }),
-        old.length ? del(old.map((b) => b.url)) : Promise.resolve()
-      ]);
-      res.status(200).json({ res: filas(others.map((b) => b.pathname).concat(pathname)) });
+      const r = await actualitza(VOTES, vuitVots, (b) => {
+        const meu = Object.keys(b.v).filter((k) => b.v[k].d === d)[0];
+        if (b.v[nh] && b.v[nh].d !== d) throw falla(409, "nom_ja_votat");           // aquest nom ja ha votat des d'un altre dispositiu
+        if (meu && meu !== nh) throw falla(409, "dispositiu_ja_votat");             // aquest dispositiu ja ha votat amb un altre nom
+        if (!meu && Object.keys(b.v).filter((k) => b.v[k].i === i).length >= MAX_PER_IP) throw falla(429, "massa vots des d'aquesta connexio");
+        b.v[nh] = { casa, d, i, nom: nomEscrit, t: (b.v[nh] && b.v[nh].t) || Date.now() };
+        return filas(b.v);
+      });
+      res.status(200).json({ res: r });
       return;
     }
     res.status(400).json({ error: "funcio desconeguda" });
   } catch (e) {
+    if (e && e.http) { res.status(e.http).json({ error: e.codi || "error" }); return; }
     console.error(e);
     res.status(500).json({ error: "error del servidor" });
   }

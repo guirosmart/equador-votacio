@@ -1,3 +1,10 @@
 {
-  "regions": ["fra1"]
+  "regions": [
+    "fra1"
+  ],
+  "functions": {
+    "api/vote.js": {
+      "maxDuration": 40
+    }
+  }
 }
