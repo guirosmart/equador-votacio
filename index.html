@@ -255,6 +255,8 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
 .admlist { display: flex; flex-direction: column; gap: 6px; max-height: 360px; overflow-y: auto; font-size: 14px; }
 .admrow { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: var(--panel2); border: 1px solid var(--line); }
 .admrow small { color: var(--muted); }
+.admrow .xarxa { color: var(--accent); margin-left: 2px; cursor: help; }
+.admrow button.sure { background: var(--warn); color: #1f1400; border-color: var(--warn); font-weight: 600; }
 .admrow button { border: 1px solid var(--warn); color: var(--warn); background: transparent; border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 12px; cursor: pointer; }
 .adm h4 { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
 .adm .ok { color: var(--ok); }
@@ -824,14 +826,23 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
       files.forEach(function (f) { l.appendChild(f); });
       c.appendChild(l); return c;
     };
-    var admFila = function (nom, sub, id) {
+    var admFila = function (nom, sub, id, xarxa) {
       var r = h("div", "admrow"), t = h("span", null, nom);
       if (sub) { t.appendChild(document.createTextNode(" ")); t.appendChild(h("small", null, sub)); }
+      if (xarxa) { t.appendChild(document.createTextNode(" ")); var tg = h("small", "xarxa", "xarxa " + xarxa); tg.title = "Ha votat des de la mateixa connexió que altres votants (pot ser la wifi de la uni)"; t.appendChild(tg); }
       r.appendChild(t);
       if (id) {
         var b = h("button", null, "Esborra"); b.type = "button";
+        var timer = 0;
         b.addEventListener("click", function () {
-          api("admin_esborrar_vot", { key: admKey, id: id }).then(admCarrega).catch(function () { admMsg.textContent = "No s'ha pogut esborrar."; });
+          if (!b.dataset.sure) {
+            // Primer toc: demana confirmació. Segon toc (en 4 s): esborra el vot.
+            b.dataset.sure = "1"; b.textContent = "Segur? Esborra"; b.classList.add("sure");
+            timer = setTimeout(function () { delete b.dataset.sure; b.textContent = "Esborra"; b.classList.remove("sure"); }, 4000);
+            return;
+          }
+          clearTimeout(timer); b.disabled = true; b.textContent = "Esborrant…";
+          api("admin_esborrar_vot", { key: admKey, id: id }).then(admCarrega).catch(function () { admMsg.textContent = "No s'ha pogut esborrar."; b.disabled = false; b.textContent = "Esborra"; });
         });
         r.appendChild(b);
       }
@@ -842,11 +853,11 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
       if (!admTa.value && d.noms && d.noms.length) admTa.value = d.noms.join("\n");
       var sense = {}; (d.senseCoincidencia || []).forEach(function (id) { sense[id] = true; });
       admMsg.textContent = d.votants.length + " votant" + (d.votants.length === 1 ? "" : "s") + (d.noms.length ? " de " + d.noms.length + " a la llista." : ". Enganxa la llista de la classe per veure qui falta.");
-      admCols.appendChild(admCol("Han votat (" + d.votants.length + ")", d.votants.map(function (v) { return admFila(v.nom, quand(v.t), v.id); })));
+      admCols.appendChild(admCol("Han votat (" + d.votants.length + ")", d.votants.map(function (v) { return admFila(v.nom, quand(v.t), v.id, v.xarxa); })));
       if (d.noms.length) {
         admCols.appendChild(admCol("Falten per votar (" + d.falten.length + ")", d.falten.map(function (n) { return admFila(n); })));
         var sc = d.votants.filter(function (v) { return sense[v.id]; });
-        admCols.appendChild(admCol("Han votat però no surten a la llista (" + sc.length + ")", sc.map(function (v) { return admFila(v.nom, quand(v.t), v.id); })));
+        admCols.appendChild(admCol("Han votat però no surten a la llista (" + sc.length + ")", sc.map(function (v) { return admFila(v.nom, quand(v.t), v.id, v.xarxa); })));
       }
     };
     var admCarrega = function () {

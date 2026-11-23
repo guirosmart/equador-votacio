@@ -137,8 +137,16 @@ module.exports = async (req, res) => {
         const blobs = (await llistar("v/")).filter((b) => CASAS.includes(parts(b)[1]));
         const votants = (await Promise.all(blobs.map(async (b) => {
           const o = await llegirJson(b.pathname);
-          return { id: b.pathname, nom: o && o.nom ? o.nom : "(sense nom)", t: o && o.t ? o.t : 0 };
+          return { id: b.pathname, nom: o && o.nom ? o.nom : "(sense nom)", t: o && o.t ? o.t : 0, ip: parts(b)[3] };
         }))).sort((a, b) => a.t - b.t);
+        // Vots que surten de la mateixa connexió (no és prova de frau: la wifi de la uni la comparteix tothom). Es marquen amb una lletra, sense mostrar l'IP.
+        const perIp = {};
+        votants.forEach((x) => { perIp[x.ip] = (perIp[x.ip] || 0) + 1; });
+        const lletres = {}; let nl = 0;
+        votants.forEach((x) => {
+          if (perIp[x.ip] > 1) { if (!lletres[x.ip]) lletres[x.ip] = String.fromCharCode(65 + (nl++ % 26)); x.xarxa = lletres[x.ip]; x.xarxaN = perIp[x.ip]; }
+          delete x.ip;
+        });
         const rost = await llegirJson("admin/roster.json");
         const noms = rost && Array.isArray(rost.noms) ? rost.noms : [];
         let falten = [], senseCoincidencia = [];
