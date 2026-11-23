@@ -206,6 +206,16 @@ dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
 .cost thead th { color: var(--muted); font-weight: 400; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; }
 .cost tbody td { border-top: 1px solid var(--line); }
 .cost tr.live td { background: var(--ok-bg); color: var(--ok); font-weight: 600; }
+.scen { display: flex; flex-direction: column; gap: 8px; }
+.scenhead { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.scengrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 440px) { .scengrid { grid-template-columns: 1fr; } }
+.scenbox { display: flex; flex-direction: column; gap: 3px; padding: 14px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel2); }
+.scenbox.pen { border-color: var(--warn); }
+.scenlab { font-size: 12px; color: var(--muted); }
+.scenpp { font-size: 22px; letter-spacing: -0.04em; line-height: 1.05; }
+.scentot { font-size: 13px; color: var(--muted); }
+.scennote { font-size: 12.5px; color: var(--warn); font-weight: 500; margin-top: 4px; }
 .extra { font-size: 13px; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; padding: 10px 14px; margin-top: -6px; }
 .num, .stat b, .cd b, .step i, .pricebox .big { letter-spacing: -0.05em; }
 .eyebrow { letter-spacing: .14em; font-weight: 500; }
@@ -359,6 +369,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
       status: "wait", statusText: "Pendent de confirmar",
       priceBig: "29 €", priceSmall: "per persona, mínim 50 persones",
       calc: function (n) { return 29 * Math.max(n, 50); },
+      min: 50, escenaris: [40, 50],
       cmp: { fianca: null, minP: 50, festaCasa: true, sortida: "17:00" },
       info: [["Fiança", "Per confirmar"], ["Entrada", "A les 10:00"], ["Sortida", "A les 17:00"], ["Festa", "Sala de 230 m² sense columnes. Música a l'interior fins que surti el sol, amb volum moderat"], ["Dormir", "Fins a 83 persones. Habitacions de 4, 8, 10 i 12 places, lavabos fora de les habitacions"], ["Cuina", "Dret a cuina. Podem portar càtering"]],
       pros: ["Sala enorme dins de la mateixa casa", "Permeten música fins l'hora que vulguem", "Cuina disponible", "Espais exteriors i capella"],
@@ -371,6 +382,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
   var el = { pcards: $("pcards"), dcards: $("dcards"), notice: $("notice"), totalv: $("totalv"), nvot: $("nvot"), cmp: $("cmp"), cmpsub: $("cmpsub") };
   var P = {}, D = {};
 
+  function fmt2(n) { return n.toLocaleString("ca-ES", { minimumFractionDigits: 0, maximumFractionDigits: 2 }); }
   function fmt(n) { return Math.round(n).toLocaleString("ca-ES"); }
   function h(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function showNotice(msg, warn) { el.notice.textContent = msg; el.notice.className = "notice" + (warn ? " warn" : ""); el.notice.hidden = !msg; }
@@ -419,6 +431,21 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     var hd = h("div"); hd.appendChild(h("p", "place", hs.place)); hd.appendChild(h("h3", null, hs.name)); b.appendChild(hd);
     var pb = h("div", "pricebox"); pb.appendChild(h("span", "big", hs.priceBig)); pb.appendChild(h("span", "small", hs.priceSmall)); b.appendChild(pb);
     if (hs.extra) b.appendChild(h("p", "extra", hs.extra));
+    if (hs.escenaris) {
+      var sc = h("div", "scen");
+      sc.appendChild(h("p", "scenhead", "Preu segons la gent que vingui"));
+      var grid = h("div", "scengrid");
+      hs.escenaris.forEach(function (n) {
+        var tot = hs.calc(n), pp = tot / n, t = h("div", "scenbox" + (n < hs.min ? " pen" : ""));
+        t.appendChild(h("span", "scenlab", "Si som " + n));
+        t.appendChild(h("strong", "scenpp", fmt2(pp) + " € per persona"));
+        t.appendChild(h("span", "scentot", "Total: " + fmt(tot) + " €"));
+        if (n < hs.min) t.appendChild(h("span", "scennote", "Cal pagar igualment com si fóssim " + hs.min + "."));
+        grid.appendChild(t);
+      });
+      sc.appendChild(grid);
+      b.appendChild(sc);
+    }
     var dl = document.createElement("dl");
     hs.info.forEach(function (x) { var d = document.createElement("div"); d.appendChild(h("dt", null, x[0])); d.appendChild(h("dd", null, x[1])); dl.appendChild(d); });
     b.appendChild(dl);
