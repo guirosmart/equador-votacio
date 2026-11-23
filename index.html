@@ -516,7 +516,11 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     var n = total >= 30 ? total : 45;
     el.cmpsub.textContent = total >= 30 ? "Càlculs amb els " + total + " votants actuals." : "Càlculs amb 45 persones, perquè encara hi ha pocs vots.";
     var rows = [
-      { label: "Preu per persona", best: "min", vals: HOUSES.map(function (x) { var v = x.calc(n) / n; return { t: fmt(v) + " €", n: v }; }) },
+      { label: "Preu de la casa, per persona", best: null, vals: HOUSES.map(function (x) { return { t: x.priceBig + " per persona", n: null }; }) },
+      { label: "Preu real amb " + n + " persones", best: "min", vals: HOUSES.map(function (x) {
+          var v = x.calc(n) / n, pen = x.cmp.minP && n < x.cmp.minP;
+          return { t: fmt2(v) + " €" + (pen ? " (paga com " + x.cmp.minP + ")" : ""), n: v };
+        }) },
       { label: "Fiança", best: "min", vals: HOUSES.map(function (x) { var f = x.cmp.fianca; return f == null ? { t: "Per confirmar", n: null } : { t: f + " €", n: f }; }) },
       { label: "Mínim de persones", best: "min", vals: HOUSES.map(function (x) { var m = x.cmp.minP; return { t: m ? String(m) : "Cap", n: m }; }) },
       { label: "Distància a la uni", best: "min", vals: HOUSES.map(function (x) { return { t: x.drive.replace(" en cotxe", ""), n: x.driveMin }; }) },
