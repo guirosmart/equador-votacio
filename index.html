@@ -127,7 +127,7 @@ a { color: inherit; }
 .dress .h3 i { font-weight: 600; }
 .seal { color: var(--wine); animation: spin2 30s linear infinite paused; }
 @keyframes spin2 { to { transform: rotate(360deg); } }
-@media (max-width: 600px) { .dress { grid-template-columns: 1fr; gap: 10px; } .seal { justify-self: end; margin-top: 6px; } .seal svg { width: 92px; height: 92px; display: block; } }
+@media (max-width: 600px) { .dress { grid-template-columns: 1fr; gap: 10px; } .seal { position: absolute; right: 18px; bottom: 20px; } .seal svg { width: 84px; height: 84px; display: block; } }
 
 /* llista de coses */
 .note { position: relative; background: #f3e3ad; border: 2px solid var(--wine); padding: 26px 28px 20px; transform: rotate(1.4deg); box-shadow: 8px 8px 0 var(--wine); border-radius: 4px; }
@@ -340,7 +340,8 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
           </div>
           <hr class="dash">
           <p class="ts" style="margin-top:0">Si necessites una mica d'inspiració, hi ha un tauler a Pinterest.</p>
-          <div style="margin-top:14px"><a class="pill out" href="https://es.pinterest.com/mdezoyysa/pas-dequador-board-inspo/" target="_blank" rel="noopener">Veure inspiració ↗</a> <span class="hand"><svg width="46" height="30" viewBox="0 0 46 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M44 6C30 0 12 4 6 24M6 24l-1-9M6 24l9-4"/></svg>(si la necessites)</span></div>
+          <div style="margin-top:14px"><a class="pill out" href="https://es.pinterest.com/mdezoyysa/pas-dequador-board-inspo/" target="_blank" rel="noopener">Veure inspiració ↗</a> </div>
+          <p class="hand" style="margin:2px 0 0 34px"><svg width="40" height="30" viewBox="0 0 40 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top:-18px"><path d="M36 26C20 24 8 16 6 4M6 4l-4 9M6 4l9 6"/></svg>(si la necessites)</p>
         </div>
       </div>
 
