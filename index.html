@@ -228,15 +228,35 @@ a { color: inherit; }
 .idea .del { align-self: flex-start; border: 1.5px solid #a3362a; color: #a3362a; background: transparent; border-radius: 999px; padding: 5px 13px; font: inherit; font-size: 12.5px; font-weight: 700; }
 .tot { color: var(--muted); font-size: 14.5px; }
 
-/* aviat: tauler de cotxes */
-.soon { position: relative; border: 2.5px dashed var(--wine); border-radius: 26px; padding: clamp(26px, 5vw, 54px); display: grid; grid-template-columns: auto 1fr; gap: 20px 34px; align-items: center; background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(88,26,16,.05) 14px 16px); }
-.soon .car { width: 104px; height: 104px; border-radius: 50%; background: var(--wine); color: var(--cream); display: grid; place-items: center; }
-.soon h3 { font-family: var(--serif); font-size: clamp(30px, 4.6vw, 54px); font-weight: 400; line-height: .98; letter-spacing: -.035em; }
-.soon h3 i { font-weight: 600; }
-.soon p { margin-top: 10px; max-width: 54ch; color: var(--muted); }
-.soon .tag { position: absolute; top: -16px; right: 26px; transform: rotate(4deg); background: var(--wine); color: var(--cream); font-weight: 800; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; padding: 7px 16px; border-radius: 999px; }
-@media (max-width: 640px) { .soon { grid-template-columns: 1fr; } .soon .car { width: 80px; height: 80px; } }
-
+/* tauler de cotxes */
+.rides { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .rides { grid-template-columns: 1fr; } }
+.rcount { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.rcount span { border: 2px solid var(--wine); border-radius: 999px; padding: 6px 14px; font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.rcount b { font-family: var(--serif); font-size: 17px; letter-spacing: 0; margin-right: 4px; }
+.rfilters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.rlist { display: flex; flex-direction: column; gap: 16px; max-height: 760px; overflow-y: auto; padding: 4px 10px 12px 4px; }
+@media (max-width: 860px) { .rlist { max-height: none; padding-right: 4px; } }
+.ride { position: relative; background: var(--paper); border: 2px solid var(--wine); border-radius: 18px; padding: 16px 18px 16px; box-shadow: 5px 5px 0 var(--wine); display: flex; flex-direction: column; gap: 6px; }
+.ride.busca { background: var(--cream2); border-style: dashed; }
+.ride::before { content: ""; position: absolute; top: -9px; left: 22px; width: 54px; height: 16px; background: rgba(201,169,106,.8); transform: rotate(-3deg); }
+.rtop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.rname { font-family: var(--serif); font-size: 28px; line-height: 1; letter-spacing: -.03em; font-weight: 600; margin-top: 4px; }
+.rbig { font-family: var(--serif); font-size: 34px; line-height: .9; font-weight: 600; letter-spacing: -.04em; text-align: right; }
+.rbig small { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; margin-top: 3px; }
+.rline { font-size: 15px; }
+.rnote { font-family: var(--hand); font-size: 23px; line-height: 1.05; color: var(--wine2); }
+.ractions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.ractions .pill { min-height: 38px; padding: 0 16px; font-size: 11.5px; }
+.ractions .pill.red { border-color: #a3362a; color: #a3362a; background: transparent; }
+.ride.ple { opacity: .72; }
+.ride.ple .stamp { display: block; }
+.stamp { display: none; position: absolute; right: 16px; top: 38%; transform: rotate(-12deg); border: 3px solid #a3362a; color: #a3362a; border-radius: 8px; padding: 2px 12px; font-weight: 900; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; background: rgba(251,247,232,.8); }
+.rform .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 420px) { .rform .row2 { grid-template-columns: 1fr; } }
+.rform .priv { font-size: 12.5px; color: var(--muted); margin-top: -2px; }
+.rform .chk { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; letter-spacing: 0; text-transform: none; margin-top: 8px; }
+.rform .chk input { width: 22px; height: 22px; accent-color: var(--wine); padding: 0; flex: none; }
 /* peu */
 footer { margin-top: clamp(56px, 9vw, 120px); background: var(--wine); color: var(--cream); padding-block: 54px 36px; overflow: hidden; }
 footer .big { font-family: var(--serif); font-weight: 400; font-size: clamp(60px, 15vw, 210px); line-height: .8; letter-spacing: -.05em; }
@@ -425,10 +445,39 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
     </section>
 
     <section class="sec" id="cotxes">
-      <div class="soon">
-        <span class="tag">Aviat</span>
-        <div class="car" aria-hidden="true"><svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V11l2-5h10l2 5v5M3 16h18M7 16v2M17 16v2"/><circle cx="8" cy="13" r=".6" fill="currentColor"/><circle cx="16" cy="13" r=".6" fill="currentColor"/></svg></div>
-        <div><h3>Tauler de <i>cotxes</i></h3><p>Molt aviat: aquí podràs dir si tens places lliures al cotxe o demanar-ne una per anar a Muntanyola.</p></div>
+      <div class="sh"><p class="kicker">Cotxes</p><h2 class="h2">Tauler de <i>cotxes</i></h2><p class="sub">Si tens places lliures, ofereix-les. Si necessites cotxe, demana'n un. El teu número no es mostra mai: només s'obre el xat de WhatsApp quan algú toca «Contacta».</p></div>
+      <div class="rides">
+        <form class="ticket mailform rform" id="rideform" autocomplete="off">
+          <div class="chips2" role="group" aria-label="Tipus d'anunci">
+            <button type="button" class="chipsel" data-rt="ofereix" aria-pressed="true">Tinc places</button>
+            <button type="button" class="chipsel" data-rt="busca" aria-pressed="false">Busco cotxe</button>
+          </div>
+          <label for="r-nom">El teu nom</label>
+          <input id="r-nom" type="text" maxlength="40" placeholder="Nom" autocomplete="given-name" required>
+          <div class="row2">
+            <div><label for="r-des">Surts de</label><input id="r-des" type="text" maxlength="40" placeholder="Bellaterra, Sabadell…" required></div>
+            <div><label for="r-hora">Hora (aprox.)</label><input id="r-hora" type="text" maxlength="20" placeholder="17:30"></div>
+          </div>
+          <div class="row2">
+            <div><label for="r-places" id="r-placeslab">Places lliures</label><input id="r-places" type="number" min="1" max="8" value="3" inputmode="numeric"></div>
+            <div><label for="r-tel">WhatsApp (privat)</label><input id="r-tel" type="tel" maxlength="20" placeholder="6XX XXX XXX" autocomplete="tel" inputmode="tel" required></div>
+          </div>
+          <p class="priv">El número només el veu el servidor. Ningú no el veu a la pàgina.</p>
+          <label class="chk" for="r-torn"><input id="r-torn" type="checkbox" checked> <span id="r-tornlab">Puc tornar el diumenge</span></label>
+          <label for="r-nota">Nota (opcional)</label>
+          <input id="r-nota" type="text" maxlength="160" placeholder="Passo per la UAB, porto maletes…">
+          <div class="mailrow"><span></span><button class="pill big" type="submit">Publica</button></div>
+          <p class="mailmsg" id="r-msg" hidden></p>
+        </form>
+        <div>
+          <div class="rcount" id="rcount" aria-live="polite"></div>
+          <div class="rfilters chips2" role="group" aria-label="Filtre">
+            <button type="button" class="chipsel" data-rf="tots" aria-pressed="true">Tots</button>
+            <button type="button" class="chipsel" data-rf="ofereix" aria-pressed="false">Tinc places</button>
+            <button type="button" class="chipsel" data-rf="busca" aria-pressed="false">Busquen cotxe</button>
+          </div>
+          <div class="rlist" id="rlist" aria-live="polite"><p class="tot">Carregant cotxes…</p></div>
+        </div>
       </div>
     </section>
   </div></div>
@@ -559,10 +608,10 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
       .then(function () { ideaState.list = ideaState.list.filter(function (x) { return x.id !== id; }); renderIdeas(); })
       .catch(function () { ideaMsg("No s'ha pogut esborrar (clau incorrecta?).", true); });
   }
-  Array.prototype.forEach.call(document.querySelectorAll(".chipsel"), function (b) {
+  Array.prototype.forEach.call(document.querySelectorAll("#ideaform .chipsel"), function (b) {
     b.addEventListener("click", function () {
       ideaState.tipus = b.getAttribute("data-t");
-      Array.prototype.forEach.call(document.querySelectorAll(".chipsel"), function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      Array.prototype.forEach.call(document.querySelectorAll("#ideaform .chipsel"), function (x) { x.setAttribute("aria-pressed", String(x === b)); });
     });
   });
   elText.addEventListener("input", function () { elCount.textContent = elText.value.length + " / 400"; });
@@ -630,6 +679,94 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
     var im = document.createElement("img"); im.src = src; im.width = 1280; im.height = 1803; im.alt = "Invitació, pàgina " + (i + 1); im.decoding = "async";
     pages.appendChild(im);
   });
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function h(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var DEV = ""; try { DEV = localStorage.getItem("eq_dev") || ""; } catch (e) {}
+  if (DEV.length < 16) { DEV = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2) + String(Date.now()) + String(Math.random()).slice(2); try { localStorage.setItem("eq_dev", DEV); } catch (e) {} }
+  var ADM = ""; try { ADM = localStorage.getItem("eq_admin") || ""; } catch (e) {}
+  function api(fn, body) {
+    return fetch("/api/vote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ fn: fn, p_dev: DEV }, body || {})) })
+      .then(function (r) { if (!r.ok) return r.text().then(function (t) { throw new Error(t || r.status); }); return r.text().then(function (t) { return t ? JSON.parse(t) : null; }); });
+  }
+  var state = { list: [], tipus: "ofereix", filtre: "tots" };
+  var elList = $("rlist"), elCount = $("rcount"), elForm = $("rideform"), elMsg = $("r-msg");
+  function msg(t, bad) { elMsg.textContent = t; elMsg.hidden = !t; elMsg.className = "mailmsg" + (bad ? " bad" : ""); }
+
+  function render() {
+    var of = state.list.filter(function (x) { return x.tipus === "ofereix"; }), bu = state.list.filter(function (x) { return x.tipus === "busca"; });
+    var lliures = of.reduce(function (n, x) { return n + (x.ple ? 0 : x.places); }, 0), busquen = bu.reduce(function (n, x) { return n + x.places; }, 0);
+    elCount.textContent = "";
+    [[of.length, "cotxes"], [lliures, "places lliures"], [busquen, "persones busquen"]].forEach(function (p) { var s = h("span"); s.appendChild(h("b", null, String(p[0]))); s.appendChild(document.createTextNode(p[1])); elCount.appendChild(s); });
+    elList.textContent = "";
+    var llista = state.list.filter(function (x) { return state.filtre === "tots" || x.tipus === state.filtre; });
+    if (!llista.length) { elList.appendChild(h("p", "tot", state.list.length ? "No hi ha anuncis d'aquest tipus." : "Encara no hi ha cap anunci. Sigues el primer!")); return; }
+    llista.forEach(function (x) {
+      var c = h("article", "ride " + x.tipus + (x.ple ? " ple" : ""));
+      var top = h("div", "rtop");
+      top.appendChild(h("span", "tagi" + (x.tipus === "ofereix" ? " aporto" : ""), x.tipus === "ofereix" ? "Tinc places" : "Busca cotxe"));
+      var big = h("div", "rbig", String(x.places)); big.appendChild(h("small", null, x.tipus === "ofereix" ? (x.places === 1 ? "plaça" : "places") : (x.places === 1 ? "persona" : "persones")));
+      top.appendChild(big); c.appendChild(top);
+      c.appendChild(h("p", "rname", x.nom));
+      c.appendChild(h("p", "rline", "Surt de " + x.des + (x.hora ? " · " + x.hora : "")));
+      c.appendChild(h("p", "rline", x.tornada ? (x.tipus === "ofereix" ? "Pot tornar el diumenge" : "Necessita tornada el diumenge") : "Només anada"));
+      if (x.nota) c.appendChild(h("p", "rnote", x.nota));
+      c.appendChild(h("span", "stamp", "Complet"));
+      var ac = h("div", "ractions");
+      if (!x.ple) { var b = h("button", "pill", "Contacta per WhatsApp"); b.type = "button"; b.addEventListener("click", function () { contacta(x, b); }); ac.appendChild(b); }
+      if (x.meu) {
+        var p = h("button", "pill out", x.ple ? "Torna a obrir" : (x.tipus === "ofereix" ? "Marca complet" : "Ja tinc cotxe")); p.type = "button"; p.addEventListener("click", function () { api("cotxe_ple", { id: x.id }).then(load).catch(function () { msg("No s'ha pogut canviar.", true); }); }); ac.appendChild(p);
+      }
+      if (x.meu || ADM) {
+        var d = h("button", "pill out red", "Esborra"); d.type = "button";
+        d.addEventListener("click", function () {
+          if (!d.dataset.sure) { d.dataset.sure = "1"; d.textContent = "Segur?"; setTimeout(function () { delete d.dataset.sure; d.textContent = "Esborra"; }, 3500); return; }
+          (x.meu ? api("cotxe_esborrar", { id: x.id }) : api("admin_cotxe_esborrar", { id: x.id, key: ADM })).then(load).catch(function () { msg("No s'ha pogut esborrar.", true); });
+        });
+        ac.appendChild(d);
+      }
+      if (ac.children.length) c.appendChild(ac);
+      elList.appendChild(c);
+    });
+  }
+  function load() { return api("cotxes_llistar").then(function (r) { state.list = (r && r.cotxes) || []; render(); }); }
+  function contacta(x, b) {
+    var w = window.open("", "_blank"); var old = b.textContent; b.disabled = true; b.textContent = "Obrint…";
+    api("cotxe_contacte", { id: x.id }).then(function (r) { if (w) w.location.href = r.url; else location.href = r.url; })
+      .catch(function () { if (w) w.close(); msg("Ara no es pot obrir el contacte. Prova-ho d'aquí a un moment.", true); })
+      .then(function () { b.disabled = false; b.textContent = old; });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-rt]"), function (b) {
+    b.addEventListener("click", function () {
+      state.tipus = b.getAttribute("data-rt");
+      Array.prototype.forEach.call(document.querySelectorAll("[data-rt]"), function (y) { y.setAttribute("aria-pressed", String(y === b)); });
+      $("r-placeslab").textContent = state.tipus === "ofereix" ? "Places lliures" : "Quantes persones";
+      $("r-tornlab").textContent = state.tipus === "ofereix" ? "Puc tornar el diumenge" : "Necessito tornada el diumenge";
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-rf]"), function (b) {
+    b.addEventListener("click", function () {
+      state.filtre = b.getAttribute("data-rf");
+      Array.prototype.forEach.call(document.querySelectorAll("[data-rf]"), function (y) { y.setAttribute("aria-pressed", String(y === b)); });
+      render();
+    });
+  });
+  elForm.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var btn = elForm.querySelector("button[type=submit]"); btn.disabled = true; msg("", false);
+    api("cotxe_nou", { tipus: state.tipus, nom: $("r-nom").value, des: $("r-des").value, hora: $("r-hora").value, places: $("r-places").value, tornada: $("r-torn").checked, nota: $("r-nota").value, tel: $("r-tel").value })
+      .then(function (r) { if (r && r.cotxe) state.list.unshift(r.cotxe); render(); $("r-nota").value = ""; msg("Publicat! Ja apareix al tauler.", false); })
+      .catch(function (e) {
+        var m = String(e && e.message);
+        msg(/tel_no_valid/.test(m) ? "Escriu un número de WhatsApp vàlid (9 xifres)." : /nom_curt/.test(m) ? "Escriu el teu nom." : /origen_curt/.test(m) ? "Indica d'on surts." : /massa/.test(m) ? "Has publicat massa anuncis. Esborra'n algun." : "No s'ha pogut publicar. Torna-ho a provar.", true);
+      })
+      .then(function () { btn.disabled = false; });
+  });
+  load().catch(function () { elList.textContent = ""; elList.appendChild(h("p", "tot", "No s'han pogut carregar els anuncis.")); });
 })();
 </script>
 </body>
