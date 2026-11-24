@@ -228,35 +228,56 @@ a { color: inherit; }
 .idea .del { align-self: flex-start; border: 1.5px solid #a3362a; color: #a3362a; background: transparent; border-radius: 999px; padding: 5px 13px; font: inherit; font-size: 12.5px; font-weight: 700; }
 .tot { color: var(--muted); font-size: 14.5px; }
 
-/* tauler de cotxes */
-.rides { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 28px; align-items: start; }
-@media (max-width: 860px) { .rides { grid-template-columns: 1fr; } }
-.rcount { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
-.rcount span { border: 2px solid var(--wine); border-radius: 999px; padding: 6px 14px; font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+/* tauler de corxo */
+.board { display: grid; grid-template-columns: minmax(0, 330px) minmax(0, 1fr); gap: 26px; align-items: start; }
+@media (max-width: 960px) { .board { grid-template-columns: 1fr; } }
+.cork { position: relative; border: 11px solid #7a4a28; border-radius: 16px; padding: 28px 20px 26px; background-color: #c69a63; background-image: radial-gradient(rgba(80,40,15,.38) 1.1px, transparent 1.8px), radial-gradient(rgba(255,236,200,.3) 1px, transparent 1.6px), radial-gradient(rgba(90,50,20,.22) 2px, transparent 3px); background-size: 7px 7px, 11px 11px, 17px 17px; background-position: 0 0, 3px 4px, 5px 2px; box-shadow: inset 0 0 50px rgba(60,30,10,.5), 8px 8px 0 var(--wine); }
+.cork::before { content: "TAULER · COTXES CAP A MUNTANYOLA"; position: absolute; top: -26px; left: 50%; transform: translateX(-50%); white-space: nowrap; background: var(--wine); color: var(--cream); font-size: 11px; font-weight: 800; letter-spacing: .2em; padding: 6px 16px; border-radius: 6px; }
+.rcount { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.rcount span { background: var(--paper); border: 2px solid var(--wine); border-radius: 999px; padding: 5px 13px; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .rcount b { font-family: var(--serif); font-size: 17px; letter-spacing: 0; margin-right: 4px; }
-.rfilters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-.rlist { display: flex; flex-direction: column; gap: 16px; max-height: 760px; overflow-y: auto; padding: 4px 10px 12px 4px; }
-@media (max-width: 860px) { .rlist { max-height: none; padding-right: 4px; } }
-.ride { position: relative; background: var(--paper); border: 2px solid var(--wine); border-radius: 18px; padding: 16px 18px 16px; box-shadow: 5px 5px 0 var(--wine); display: flex; flex-direction: column; gap: 6px; }
-.ride.busca { background: var(--cream2); border-style: dashed; }
-.ride::before { content: ""; position: absolute; top: -9px; left: 22px; width: 54px; height: 16px; background: rgba(201,169,106,.8); transform: rotate(-3deg); }
-.rtop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.rname { font-family: var(--serif); font-size: 28px; line-height: 1; letter-spacing: -.03em; font-weight: 600; margin-top: 4px; }
-.rbig { font-family: var(--serif); font-size: 34px; line-height: .9; font-weight: 600; letter-spacing: -.04em; text-align: right; }
+.rfilters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.rfilters .chipsel { background: var(--paper); }
+.rfilters .chipsel[aria-pressed="true"] { background: var(--wine); }
+.rlist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 20px; align-items: start; max-height: 860px; overflow-y: auto; padding: 14px 6px 10px; }
+@media (max-width: 700px) { .rlist { grid-template-columns: 1fr; max-height: none; } }
+.ride { position: relative; background: var(--paper); border-radius: 3px; padding: 22px 16px 14px; box-shadow: 3px 5px 0 rgba(60,30,10,.4); display: flex; flex-direction: column; gap: 5px; color: var(--wine); }
+.ride:nth-child(3n+2) { background: #f3e3ad; transform: rotate(1.2deg); }
+.ride:nth-child(3n) { transform: rotate(-1deg); }
+.ride:nth-child(3n+1) { transform: rotate(.6deg); }
+.ride.busca { background: #f2cfc4; }
+.ride::before { content: ""; position: absolute; top: -9px; left: 50%; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f06a55, #a3362a 65%); box-shadow: 0 4px 3px rgba(0,0,0,.35); }
+.rtop { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.rname { font-family: var(--serif); font-size: 26px; line-height: 1; letter-spacing: -.03em; font-weight: 600; margin-top: 2px; }
+.rbig { font-family: var(--serif); font-size: 34px; line-height: .9; font-weight: 600; letter-spacing: -.04em; text-align: right; flex: none; }
 .rbig small { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; margin-top: 3px; }
-.rline { font-size: 15px; }
-.rnote { font-family: var(--hand); font-size: 23px; line-height: 1.05; color: var(--wine2); }
+.rline { font-size: 14.5px; }
+.rnote { font-family: var(--hand); font-size: 23px; line-height: 1.05; color: var(--wine2); margin-top: 2px; }
 .ractions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.ractions .pill { min-height: 38px; padding: 0 16px; font-size: 11.5px; }
+.ractions .pill { min-height: 34px; padding: 0 14px; font-size: 11px; }
 .ractions .pill.red { border-color: #a3362a; color: #a3362a; background: transparent; }
-.ride.ple { opacity: .72; }
+.ride.ple { opacity: .78; }
 .ride.ple .stamp { display: block; }
-.stamp { display: none; position: absolute; right: 16px; top: 38%; transform: rotate(-12deg); border: 3px solid #a3362a; color: #a3362a; border-radius: 8px; padding: 2px 12px; font-weight: 900; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; background: rgba(251,247,232,.8); }
+.stamp { display: none; position: absolute; right: 12px; top: 40%; transform: rotate(-12deg); border: 3px solid #a3362a; color: #a3362a; border-radius: 8px; padding: 2px 12px; font-weight: 900; font-size: 20px; letter-spacing: .14em; text-transform: uppercase; background: rgba(251,247,232,.85); pointer-events: none; }
+.cm { margin-top: 8px; border-top: 1.5px dashed rgba(88,26,16,.35); padding-top: 6px; }
+.cm summary { cursor: pointer; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; list-style: none; padding: 6px 0; }
+.cm summary::-webkit-details-marker { display: none; }
+.cm summary::after { content: " ▾"; }
+.cm[open] summary::after { content: " ▴"; }
+.cmlist { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 10px; }
+.cmi { background: rgba(255,255,255,.55); border-radius: 8px; padding: 7px 10px; font-size: 14px; overflow-wrap: anywhere; }
+.cmi b { font-family: var(--serif); font-size: 15px; }
+.cmi small { color: var(--muted); margin-left: 6px; }
+.cmi button { float: right; border: 0; background: none; color: #a3362a; font-size: 12px; font-weight: 700; cursor: pointer; padding: 0 0 0 8px; }
+.cmform { display: flex; flex-direction: column; gap: 6px; }
+.cmform input { font: inherit; font-size: 16px; padding: 9px 12px; border-radius: 10px; border: 1.5px solid var(--wine); background: rgba(255,255,255,.7); color: var(--wine); width: 100%; }
+.cmform .pill { align-self: flex-start; min-height: 36px; font-size: 11px; padding: 0 16px; }
 .rform .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 420px) { .rform .row2 { grid-template-columns: 1fr; } }
-.rform .priv { font-size: 12.5px; color: var(--muted); margin-top: -2px; }
 .rform .chk { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; letter-spacing: 0; text-transform: none; margin-top: 8px; }
 .rform .chk input { width: 22px; height: 22px; accent-color: var(--wine); padding: 0; flex: none; }
+.rhow { display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--muted); margin-top: 14px; }
+.rhow b { color: var(--wine); }
 /* peu */
 footer { margin-top: clamp(56px, 9vw, 120px); background: var(--wine); color: var(--cream); padding-block: 54px 36px; overflow: hidden; }
 footer .big { font-family: var(--serif); font-weight: 400; font-size: clamp(60px, 15vw, 210px); line-height: .8; letter-spacing: -.05em; }
@@ -445,10 +466,10 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
     </section>
 
     <section class="sec" id="cotxes">
-      <div class="sh"><p class="kicker">Cotxes</p><h2 class="h2">Tauler de <i>cotxes</i></h2><p class="sub">Si tens places lliures, ofereix-les. Si necessites cotxe, demana'n un. El teu número no es mostra mai: només s'obre el xat de WhatsApp quan algú toca «Contacta».</p></div>
-      <div class="rides">
+      <div class="sh"><p class="kicker">Cotxes</p><h2 class="h2">Tauler de <i>cotxes</i></h2><p class="sub">Com el tauler de corxo de l'oficina: penja una nota si tens places lliures o si busques cotxe, i la gent hi pot comentar. Els detalls (telèfon, punt de trobada) els arregleu per privat.</p></div>
+      <div class="board">
         <form class="ticket mailform rform" id="rideform" autocomplete="off">
-          <div class="chips2" role="group" aria-label="Tipus d'anunci">
+          <div class="chips2" role="group" aria-label="Tipus de nota">
             <button type="button" class="chipsel" data-rt="ofereix" aria-pressed="true">Tinc places</button>
             <button type="button" class="chipsel" data-rt="busca" aria-pressed="false">Busco cotxe</button>
           </div>
@@ -458,25 +479,23 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
             <div><label for="r-des">Surts de</label><input id="r-des" type="text" maxlength="40" placeholder="Bellaterra, Sabadell…" required></div>
             <div><label for="r-hora">Hora (aprox.)</label><input id="r-hora" type="text" maxlength="20" placeholder="17:30"></div>
           </div>
-          <div class="row2">
-            <div><label for="r-places" id="r-placeslab">Places lliures</label><input id="r-places" type="number" min="1" max="8" value="3" inputmode="numeric"></div>
-            <div><label for="r-tel">WhatsApp (privat)</label><input id="r-tel" type="tel" maxlength="20" placeholder="6XX XXX XXX" autocomplete="tel" inputmode="tel" required></div>
-          </div>
-          <p class="priv">El número només el veu el servidor. Ningú no el veu a la pàgina.</p>
+          <label for="r-places" id="r-placeslab">Places lliures</label>
+          <input id="r-places" type="number" min="1" max="8" value="3" inputmode="numeric">
           <label class="chk" for="r-torn"><input id="r-torn" type="checkbox" checked> <span id="r-tornlab">Puc tornar el diumenge</span></label>
           <label for="r-nota">Nota (opcional)</label>
           <input id="r-nota" type="text" maxlength="160" placeholder="Passo per la UAB, porto maletes…">
-          <div class="mailrow"><span></span><button class="pill big" type="submit">Publica</button></div>
+          <div class="mailrow"><span></span><button class="pill big" type="submit">Penja la nota</button></div>
           <p class="mailmsg" id="r-msg" hidden></p>
+          <div class="rhow"><span><b>1.</b> Penja la teva nota.</span><span><b>2.</b> Algú et respon als comentaris.</span><span><b>3.</b> Us poseu d'acord per privat.</span></div>
         </form>
-        <div>
+        <div class="cork">
           <div class="rcount" id="rcount" aria-live="polite"></div>
           <div class="rfilters chips2" role="group" aria-label="Filtre">
             <button type="button" class="chipsel" data-rf="tots" aria-pressed="true">Tots</button>
             <button type="button" class="chipsel" data-rf="ofereix" aria-pressed="false">Tinc places</button>
             <button type="button" class="chipsel" data-rf="busca" aria-pressed="false">Busquen cotxe</button>
           </div>
-          <div class="rlist" id="rlist" aria-live="polite"><p class="tot">Carregant cotxes…</p></div>
+          <div class="rlist" id="rlist" aria-live="polite"><p class="tot" style="background:var(--paper);padding:8px 12px;border-radius:8px">Carregant notes…</p></div>
         </div>
       </div>
     </section>
@@ -689,57 +708,74 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
   var DEV = ""; try { DEV = localStorage.getItem("eq_dev") || ""; } catch (e) {}
   if (DEV.length < 16) { DEV = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2) + String(Date.now()) + String(Math.random()).slice(2); try { localStorage.setItem("eq_dev", DEV); } catch (e) {} }
   var ADM = ""; try { ADM = localStorage.getItem("eq_admin") || ""; } catch (e) {}
+  var NOM = ""; try { NOM = localStorage.getItem("eq_cnom") || ""; } catch (e) {}
   function api(fn, body) {
     return fetch("/api/vote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ fn: fn, p_dev: DEV }, body || {})) })
       .then(function (r) { if (!r.ok) return r.text().then(function (t) { throw new Error(t || r.status); }); return r.text().then(function (t) { return t ? JSON.parse(t) : null; }); });
   }
-  var state = { list: [], tipus: "ofereix", filtre: "tots" };
+  var state = { list: [], tipus: "ofereix", filtre: "tots", open: {} };
   var elList = $("rlist"), elCount = $("rcount"), elForm = $("rideform"), elMsg = $("r-msg");
+  if (NOM) $("r-nom").value = NOM;
   function msg(t, bad) { elMsg.textContent = t; elMsg.hidden = !t; elMsg.className = "mailmsg" + (bad ? " bad" : ""); }
+  function ago(t) { var s = Math.max(0, (Date.now() - t) / 1000); if (s < 60) return "ara"; if (s < 3600) return Math.floor(s / 60) + " min"; if (s < 86400) return Math.floor(s / 3600) + " h"; return Math.floor(s / 86400) + " d"; }
+  function swap(c) { for (var i = 0; i < state.list.length; i++) if (state.list[i].id === c.id) { state.list[i] = c; break; } render(); }
 
   function render() {
+    var keep = elList.scrollTop;
     var of = state.list.filter(function (x) { return x.tipus === "ofereix"; }), bu = state.list.filter(function (x) { return x.tipus === "busca"; });
-    var lliures = of.reduce(function (n, x) { return n + (x.ple ? 0 : x.places); }, 0), busquen = bu.reduce(function (n, x) { return n + x.places; }, 0);
+    var lliures = of.reduce(function (n, x) { return n + (x.ple ? 0 : x.places); }, 0), busquen = bu.reduce(function (n, x) { return n + (x.ple ? 0 : x.places); }, 0);
     elCount.textContent = "";
-    [[of.length, "cotxes"], [lliures, "places lliures"], [busquen, "persones busquen"]].forEach(function (p) { var s = h("span"); s.appendChild(h("b", null, String(p[0]))); s.appendChild(document.createTextNode(p[1])); elCount.appendChild(s); });
+    [[of.length, "cotxes"], [lliures, "places lliures"], [busquen, "busquen cotxe"]].forEach(function (p) { var s = h("span"); s.appendChild(h("b", null, String(p[0]))); s.appendChild(document.createTextNode(p[1])); elCount.appendChild(s); });
     elList.textContent = "";
     var llista = state.list.filter(function (x) { return state.filtre === "tots" || x.tipus === state.filtre; });
-    if (!llista.length) { elList.appendChild(h("p", "tot", state.list.length ? "No hi ha anuncis d'aquest tipus." : "Encara no hi ha cap anunci. Sigues el primer!")); return; }
+    if (!llista.length) { var em = h("p", "tot", state.list.length ? "No hi ha notes d'aquest tipus." : "El tauler està buit. Penja la primera nota!"); em.style.cssText = "background:var(--paper);padding:10px 14px;border-radius:8px;grid-column:1/-1"; elList.appendChild(em); return; }
     llista.forEach(function (x) {
       var c = h("article", "ride " + x.tipus + (x.ple ? " ple" : ""));
       var top = h("div", "rtop");
-      top.appendChild(h("span", "tagi" + (x.tipus === "ofereix" ? " aporto" : ""), x.tipus === "ofereix" ? "Tinc places" : "Busca cotxe"));
+      var left = h("div"); left.appendChild(h("span", "tagi" + (x.tipus === "ofereix" ? " aporto" : ""), x.tipus === "ofereix" ? "Tinc places" : "Busca cotxe")); left.appendChild(h("p", "rname", x.nom));
       var big = h("div", "rbig", String(x.places)); big.appendChild(h("small", null, x.tipus === "ofereix" ? (x.places === 1 ? "plaça" : "places") : (x.places === 1 ? "persona" : "persones")));
-      top.appendChild(big); c.appendChild(top);
-      c.appendChild(h("p", "rname", x.nom));
+      top.appendChild(left); top.appendChild(big); c.appendChild(top);
       c.appendChild(h("p", "rline", "Surt de " + x.des + (x.hora ? " · " + x.hora : "")));
       c.appendChild(h("p", "rline", x.tornada ? (x.tipus === "ofereix" ? "Pot tornar el diumenge" : "Necessita tornada el diumenge") : "Només anada"));
       if (x.nota) c.appendChild(h("p", "rnote", x.nota));
       c.appendChild(h("span", "stamp", "Complet"));
-      var ac = h("div", "ractions");
-      if (!x.ple) { var b = h("button", "pill", "Contacta per WhatsApp"); b.type = "button"; b.addEventListener("click", function () { contacta(x, b); }); ac.appendChild(b); }
-      if (x.meu) {
-        var p = h("button", "pill out", x.ple ? "Torna a obrir" : (x.tipus === "ofereix" ? "Marca complet" : "Ja tinc cotxe")); p.type = "button"; p.addEventListener("click", function () { api("cotxe_ple", { id: x.id }).then(load).catch(function () { msg("No s'ha pogut canviar.", true); }); }); ac.appendChild(p);
-      }
       if (x.meu || ADM) {
+        var ac = h("div", "ractions");
+        if (x.meu) { var p = h("button", "pill out", x.ple ? "Torna a obrir" : (x.tipus === "ofereix" ? "Marca complet" : "Ja tinc cotxe")); p.type = "button"; p.addEventListener("click", function () { api("cotxe_ple", { id: x.id }).then(load).catch(function () { msg("No s'ha pogut canviar.", true); }); }); ac.appendChild(p); }
         var d = h("button", "pill out red", "Esborra"); d.type = "button";
         d.addEventListener("click", function () {
           if (!d.dataset.sure) { d.dataset.sure = "1"; d.textContent = "Segur?"; setTimeout(function () { delete d.dataset.sure; d.textContent = "Esborra"; }, 3500); return; }
           (x.meu ? api("cotxe_esborrar", { id: x.id }) : api("admin_cotxe_esborrar", { id: x.id, key: ADM })).then(load).catch(function () { msg("No s'ha pogut esborrar.", true); });
         });
-        ac.appendChild(d);
+        ac.appendChild(d); c.appendChild(ac);
       }
-      if (ac.children.length) c.appendChild(ac);
+      var cm = document.createElement("details"); cm.className = "cm"; if (state.open[x.id]) cm.open = true;
+      cm.addEventListener("toggle", function () { state.open[x.id] = cm.open; });
+      cm.appendChild(h("summary", null, "Comentaris (" + x.comentaris.length + ")"));
+      var cl = h("div", "cmlist");
+      x.comentaris.forEach(function (q) {
+        var i = h("div", "cmi");
+        if (q.meu || x.meu || ADM) { var del = h("button", null, "×"); del.type = "button"; del.setAttribute("aria-label", "Esborra el comentari"); del.addEventListener("click", function () { (q.meu || x.meu ? api("cotxe_comentari_esborrar", { id: x.id, cid: q.id }).then(swap) : api("admin_cotxe_comentari_esborrar", { id: x.id, cid: q.id, key: ADM }).then(load)).catch(function () {}); }); i.appendChild(del); }
+        i.appendChild(h("b", null, q.nom)); i.appendChild(h("small", null, ago(q.t))); i.appendChild(document.createElement("br")); i.appendChild(document.createTextNode(q.text));
+        cl.appendChild(i);
+      });
+      cm.appendChild(cl);
+      var f = h("form", "cmform"); f.autocomplete = "off";
+      var n = document.createElement("input"); n.type = "text"; n.maxLength = 30; n.placeholder = "El teu nom"; n.value = NOM; n.setAttribute("aria-label", "El teu nom");
+      var t = document.createElement("input"); t.type = "text"; t.maxLength = 240; t.placeholder = "Escriu un comentari…"; t.setAttribute("aria-label", "Comentari");
+      var sb = h("button", "pill", "Comenta"); sb.type = "submit";
+      f.appendChild(n); f.appendChild(t); f.appendChild(sb);
+      f.addEventListener("submit", function (ev) {
+        ev.preventDefault(); if (t.value.trim().length < 2 || n.value.trim().length < 2) { msg("Escriu el teu nom i el comentari.", true); return; }
+        sb.disabled = true; NOM = n.value.trim(); try { localStorage.setItem("eq_cnom", NOM); } catch (e) {} state.open[x.id] = true;
+        api("cotxe_comentar", { id: x.id, nom: n.value, text: t.value }).then(swap).catch(function (er) { msg(/massa/.test(String(er && er.message)) ? "Aquesta nota ja té massa comentaris." : "No s'ha pogut comentar.", true); sb.disabled = false; });
+      });
+      cm.appendChild(f); c.appendChild(cm);
       elList.appendChild(c);
     });
+    elList.scrollTop = keep;
   }
   function load() { return api("cotxes_llistar").then(function (r) { state.list = (r && r.cotxes) || []; render(); }); }
-  function contacta(x, b) {
-    var w = window.open("", "_blank"); var old = b.textContent; b.disabled = true; b.textContent = "Obrint…";
-    api("cotxe_contacte", { id: x.id }).then(function (r) { if (w) w.location.href = r.url; else location.href = r.url; })
-      .catch(function () { if (w) w.close(); msg("Ara no es pot obrir el contacte. Prova-ho d'aquí a un moment.", true); })
-      .then(function () { b.disabled = false; b.textContent = old; });
-  }
   Array.prototype.forEach.call(document.querySelectorAll("[data-rt]"), function (b) {
     b.addEventListener("click", function () {
       state.tipus = b.getAttribute("data-rt");
@@ -758,15 +794,16 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
   elForm.addEventListener("submit", function (ev) {
     ev.preventDefault();
     var btn = elForm.querySelector("button[type=submit]"); btn.disabled = true; msg("", false);
-    api("cotxe_nou", { tipus: state.tipus, nom: $("r-nom").value, des: $("r-des").value, hora: $("r-hora").value, places: $("r-places").value, tornada: $("r-torn").checked, nota: $("r-nota").value, tel: $("r-tel").value })
-      .then(function (r) { if (r && r.cotxe) state.list.unshift(r.cotxe); render(); $("r-nota").value = ""; msg("Publicat! Ja apareix al tauler.", false); })
+    NOM = $("r-nom").value.trim(); try { localStorage.setItem("eq_cnom", NOM); } catch (e) {}
+    api("cotxe_nou", { tipus: state.tipus, nom: $("r-nom").value, des: $("r-des").value, hora: $("r-hora").value, places: $("r-places").value, tornada: $("r-torn").checked, nota: $("r-nota").value })
+      .then(function (r) { if (r && r.cotxe) state.list.unshift(r.cotxe); render(); $("r-nota").value = ""; msg("Nota penjada al tauler!", false); })
       .catch(function (e) {
         var m = String(e && e.message);
-        msg(/tel_no_valid/.test(m) ? "Escriu un número de WhatsApp vàlid (9 xifres)." : /nom_curt/.test(m) ? "Escriu el teu nom." : /origen_curt/.test(m) ? "Indica d'on surts." : /massa/.test(m) ? "Has publicat massa anuncis. Esborra'n algun." : "No s'ha pogut publicar. Torna-ho a provar.", true);
+        msg(/nom_curt/.test(m) ? "Escriu el teu nom." : /origen_curt/.test(m) ? "Indica d'on surts." : /massa/.test(m) ? "Has penjat massa notes. Esborra'n alguna." : "No s'ha pogut penjar. Torna-ho a provar.", true);
       })
       .then(function () { btn.disabled = false; });
   });
-  load().catch(function () { elList.textContent = ""; elList.appendChild(h("p", "tot", "No s'han pogut carregar els anuncis.")); });
+  load().catch(function () { elList.textContent = ""; var p = h("p", "tot", "No s'han pogut carregar les notes."); p.style.cssText = "background:var(--paper);padding:10px 14px;border-radius:8px;grid-column:1/-1"; elList.appendChild(p); });
 })();
 </script>
 </body>

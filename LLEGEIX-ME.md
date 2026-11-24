@@ -3,7 +3,7 @@
 Web informativa de la festa (30 de gener de 2027, Mas Aliberch, Muntanyola): https://equador-uab.vercel.app
 
 - Pàgina estàtica (`index.html`, `img/` en webp i `inv/` amb les pàgines de la invitació en webp; l'original és el PDF de disseny). Estètica del PDF: granat `#581a10` i crema `#f6efd8`.
-- Seccions: info, on (galeria i mapa), playlist, bústia i tauler de cotxes (`data/cotxes.json`; el telèfon es guarda al servidor i mai es retorna a la llista, només s'obre WhatsApp en tocar «Contacta»).
+- Seccions: info, on (galeria i mapa), playlist, bústia i tauler de cotxes en format tauler de corxo (`data/cotxes.json`): notes amb comentaris, sense telèfons; els detalls s'arreglen per privat.
 - La bústia usa `api/vote.js` i guarda les propostes en un Vercel Blob privat (`data/ideas.json`). Ja no hi ha votació a la web.
 
 ## Moderar la bústia

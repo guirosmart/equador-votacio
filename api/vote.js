@@ -20,15 +20,8 @@ const VOTES = "data/votes.json", IDEAS = "data/ideas.json", ROSTER = "data/roste
 const MAX_COTXES = 150, MAX_COTXES_PER_DISPOSITIU = 3;
 const FI_COTXES = Date.UTC(2027, 1, 2); // els anuncis desapareixen passat el 31/01/2027
 const vuitCotxes = () => ({ list: [] });
-// Telèfon: només xifres; si en té 9 i comença per 6 o 7, s'hi afegeix el prefix d'Espanya. Mai es retorna al públic.
-function telNet(s) {
-  let d = String(s || "").replace(/[^0-9]/g, "");
-  if (d.indexOf("00") === 0) d = d.slice(2);
-  if (d.length === 9 && /^[67]/.test(d)) d = "34" + d;
-  return d.length >= 10 && d.length <= 15 ? d : "";
-}
-const contactes = {}; // límit senzill de consultes de contacte per dispositiu (a la memòria de la instància)
-const pubCotxe = (x, d12) => ({ id: x.id, tipus: x.tipus, nom: x.nom, des: x.des, hora: x.hora, places: x.places, tornada: x.tornada, nota: x.nota, ple: !!x.ple, t: x.t, meu: x.d === d12 });
+const MAX_COMENTARIS = 40;
+const pubCotxe = (x, d12) => ({ id: x.id, tipus: x.tipus, nom: x.nom, des: x.des, hora: x.hora, places: x.places, tornada: x.tornada, nota: x.nota, ple: !!x.ple, t: x.t, meu: x.d === d12, comentaris: (x.c || []).map((c) => ({ id: c.id, nom: c.nom, text: c.text, t: c.t, meu: c.d === d12 })) });
 const sha = (s) => crypto.createHash("sha256").update(s + ":equador-uab").digest("hex").slice(0, 32);
 
 // ---------- Emmagatzematge ----------
@@ -159,13 +152,12 @@ module.exports = async (req, res) => {
       if (fn === "cotxe_nou") {
         const tipus = String(body.tipus || "");
         if (tipus !== "ofereix" && tipus !== "busca") { res.status(400).json({ error: "tipus no valid" }); return; }
-        const nom = neteja(body.nom, 40), des = neteja(body.des, 40), hora = neteja(body.hora, 20), nota = neteja(body.nota, 160), tel = telNet(body.tel);
+        const nom = neteja(body.nom, 40), des = neteja(body.des, 40), hora = neteja(body.hora, 20), nota = neteja(body.nota, 160);
         const places = Math.max(1, Math.min(8, parseInt(body.places, 10) || 1));
         if (nom.length < 2) { res.status(400).json({ error: "nom_curt" }); return; }
         if (des.length < 2) { res.status(400).json({ error: "origen_curt" }); return; }
-        if (!tel) { res.status(400).json({ error: "tel_no_valid" }); return; }
         const t = Date.now();
-        const x = { id: String(t) + crypto.randomBytes(3).toString("hex"), tipus, nom, des, hora, places, tornada: body.tornada === true || body.tornada === "si", nota, tel, ple: false, t, d: d12 };
+        const x = { id: String(t) + crypto.randomBytes(3).toString("hex"), tipus, nom, des, hora, places, tornada: body.tornada === true || body.tornada === "si", nota, ple: false, t, d: d12, c: [] };
         await actualitza(COTXES, vuitCotxes, (b) => {
           if (b.list.length >= MAX_COTXES || b.list.filter((y) => y.d === d12).length >= MAX_COTXES_PER_DISPOSITIU) throw falla(429, "massa anuncis");
           b.list.unshift(x);
@@ -173,17 +165,35 @@ module.exports = async (req, res) => {
         res.status(200).json({ cotxe: pubCotxe(x, d12) });
         return;
       }
-      if (fn === "cotxe_contacte") {
+      if (fn === "cotxe_comentar") {
         const id = String(body.id || "");
-        const k = d12, ara = Date.now();
-        contactes[k] = (contactes[k] || []).filter((q) => ara - q < 60000);
-        if (contactes[k].length >= 12) { res.status(429).json({ error: "massa consultes" }); return; }
-        contactes[k].push(ara);
-        const { obj } = await llegir(COTXES);
-        const x = ((obj && obj.list) || []).filter((y) => y.id === id)[0];
-        if (!x || !x.tel) { res.status(404).json({ error: "no trobat" }); return; }
-        const txt = "Hola " + x.nom + "! Et escric des de la web del Pas d'Equador pel cotxe cap a Muntanyola.";
-        res.status(200).json({ url: "https://wa.me/" + x.tel + "?text=" + encodeURIComponent(txt) });
+        const nom = neteja(body.nom, 30), text = neteja(body.text, 240);
+        if (nom.length < 2) { res.status(400).json({ error: "nom_curt" }); return; }
+        if (text.length < 2) { res.status(400).json({ error: "text_curt" }); return; }
+        const t = Date.now(), cid = String(t) + crypto.randomBytes(3).toString("hex");
+        const r = await actualitza(COTXES, vuitCotxes, (b) => {
+          const x = b.list.filter((y) => y.id === id)[0];
+          if (!x) throw falla(404, "no trobat");
+          x.c = x.c || [];
+          if (x.c.length >= MAX_COMENTARIS) throw falla(429, "massa comentaris");
+          x.c.push({ id: cid, nom, text, t, d: d12 });
+          return pubCotxe(x, d12);
+        });
+        res.status(200).json({ cotxe: r });
+        return;
+      }
+      if (fn === "cotxe_comentari_esborrar") {
+        const id = String(body.id || ""), cid = String(body.cid || "");
+        const r = await actualitza(COTXES, vuitCotxes, (b) => {
+          const x = b.list.filter((y) => y.id === id)[0];
+          if (!x) throw falla(404, "no trobat");
+          const c = (x.c || []).filter((q) => q.id === cid)[0];
+          if (!c) return pubCotxe(x, d12);
+          if (c.d !== d12 && x.d !== d12) throw falla(403, "no es teu");
+          x.c = x.c.filter((q) => q.id !== cid);
+          return pubCotxe(x, d12);
+        });
+        res.status(200).json({ cotxe: r });
         return;
       }
       if (fn === "cotxe_ple" || fn === "cotxe_esborrar") {
@@ -239,6 +249,12 @@ module.exports = async (req, res) => {
         const id = String(body.id || "");
         if (!/^[0-9a-f]{32}$/.test(id)) { res.status(400).json({ error: "id no valid" }); return; }
         await actualitza(VOTES, vuitVots, (b) => { delete b.v[id]; });
+        res.status(200).json({ ok: true });
+        return;
+      }
+      if (fn === "admin_cotxe_comentari_esborrar") {
+        const id = String(body.id || ""), cid = String(body.cid || "");
+        await actualitza(COTXES, vuitCotxes, (b) => { const x = b.list.filter((y) => y.id === id)[0]; if (x) x.c = (x.c || []).filter((q) => q.id !== cid); });
         res.status(200).json({ ok: true });
         return;
       }
