@@ -172,6 +172,15 @@ a { color: inherit; }
 .gnav span { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
 /* bustia */
+.pls { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 34px; align-items: center; }
+@media (max-width: 860px) { .pls { grid-template-columns: 1fr; } }
+.vinyl { position: relative; width: min(100%, 300px); aspect-ratio: 1; margin: 0 auto; border-radius: 50%; background: repeating-radial-gradient(circle, #2b0d08 0 3px, #3a130b 3px 5px); border: 3px solid var(--wine); box-shadow: 8px 8px 0 var(--wine); animation: spin3 9s linear infinite; display: grid; place-items: center; }
+.vinyl::before { content: ""; position: absolute; width: 36%; aspect-ratio: 1; border-radius: 50%; background: var(--cream); border: 3px solid var(--wine); }
+.vinyl::after { content: ""; position: absolute; width: 7%; aspect-ratio: 1; border-radius: 50%; background: var(--wine); }
+.vinyl span { position: absolute; z-index: 1; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 17px; color: var(--wine); transform: translateY(-34px); }
+@keyframes spin3 { to { transform: rotate(360deg); } }
+.plframe { border: 2px solid var(--wine); border-radius: 22px; overflow: hidden; box-shadow: 7px 7px 0 var(--wine); background: var(--wine); }
+.plframe iframe { display: block; width: 100%; height: 380px; border: 0; }
 .mail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 28px; align-items: start; }
 @media (max-width: 860px) { .mail { grid-template-columns: 1fr; } }
 .mailform { display: flex; flex-direction: column; gap: 10px; }
@@ -220,7 +229,7 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
 #admform .pill { background: var(--cream); color: var(--wine); border-color: var(--cream); min-height: 36px; }
 .admerr { color: #ffb3a5; }
 
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marq .track, .sticker.s1, .seal { animation: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marq .track, .sticker.s1, .seal, .vinyl { animation: none; } }
 </style>
 </head>
 <body>
@@ -229,7 +238,7 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
 <header class="nav">
   <div class="page"><div class="wrap">
     <a class="logo" href="#top">Halfway There</a>
-    <nav class="links"><a href="#info">Info</a><a href="#lloc">On</a><a href="#butlleti">Bústia</a><a href="#cotxes">Cotxes</a></nav>
+    <nav class="links"><a href="#info">Info</a><a href="#lloc">On</a><a href="#playlist">Playlist</a><a href="#butlleti">Bústia</a><a href="#cotxes">Cotxes</a></nav>
     <span class="sp"></span>
     <a class="pill" href="#butlleti">Suggeriments</a>
   </div></div>
@@ -311,6 +320,17 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
         </div>
       </div>
       <p class="tot" style="margin-top:22px;max-width:70ch">Arribada a partir de les 15:00 i sortida el diumenge a les 15:00. Fiança de 400 € en efectiu, que es torna si no hi ha desperfectes. Fotos de la web de la casa.</p>
+    </section>
+
+    <section class="sec" id="playlist">
+      <div class="sh"><p class="kicker">Banda sonora</p><h2 class="h2">La <i>playlist</i> de la nit</h2><p class="sub">Escolta-la i digues a la bústia quines cançons hi falten.</p></div>
+      <div class="pls">
+        <div class="vinyl" aria-hidden="true"><span>Halfway</span></div>
+        <div>
+          <div class="plframe"><iframe title="Playlist del Pas d'Equador a Spotify" src="https://open.spotify.com/embed/playlist/4nFxaG4gqNTghZlPAsSg2P?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>
+          <div style="margin-top:18px"><a class="pill out" href="https://open.spotify.com/playlist/4nFxaG4gqNTghZlPAsSg2P" target="_blank" rel="noopener">Obre-la a Spotify ↗</a></div>
+        </div>
+      </div>
     </section>
 
     <section class="sec" id="butlleti">
