@@ -272,6 +272,11 @@ a { color: inherit; }
 .cmform { display: flex; flex-direction: column; gap: 6px; }
 .cmform input { font: inherit; font-size: 16px; padding: 9px 12px; border-radius: 10px; border: 1.5px solid var(--wine); background: rgba(255,255,255,.7); color: var(--wine); width: 100%; }
 .cmform .pill { align-self: flex-start; min-height: 36px; font-size: 11px; padding: 0 16px; }
+.rdet > summary { list-style: none; width: 100%; cursor: pointer; margin-bottom: 0; }
+.rdet > summary::-webkit-details-marker { display: none; }
+.rdet > summary .plus { font-family: var(--serif); font-size: 22px; margin-right: 8px; line-height: 1; transition: transform .2s; }
+.rdet[open] > summary .plus { transform: rotate(45deg); }
+.rdet[open] > summary { margin-bottom: 18px; }
 .rform .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 420px) { .rform .row2 { grid-template-columns: 1fr; } }
 .rform .chk { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; letter-spacing: 0; text-transform: none; margin-top: 8px; }
@@ -468,6 +473,8 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
     <section class="sec" id="cotxes">
       <div class="sh"><p class="kicker">Cotxes</p><h2 class="h2">Tauler de <i>cotxes</i></h2><p class="sub">Com el tauler de corxo de l'oficina: penja una nota si tens places lliures o si busques cotxe, i la gent hi pot comentar. Els detalls (telèfon, punt de trobada) els arregleu per privat.</p></div>
       <div class="board">
+        <details class="rdet" id="rdet">
+        <summary class="pill big"><span class="plus">+</span> Penja una nota</summary>
         <form class="ticket mailform rform" id="rideform" autocomplete="off">
           <div class="chips2" role="group" aria-label="Tipus de nota">
             <button type="button" class="chipsel" data-rt="ofereix" aria-pressed="true">Tinc places</button>
@@ -488,6 +495,7 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
           <p class="mailmsg" id="r-msg" hidden></p>
           <div class="rhow"><span><b>1.</b> Penja la teva nota.</span><span><b>2.</b> Algú et respon als comentaris.</span><span><b>3.</b> Us poseu d'acord per privat.</span></div>
         </form>
+        </details>
         <div class="cork">
           <div class="rcount" id="rcount" aria-live="polite"></div>
           <div class="rfilters chips2" role="group" aria-label="Filtre">
@@ -796,7 +804,7 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
     var btn = elForm.querySelector("button[type=submit]"); btn.disabled = true; msg("", false);
     NOM = $("r-nom").value.trim(); try { localStorage.setItem("eq_cnom", NOM); } catch (e) {}
     api("cotxe_nou", { tipus: state.tipus, nom: $("r-nom").value, des: $("r-des").value, hora: $("r-hora").value, places: $("r-places").value, tornada: $("r-torn").checked, nota: $("r-nota").value })
-      .then(function (r) { if (r && r.cotxe) state.list.unshift(r.cotxe); render(); $("r-nota").value = ""; msg("Nota penjada al tauler!", false); })
+      .then(function (r) { if (r && r.cotxe) state.list.unshift(r.cotxe); render(); $("r-nota").value = ""; msg("", false); $("rdet").open = false; var cs = document.querySelector(".cork"); if (cs) cs.scrollIntoView({ behavior: "smooth", block: "start" }); })
       .catch(function (e) {
         var m = String(e && e.message);
         msg(/nom_curt/.test(m) ? "Escriu el teu nom." : /origen_curt/.test(m) ? "Indica d'on surts." : /massa/.test(m) ? "Has penjat massa notes. Esborra'n alguna." : "No s'ha pogut penjar. Torna-ho a provar.", true);
