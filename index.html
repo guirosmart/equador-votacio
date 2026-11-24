@@ -35,7 +35,7 @@ a { color: inherit; }
 :focus-visible { outline: 3px solid var(--wine2); outline-offset: 3px; }
 .page { padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
 .wrap { width: 100%; max-width: 1180px; margin-inline: auto; }
-.grain { position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: .5; background: url(img/grain.png) 0 0 / 128px 128px; }
+.grain { position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: .3; background: url(img/grain.png) 0 0 / 128px 128px; }
 
 /* marquesina */
 .marq { background: var(--wine); color: var(--cream); overflow: hidden; white-space: nowrap; border-block: 2px solid var(--wine); }
@@ -127,7 +127,7 @@ a { color: inherit; }
 .dress .h3 i { font-weight: 600; }
 .seal { color: var(--wine); animation: spin2 30s linear infinite paused; }
 @keyframes spin2 { to { transform: rotate(360deg); } }
-@media (max-width: 600px) { .dress { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .dress { grid-template-columns: 1fr; gap: 10px; } .seal { justify-self: end; margin-top: 6px; } .seal svg { width: 92px; height: 92px; display: block; } }
 
 /* llista de coses */
 .note { position: relative; background: #f3e3ad; border: 2px solid var(--wine); padding: 26px 28px 20px; transform: rotate(1.4deg); box-shadow: 8px 8px 0 var(--wine); border-radius: 4px; }
