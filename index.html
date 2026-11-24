@@ -25,7 +25,8 @@
   --sans: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.55; overflow-x: hidden; }
 h1, h2, h3, h4, p, ul { margin: 0; }
 button { font: inherit; cursor: pointer; }
@@ -245,12 +246,12 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
 .admerr { color: #ffb3a5; }
 
 /* invitacio: sobre que s'obre */
-.inv { position: fixed; inset: 0; z-index: 100; background: var(--wine) radial-gradient(circle at 50% 38%, #7b2a19 0, var(--wine) 62%); display: grid; place-items: center; overflow: hidden; transition: opacity .7s, visibility .7s; }
+.inv { position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 100; background: var(--wine) radial-gradient(circle at 50% 38%, #7b2a19 0, var(--wine) 62%); display: grid; place-items: center; overflow: hidden; transition: opacity .7s, visibility .7s; }
 .inv.gone { opacity: 0; visibility: hidden; }
 .inv .star { position: absolute; color: var(--cream); opacity: .35; font-family: var(--serif); pointer-events: none; }
 .envwrap { display: flex; flex-direction: column; align-items: center; gap: 34px; transition: opacity .5s, transform .6s; }
 .inv.view .envwrap { opacity: 0; transform: translateY(40px) scale(.96); pointer-events: none; }
-.env { position: relative; width: min(86vw, 460px); aspect-ratio: 1.5; perspective: 1400px; cursor: pointer; border: 0; background: none; padding: 0; margin-top: 12vh; transition: transform .6s; }
+.env { position: relative; width: min(86vw, 460px); aspect-ratio: 1.5; perspective: 1400px; cursor: pointer; border: 0; background: none; padding: 0; margin-top: 18vh; transition: transform .6s; }
 .env.open { transform: translateY(14vh); }
 .env .back { position: absolute; inset: 0; background: #cdb98a; border-radius: 8px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.6); }
 .env .card { position: absolute; left: 6%; right: 6%; top: 6%; bottom: 4%; background: var(--cream); border-radius: 4px; z-index: 2; overflow: hidden; transition: transform 1s cubic-bezier(.3,.8,.3,1) .55s; display: grid; place-items: start center; }
@@ -267,14 +268,14 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
 .env.open ~ .hint { opacity: 0; }
 .invview { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity .6s .15s, visibility .6s .15s; }
 .inv.view .invview { opacity: 1; visibility: visible; }
-.pages { flex: 1; overflow-y: auto; padding: 26px 16px 130px; display: flex; flex-direction: column; align-items: center; gap: 22px; -webkit-overflow-scrolling: touch; }
+.pages { flex: 1; overflow-y: auto; padding: 26px 16px 130px; display: flex; flex-direction: column; align-items: center; gap: 22px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
 .pages canvas { width: 100%; max-width: 640px; height: auto; border-radius: 4px; box-shadow: 8px 8px 0 rgba(0,0,0,.35); background: var(--cream); }
 .pages .msg { color: var(--cream); text-align: center; font-size: 15px; margin-top: 18vh; }
 .pages .msg a { text-decoration: underline; }
 .invbar { position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 16px max(22px, env(safe-area-inset-bottom, 0px)); display: flex; justify-content: center; background: linear-gradient(transparent, var(--wine) 60%); pointer-events: none; }
 .invbar .pill { pointer-events: auto; background: var(--cream); color: var(--wine); border-color: var(--cream); }
 .invbar .pill:hover { background: transparent; color: var(--cream); }
-.skipinv { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: 16px; z-index: 6; background: none; border: 0; color: var(--cream); opacity: .7; font: inherit; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; padding: 8px; }
+.skipinv { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: 16px; z-index: 6; background: none; border: 0; color: var(--cream); opacity: .7; font: inherit; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; padding: 14px 12px; }
 .skipinv:hover { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .env .card, .env .flap, .env .wax, .envwrap, .env { transition-duration: .01s !important; transition-delay: 0s !important; } .env .wax { animation: none; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marq .track, .sticker.s1, .seal, .vinyl { animation: none; } }
