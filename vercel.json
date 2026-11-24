@@ -6,5 +6,13 @@
     "api/vote.js": {
       "maxDuration": 40
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/(img|inv)/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }
+      ]
+    }
+  ]
 }
