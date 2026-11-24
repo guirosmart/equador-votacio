@@ -3,363 +3,301 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Votació Pas d'Equador</title>
+<title>Halfway There · Pas d'Equador 2026-27</title>
+<meta name="description" content="Pas d'Equador de Publicitat i Relacions Públiques. 30 de gener de 2027, Mas Aliberch (Muntanyola).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter+Tight:wght@400;500;600;700;800;900&display=swap">
 <style>
-[hidden]{display:none!important}img{max-width:100%}
-/* Concepte: nit d'estiu a la finca. Foto a sang amb el sol de l'equador a l'horitzó, titular condensat gegant, panells de vidre sobre blau nit, vots en directe i comparativa cara a cara. */
+[hidden]{display:none!important}img{max-width:100%;display:block}
+/* Paleta del PDF: granat fosc i crema. Detalls: marquesina, adhesius girats, targetes tipus entrada, arcs per a les fotos. */
 :root {
-  --bg: #090f1d;
-  --bg2: #0e182b;
-  --panel: rgba(255,255,255,.055);
-  --panel2: rgba(255,255,255,.1);
-  --line: rgba(255,255,255,.13);
-  --ink: #f5f3ec;
-  --muted: #9aa8bf;
-  --accent: #ffd24a;
-  --grad: linear-gradient(135deg, #ffe375 0%, #ffb02e 55%, #ff8a1f 100%);
-  --grad-ink: #2a1800;
-  --grad-text: linear-gradient(135deg, #ffe375 0%, #ffb02e 55%, #ff8a1f 100%);
-  --glow: 0 10px 40px -8px rgba(255,176,46,.45);
-  --ok: #55e8b0; --ok-bg: rgba(85,232,176,.14);
-  --warn: #ffbf5e; --warn-bg: rgba(255,191,94,.14);
-  --shadow: 0 24px 60px -20px rgba(0,0,0,.7);
-  --nav: rgba(9,15,29,.72);
-  --font-display: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --font: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif;
-  color-scheme: dark;
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #eef2f9; --bg2: #e2e9f5; --panel: rgba(255,255,255,.78); --panel2: #ffffff; --line: rgba(16,26,46,.12);
-    --ink: #101a2e; --muted: #56627a; --accent: #b25e00; --glow: 0 10px 30px -10px rgba(255,138,31,.55);
-    --grad-text: linear-gradient(135deg, #e48a00 0%, #cc5a00 100%);
-    --ok: #0f7a52; --ok-bg: rgba(15,122,82,.12); --warn: #8f5a05; --warn-bg: rgba(143,90,5,.12);
-    --shadow: 0 20px 50px -24px rgba(16,26,46,.35); --nav: rgba(238,242,249,.78);
-    color-scheme: light;
-  }
-}
-:root[data-theme="light"] {
-  --bg: #eef2f9; --bg2: #e2e9f5; --panel: rgba(255,255,255,.78); --panel2: #ffffff; --line: rgba(16,26,46,.12);
-  --ink: #101a2e; --muted: #56627a; --accent: #b25e00; --glow: 0 10px 30px -10px rgba(255,138,31,.55);
-  --grad-text: linear-gradient(135deg, #e48a00 0%, #cc5a00 100%);
-  --ok: #0f7a52; --ok-bg: rgba(15,122,82,.12); --warn: #8f5a05; --warn-bg: rgba(143,90,5,.12);
-  --shadow: 0 20px 50px -24px rgba(16,26,46,.35); --nav: rgba(238,242,249,.78);
-  color-scheme: light;
+  --wine: #581a10;
+  --wine2: #7b2a19;
+  --cream: #f6efd8;
+  --cream2: #ede3c4;
+  --paper: #fbf7e8;
+  --ink: #581a10;
+  --muted: #8a5f4f;
+  --line: rgba(88,26,16,.28);
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55; overflow-x: hidden; }
-h1, h2, h3, h4, p { margin: 0; }
+body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.55; overflow-x: hidden; }
+h1, h2, h3, h4, p, ul { margin: 0; }
 button { font: inherit; cursor: pointer; }
 a { color: inherit; }
-button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.page { width: 100%; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.wrap { width: 100%; max-width: 1240px; margin-inline: auto; }
-.sec { padding-block: clamp(36px, 6vw, 72px) 0; }
-.dots { position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px); background-size: 26px 26px; opacity: .8; }
-:root[data-theme="light"] .dots { background-image: radial-gradient(rgba(16,26,46,.08) 1px, transparent 1px); }
-@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .dots { background-image: radial-gradient(rgba(16,26,46,.08) 1px, transparent 1px); } }
+:focus-visible { outline: 3px solid var(--wine2); outline-offset: 3px; }
+.page { padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+.wrap { width: 100%; max-width: 1180px; margin-inline: auto; }
+.grain { position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: .09; mix-blend-mode: multiply; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .1  0 0 0 0 .06  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 
-.eyebrow { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
-.eyebrow::before { content: ""; width: 34px; height: 2px; background: var(--grad); border-radius: 2px; flex: none; }
-.title { font-family: var(--font-display); font-weight: 800; line-height: .92; letter-spacing: -0.05em; font-size: clamp(40px, 7vw, 84px); text-wrap: balance; }
-.sec .sechead { border-top: 1px solid var(--line); padding-top: 16px; }
-.lead-p { color: var(--muted); max-width: 52ch; font-size: 15px; }
-.sechead { display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px; }
+/* marquesina */
+.marq { background: var(--wine); color: var(--cream); overflow: hidden; white-space: nowrap; border-block: 2px solid var(--wine); }
+.marq .track { display: inline-flex; gap: 0; animation: slide 38s linear infinite; padding-block: 11px; }
+.marq span { font-family: var(--sans); font-weight: 800; letter-spacing: .22em; text-transform: uppercase; font-size: 12.5px; padding-inline: 18px; }
+.marq span.st { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: 0; font-size: 16px; padding-inline: 4px; }
+@keyframes slide { to { transform: translateX(-50%); } }
 
 /* nav */
-.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: var(--nav); border-bottom: 1px solid var(--line); }
-.nav::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--nav); z-index: 31; }
-.nav .wrap { display: flex; align-items: center; gap: 22px; height: 62px; }
-.logo { font-family: var(--font-display); font-weight: 800; font-size: 21px; letter-spacing: -0.05em; text-decoration: none; white-space: nowrap; }
-.logo b { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.links { display: flex; gap: 22px; font-size: 13px; font-weight: 400; }
-.links a { text-decoration: none; color: var(--muted); }
-.links a:hover { color: var(--ink); }
+.nav { position: sticky; top: 0; z-index: 30; background: rgba(246,239,216,.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1.5px solid var(--wine); }
+.nav .wrap { display: flex; align-items: center; gap: 22px; height: 58px; }
+.logo { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 22px; text-decoration: none; white-space: nowrap; letter-spacing: -.01em; }
+.links { display: flex; gap: 22px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.links a { text-decoration: none; position: relative; }
+.links a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -4px; height: 2px; background: var(--wine); transition: right .2s; }
+.links a:hover::after { right: 0; }
 .sp { flex: 1; }
-.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 24px; border-radius: 999px; border: 0; font-weight: 600; font-size: 14px; text-decoration: none; background: var(--grad); color: var(--grad-ink); box-shadow: var(--glow); white-space: nowrap; transition: transform .12s, box-shadow .2s; }
-.btn:hover { box-shadow: 0 14px 46px -8px rgba(255,176,46,.65); }
-.btn:active { transform: scale(.97); }
-.btn.line { background: transparent; color: var(--ink); border: 1.5px solid var(--line); box-shadow: none; }
-.btn.line:hover { border-color: var(--accent); }
-.btn.sm { min-height: 40px; padding: 0 18px; font-size: 13px; }
-@media (max-width: 700px) { .links { display: none; } }
+.pill { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 20px; border-radius: 999px; background: var(--wine); color: var(--cream); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; border: 2px solid var(--wine); white-space: nowrap; transition: transform .12s, background .2s, color .2s; cursor: pointer; font-family: var(--sans); }
+.pill:hover { background: transparent; color: var(--wine); }
+.pill:active { transform: scale(.97); }
+.pill.out { background: transparent; color: var(--wine); }
+.pill.out:hover { background: var(--wine); color: var(--cream); }
+.pill.big { min-height: 52px; padding: 0 30px; font-size: 13px; }
+@media (max-width: 760px) { .links { display: none; } }
 
-.notice { margin-top: 14px; border-radius: 14px; padding: 12px 16px; background: var(--panel2); border: 1px solid var(--line); color: var(--muted); font-size: 14px; }
-.notice.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
-
-/* hero */
-.hero { position: relative; isolation: isolate; margin-top: 14px; border-radius: 28px; overflow: hidden; min-height: clamp(520px, 62vw, 760px); display: flex; align-items: flex-end; border: 1px solid var(--line); }
-.hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
-.hero::before { content: ""; position: absolute; inset: 0; z-index: -2; background: linear-gradient(180deg, rgba(9,15,29,.25) 0%, rgba(9,15,29,.55) 55%, rgba(9,15,29,.96) 100%); }
-.hero::after { content: ""; position: absolute; left: 50%; bottom: -34%; width: 120%; aspect-ratio: 1; transform: translateX(-50%); z-index: -1; background: radial-gradient(circle, rgba(255,176,46,.5) 0%, rgba(255,138,31,.16) 30%, transparent 62%); }
-.hero .in { width: 100%; padding: clamp(20px, 4vw, 52px); display: flex; flex-direction: column; gap: 22px; color: #f5f3ec; }
-.hero .eyebrow { color: #ffd24a; font-weight: 600; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
-.hero h1 { font-family: var(--font-display); font-weight: 900; line-height: .8; letter-spacing: -0.065em; font-size: clamp(60px, 18vw, 230px); }
-.hero h1 span { display: block; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .22em; margin-bottom: -.16em; }
-.hero h1 small { display: block; font-size: .36em; font-weight: 300; letter-spacing: -0.04em; color: #f5f3ec; margin-bottom: .14em; }
-.hero p { max-width: 50ch; font-size: 15px; font-weight: 300; color: #dfe5f1; }
-.hero .btns { display: flex; flex-wrap: wrap; gap: 12px; }
-.chipdate { position: absolute; top: 18px; right: 18px; padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 500; background: rgba(9,15,29,.55); border: 1px solid rgba(255,255,255,.25); color: #fff; backdrop-filter: blur(8px); }
-
-/* countdown */
-.cd { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 560px; }
-.cd div { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(10px); border-radius: 18px; padding: 12px 6px 9px; text-align: center; }
-.cd b { display: block; font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 6vw, 52px); line-height: 1; font-variant-numeric: tabular-nums; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.cd span { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #c3cde0; }
-
-/* panels */
-.glass { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); }
-.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-@media (max-width: 760px) { .how { grid-template-columns: 1fr; } }
-.step { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
-.step i { font-style: normal; font-family: var(--font-display); font-weight: 900; font-size: 44px; line-height: 1; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.step h4 { font-size: 17px; font-weight: 600; }
-.step p { font-size: 13.5px; color: var(--muted); }
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
-.stat { padding: 18px 12px; text-align: center; }
-.stat b { display: block; font-family: var(--font-display); font-weight: 900; font-size: clamp(34px, 6vw, 56px); line-height: 1; font-variant-numeric: tabular-nums; }
-.stat span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-
-/* photo cards */
-.pcards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-@media (max-width: 1000px) { .pcards { grid-template-columns: 1fr; } .pcard { aspect-ratio: 16 / 10; } }
-.pcard { position: relative; isolation: isolate; border-radius: 26px; overflow: hidden; aspect-ratio: 4 / 5; display: flex; flex-direction: column; justify-content: flex-end; color: #f5f3ec; background: var(--bg2); box-shadow: var(--shadow); transition: transform .25s; }
-.pcard:hover { transform: translateY(-4px); }
-.pcard > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform .6s; }
-.pcard:hover > img { transform: scale(1.04); }
-.pcard::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9,15,29,.0) 25%, rgba(9,15,29,.92) 82%); }
-.pcard.mine::after { content: ""; position: absolute; inset: 0; border-radius: 26px; padding: 3px; background: var(--grad); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
-.pt { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
-.badge { font-size: 11px; font-weight: 500; padding: 6px 12px; border-radius: 999px; background: rgba(9,15,29,.6); border: 1px solid rgba(255,255,255,.22); backdrop-filter: blur(8px); color: #fff; }
-.badge { background: rgba(9,15,29,.78); }
-.badge.ok { background: rgba(5,50,36,.82); border-color: rgba(85,232,176,.6); color: #b8f7de; }
-.badge.wait { background: rgba(62,40,4,.85); border-color: rgba(255,191,94,.6); color: #ffe2b0; }
-.pb { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-.pb h3 { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 3.4vw, 40px); line-height: .94; letter-spacing: -0.05em; }
-.pb .meta { font-size: 12.5px; font-weight: 300; color: #d4dcec; }
-.lead { align-self: flex-start; font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; background: var(--grad); color: var(--grad-ink); }
-.row { display: flex; align-items: center; gap: 12px; }
-.num { font-family: var(--font-display); font-weight: 900; font-size: 44px; line-height: 1; min-width: 1.1em; font-variant-numeric: tabular-nums; }
-.bar { flex: 1; height: 8px; border-radius: 999px; background: rgba(255,255,255,.2); overflow: hidden; }
-.bar i { display: block; height: 100%; width: 0; background: var(--grad); border-radius: 999px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
-.vote { min-height: 50px; border: 0; border-radius: 999px; font-weight: 600; font-size: 15px; background: rgba(255,255,255,.95); color: #14203a; transition: transform .12s, background .2s; }
-.vote:active { transform: scale(.98); }
-.vote[aria-pressed="true"] { background: var(--grad); color: var(--grad-ink); box-shadow: var(--glow); }
-.vote:disabled { opacity: .55; cursor: not-allowed; }
-.tot { color: var(--muted); font-size: 14px; }
-
-/* compare */
-.cmp { overflow-x: auto; padding: 6px; }
-.cmp table { width: 100%; min-width: 620px; border-collapse: separate; border-spacing: 0; font-size: 14px; font-variant-numeric: tabular-nums; }
-.cmp th, .cmp td { padding: 14px 16px; text-align: left; border-top: 1px solid var(--line); }
-.cmp thead th { border-top: 0; font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.04em; }
-.cmp tbody th { font-weight: 400; color: var(--muted); font-size: 13px; width: 26%; }
-.cmp td { font-weight: 500; }
-.cmp td.best { color: var(--ok); background: var(--ok-bg); font-weight: 600; }
-.cmp td.best::after { content: " ▲"; font-size: 10px; }
-.cmpnote { margin-top: 12px; color: var(--muted); font-size: 12.5px; }
-
-/* details */
-.dcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; align-items: start; }
-.dcard { overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
-.pic { position: relative; }
-.strip { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; background: var(--bg2); }
-.strip::-webkit-scrollbar { display: none; }
-.strip .ph { flex: 0 0 100%; scroll-snap-align: center; aspect-ratio: 4 / 3; position: relative; }
-.strip img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.count { position: absolute; right: 12px; bottom: 12px; background: rgba(9,15,29,.7); color: #fff; font-size: 11px; padding: 4px 11px; border-radius: 999px; backdrop-filter: blur(6px); }
-.arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.28); background: rgba(9,15,29,.62); color: #fff; display: grid; place-items: center; padding: 0; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); cursor: pointer; transition: background .15s, transform .15s; }
-.arrow:hover { background: rgba(9,15,29,.88); }
-.arrow:active { transform: translateY(-50%) scale(.92); }
-.arrow.prev { left: 10px; }
-.arrow.next { right: 10px; }
-@media (max-width: 640px) { .arrow { width: 38px; height: 38px; } }
-.rm { position: absolute; top: 10px; right: 10px; border: 0; background: rgba(9,15,29,.8); color: #fff; border-radius: 8px; padding: 4px 9px; font-size: 12px; }
-.upload { display: flex; align-items: center; gap: 8px; padding: 10px 18px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
-.upload input { max-width: 100%; font-size: 12px; }
-.dbody { padding: 22px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
-.dbody .place { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
-.dbody h3 { font-family: var(--font-display); font-weight: 800; font-size: 36px; line-height: .94; letter-spacing: -0.05em; }
-.pricebox { background: var(--grad); color: var(--grad-ink); border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; box-shadow: var(--glow); }
-.pricebox .big { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: .9; }
-.pricebox .small { font-size: 13px; font-weight: 500; line-height: 1.35; }
-dl { margin: 0; display: flex; flex-direction: column; font-size: 13.5px; }
-dl > div { display: grid; grid-template-columns: 78px 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
-dl > div:first-child { border-top: 0; }
-dt { color: var(--muted); }
-dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
-.pc { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 13px; }
-.pc ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
-.pc li { padding-left: 16px; position: relative; }
-.pc li::before { content: ""; position: absolute; left: 0; top: .55em; width: 7px; height: 7px; border-radius: 50%; }
-.pc .pro li::before { background: var(--ok); } .pc .con li::before { background: var(--warn); }
-.pc h4 { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
-.pc .pro h4 { color: var(--ok); } .pc .con h4 { color: var(--warn); }
-@media (max-width: 440px) { .pc { grid-template-columns: 1fr; } }
-.cost { border: 1px solid var(--line); border-radius: 16px; overflow-x: auto; }
-.cost table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
-.cost th, .cost td { padding: 9px 14px; text-align: right; white-space: nowrap; }
-.cost th:first-child, .cost td:first-child { text-align: left; }
-.cost thead th { color: var(--muted); font-weight: 400; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; }
-.cost tbody td { border-top: 1px solid var(--line); }
-.cost tr.live td { background: var(--ok-bg); color: var(--ok); font-weight: 600; }
-.scen { display: flex; flex-direction: column; gap: 8px; }
-.scenhead { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
-.scengrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-@media (max-width: 440px) { .scengrid { grid-template-columns: 1fr; } }
-.scenbox { display: flex; flex-direction: column; gap: 3px; padding: 14px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel2); }
-.scenbox.pen { border-color: var(--warn); }
-.scenlab { font-size: 12px; color: var(--muted); }
-.scenpp { font-size: 22px; letter-spacing: -0.04em; line-height: 1.05; }
-.scentot { font-size: 13px; color: var(--muted); }
-.scennote { font-size: 12.5px; color: var(--warn); font-weight: 500; margin-top: 4px; }
-.extra { font-size: 13px; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; padding: 10px 14px; margin-top: -6px; }
-.num, .stat b, .cd b, .step i, .pricebox .big { letter-spacing: -0.05em; }
-.eyebrow { letter-spacing: .14em; font-weight: 500; }
-.foot { margin-top: 28px; color: var(--muted); font-size: 12px; max-width: 80ch; }
-footer { padding-block: 40px 56px; }
-canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .pcard, .pcard > img, .bar i, .btn, .vote { transition: none; } }
-@media (max-width: 640px) {
-  .nav .wrap { height: 56px; }
-  .hero { border-radius: 22px; min-height: 560px; }
-  .chipdate { top: 12px; right: 12px; font-size: 11px; padding: 6px 12px; }
-  .cd { gap: 8px; }
-  .btns .btn { flex: 1 1 auto; }
-  .pcard { aspect-ratio: 4 / 5; }
-  .dbody { padding: 18px; }
-  .stats { gap: 10px; }
+/* hero dividit com la paleta: granat | crema */
+.hero { display: grid; grid-template-columns: 1.05fr .95fr; min-height: min(86vh, 760px); }
+.hero-l { background: var(--wine); color: var(--cream); display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: clamp(26px, 4vw, 56px); position: relative; overflow: hidden; }
+.hero-l .kick { font-size: 12px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; line-height: 1.7; }
+.hero-l .kick em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 15px; display: block; opacity: .85; }
+.hero h1 { font-family: var(--serif); font-weight: 400; line-height: .82; letter-spacing: -.045em; font-size: clamp(60px, 11vw, 160px); }
+.hero h1 i { display: block; font-style: italic; font-weight: 600; margin-left: .12em; }
+.hero-l .lead { max-width: 38ch; font-size: 17px; font-family: var(--serif); font-style: italic; opacity: .92; }
+.hero-l .date { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.hero-l .date b { font-family: var(--serif); font-size: clamp(26px, 3.2vw, 40px); font-weight: 600; line-height: 1; letter-spacing: -.02em; }
+.hero-r { background: var(--cream); position: relative; display: grid; place-items: center; padding: clamp(22px, 4vw, 52px); }
+.arch { position: relative; width: min(100%, 440px); aspect-ratio: 3 / 4; border-radius: 999px 999px 18px 18px; overflow: hidden; border: 3px solid var(--wine); box-shadow: 10px 10px 0 var(--wine); background: var(--cream2); }
+.arch img { width: 100%; height: 100%; object-fit: cover; }
+.sticker { position: absolute; z-index: 3; display: grid; place-items: center; text-align: center; border-radius: 50%; background: var(--cream); color: var(--wine); border: 2.5px solid var(--wine); font-weight: 800; line-height: 1.05; }
+.sticker.s1 { width: 128px; height: 128px; top: 7%; right: 5%; transform: rotate(12deg); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; animation: spin 24s linear infinite; background: var(--cream); }
+.sticker.s1 b { display: block; font-family: var(--serif); font-style: italic; font-size: 30px; letter-spacing: -.02em; text-transform: none; font-weight: 600; }
+.sticker.s2 { bottom: 7%; left: 5%; padding: 12px 18px; border-radius: 999px; transform: rotate(-7deg); font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 20px; background: var(--wine); color: var(--cream); }
+@keyframes spin { from { transform: rotate(12deg); } to { transform: rotate(372deg); } }
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; min-height: 0; }
+  .hero-r { padding-block: 36px 52px; }
+  .sticker.s1 { width: 104px; height: 104px; font-size: 10px; right: 3%; }
+  .sticker.s1 b { font-size: 24px; }
 }
-.namebox { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-width: 560px; }
-.namebox label { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
-.namebox input { font: inherit; font-size: 17px; padding: 13px 16px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 100%; }
-.namebox input:focus { border-color: var(--accent); outline: none; }
-.namebox input[readonly] { opacity: .75; }
-.namebox p { font-size: 12.5px; color: var(--muted); }
-.foot2 { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-block: 8px 24px; border-top: 1px solid var(--line); margin-top: 8px; }
-.admlink { background: none; border: 0; color: var(--muted); font: inherit; font-size: 12.5px; cursor: pointer; padding: 6px 2px; text-decoration: underline; text-underline-offset: 3px; }
-.admlink:hover { color: var(--ink); }
-#admform { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-#admform[hidden] { display: none; }
-#admform input { font: inherit; font-size: 14px; padding: 9px 14px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 220px; max-width: 100%; }
-#admform .btn { border: 0; cursor: pointer; }
-.admerr { color: var(--warn); font-size: 13px; }
-.adm .admout { align-self: flex-start; background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 12.5px; cursor: pointer; }
-.adm { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
-.adm h3 { font-size: 22px; }
-.adm textarea { font: inherit; font-size: 14px; padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 100%; min-height: 110px; resize: vertical; }
-.admcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
-.admlist { display: flex; flex-direction: column; gap: 6px; max-height: 360px; overflow-y: auto; font-size: 14px; }
-.admrow { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: var(--panel2); border: 1px solid var(--line); }
-.admrow small { color: var(--muted); }
-.admrow .xarxa { color: var(--accent); margin-left: 2px; cursor: help; }
-.admrow button.sure { background: var(--warn); color: #1f1400; border-color: var(--warn); font-weight: 600; }
-.admrow button { border: 1px solid var(--warn); color: var(--warn); background: transparent; border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 12px; cursor: pointer; }
-.adm h4 { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
-.adm .ok { color: var(--ok); }
-.anon { color: var(--muted); font-size: 13px; max-width: 62ch; margin: -8px 0 20px; }
-.mail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; align-items: start; }
+
+/* compte enrere */
+.cd { display: flex; gap: 10px; }
+.cd div { min-width: 68px; border: 1.5px solid rgba(246,239,216,.5); border-radius: 14px; padding: 8px 8px 6px; text-align: center; }
+.cd b { display: block; font-family: var(--serif); font-weight: 400; font-size: 32px; line-height: 1; font-variant-numeric: tabular-nums; }
+.cd span { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; opacity: .8; }
+
+/* seccions */
+.sec { padding-block: clamp(48px, 8vw, 104px) 0; }
+.sh { display: flex; flex-direction: column; gap: 8px; margin-bottom: clamp(24px, 4vw, 44px); }
+.kicker { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; }
+.kicker::before { content: "✦"; font-size: 15px; letter-spacing: 0; }
+.h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(42px, 7.5vw, 96px); line-height: .9; letter-spacing: -.04em; text-wrap: balance; }
+.h2 i { font-style: italic; font-weight: 600; }
+.sub { color: var(--muted); max-width: 52ch; font-size: 15.5px; }
+
+/* targetes tipus entrada */
+.ticket { position: relative; background: var(--paper); border: 2px solid var(--wine); border-radius: 22px; padding: 26px 26px 24px; box-shadow: 7px 7px 0 var(--wine); }
+.ticket::before, .ticket::after { content: ""; position: absolute; top: 50%; width: 22px; height: 22px; border-radius: 50%; background: var(--cream); border: 2px solid var(--wine); transform: translateY(-50%); }
+.ticket::before { left: -12px; clip-path: inset(0 0 0 50%); }
+.ticket::after { right: -12px; clip-path: inset(0 50% 0 0); }
+.ticket.dark { background: var(--wine); color: var(--cream); box-shadow: 7px 7px 0 var(--wine2); }
+.ticket.dark::before, .ticket.dark::after { border-color: var(--wine); }
+.tl { font-size: 11.5px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; opacity: .75; }
+.tv { font-family: var(--serif); font-size: clamp(34px, 4.6vw, 54px); line-height: 1; letter-spacing: -.03em; margin-top: 6px; }
+.tv i { font-weight: 600; }
+.ts { margin-top: 8px; font-size: 14.5px; opacity: .85; }
+.dash { border: 0; border-top: 2px dashed currentColor; opacity: .35; margin: 16px 0; }
+
+.pl { display: grid; grid-template-columns: repeat(12, 1fr); gap: 26px; align-items: start; }
+.c-5 { grid-column: span 5; } .c-7 { grid-column: span 7; } .c-6 { grid-column: span 6; } .c-4 { grid-column: span 4; } .c-8 { grid-column: span 8; }
+@media (max-width: 900px) { .pl > * { grid-column: 1 / -1; } .ticket { box-shadow: 5px 5px 0 var(--wine); } }
+
+/* dresscode */
+.dress { display: grid; grid-template-columns: 1fr auto; gap: 18px 36px; align-items: center; }
+.dress .h3 { font-family: var(--serif); font-size: clamp(30px, 4vw, 48px); line-height: .98; letter-spacing: -.03em; }
+.dress .h3 i { font-weight: 600; }
+.palette { display: flex; gap: 0; border: 2px solid var(--cream); border-radius: 999px; overflow: hidden; }
+.palette span { width: 54px; height: 54px; }
+.palette span:nth-child(1) { background: var(--cream); } .palette span:nth-child(2) { background: #a3362a; } .palette span:nth-child(3) { background: #2b0d08; } .palette span:nth-child(4) { background: #c9a96a; }
+@media (max-width: 600px) { .dress { grid-template-columns: 1fr; } }
+
+/* llista de coses */
+.todo { list-style: none; padding: 0; display: flex; flex-direction: column; margin-top: 10px; counter-reset: t; }
+.todo li { counter-increment: t; display: grid; grid-template-columns: 44px 1fr; gap: 6px; align-items: baseline; padding: 14px 0; border-top: 1.5px solid var(--line); font-size: 18px; font-weight: 600; }
+.todo li:first-child { border-top: 0; }
+.todo li::before { content: counter(t, decimal-leading-zero); font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 20px; color: var(--muted); }
+.todo li small { display: block; font-weight: 400; font-size: 14px; color: var(--muted); margin-top: 2px; }
+
+/* mapa i lloc */
+.place h3 { font-family: var(--serif); font-size: clamp(34px, 5vw, 60px); font-weight: 400; line-height: .95; letter-spacing: -.035em; }
+.place h3 i { font-weight: 600; }
+.place address { font-style: normal; margin-top: 14px; font-size: 16px; }
+.place .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 22px; border: 2px solid var(--wine); border-radius: 18px; overflow: hidden; }
+.facts div { padding: 14px 16px; border-right: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line); }
+.facts div:nth-child(2n) { border-right: 0; } .facts div:nth-last-child(-n+2) { border-bottom: 0; }
+.facts b { display: block; font-family: var(--serif); font-size: 26px; font-weight: 600; line-height: 1.05; letter-spacing: -.02em; }
+.facts span { font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* galeria */
+.gal { position: relative; }
+.strip { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 14px; }
+.strip::-webkit-scrollbar { display: none; }
+.strip .ph { flex: 0 0 min(78%, 520px); scroll-snap-align: start; aspect-ratio: 4 / 3; border: 2.5px solid var(--wine); border-radius: 18px; overflow: hidden; background: var(--cream2); box-shadow: 6px 6px 0 var(--wine); margin: 0 6px 8px 0; }
+.strip .ph:nth-child(even) { border-radius: 120px 120px 18px 18px; }
+.strip img { width: 100%; height: 100%; object-fit: cover; }
+.gnav { display: flex; gap: 10px; margin-top: 18px; align-items: center; }
+.gnav button { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--wine); background: transparent; color: var(--wine); display: grid; place-items: center; padding: 0; transition: background .15s, color .15s; }
+.gnav button:hover { background: var(--wine); color: var(--cream); }
+.gnav span { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* bustia */
+.mail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 28px; align-items: start; }
 @media (max-width: 860px) { .mail { grid-template-columns: 1fr; } }
-.mailform { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
-.mailform label { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-top: 4px; }
-.mailform textarea, .mailform input { font: inherit; font-size: 16px; padding: 13px 15px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel2); color: var(--ink); width: 100%; resize: vertical; }
-.mailform textarea:focus, .mailform input:focus { border-color: var(--accent); outline: none; }
+.mailform { display: flex; flex-direction: column; gap: 10px; }
+.mailform label { font-size: 11.5px; letter-spacing: .18em; text-transform: uppercase; font-weight: 800; margin-top: 6px; }
+.mailform textarea, .mailform input { font: inherit; font-size: 16px; padding: 13px 15px; border-radius: 14px; border: 2px solid var(--wine); background: var(--cream); color: var(--ink); width: 100%; resize: vertical; }
+.mailform textarea::placeholder, .mailform input::placeholder { color: var(--muted); opacity: .7; }
+.mailform textarea:focus, .mailform input:focus { outline: none; box-shadow: 4px 4px 0 var(--wine); }
 .chips2 { display: flex; flex-wrap: wrap; gap: 8px; }
-.chipsel { border: 1.5px solid var(--line); background: transparent; color: var(--ink); padding: 9px 15px; border-radius: 999px; font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer; }
-.chipsel[aria-pressed="true"] { background: var(--grad); color: var(--grad-ink); border-color: transparent; font-weight: 600; }
-.mailrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+.chipsel { border: 2px solid var(--wine); background: transparent; color: var(--wine); padding: 8px 15px; border-radius: 999px; font: inherit; font-size: 13.5px; font-weight: 700; }
+.chipsel[aria-pressed="true"] { background: var(--wine); color: var(--cream); }
+.mailrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
 .mailrow span { color: var(--muted); font-size: 12.5px; }
-.mailrow .btn { border: 0; cursor: pointer; }
-.mailrow .btn:disabled { opacity: .6; cursor: wait; }
-.mailmsg { font-size: 13.5px; color: var(--ok); }
-.mailmsg.bad { color: var(--warn); }
-.ideas { display: flex; flex-direction: column; gap: 12px; max-height: 660px; overflow-y: auto; padding-right: 4px; }
-@media (max-width: 860px) { .ideas { max-height: none; } }
-.idea { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.mailrow .pill:disabled { opacity: .6; cursor: wait; }
+.mailmsg { font-size: 14px; font-weight: 600; }
+.mailmsg.bad { color: #a3362a; }
+.ideas { display: flex; flex-direction: column; gap: 14px; max-height: 680px; overflow-y: auto; padding: 2px 10px 10px 2px; }
+@media (max-width: 860px) { .ideas { max-height: none; padding-right: 2px; } }
+.idea { background: var(--paper); border: 2px solid var(--wine); border-radius: 18px; padding: 15px 18px; display: flex; flex-direction: column; gap: 8px; box-shadow: 4px 4px 0 var(--wine); }
 .ideatop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.tagi { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); }
-.tagi.aporto { background: var(--ok-bg); color: var(--ok); border-color: transparent; }
-.tagi.idea { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.tagi { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; border: 1.5px solid var(--wine); }
+.tagi.aporto { background: var(--wine); color: var(--cream); }
 .when { color: var(--muted); font-size: 12px; }
-.ideatext { font-size: 15px; overflow-wrap: anywhere; white-space: pre-wrap; }
-.ideaby { color: var(--muted); font-size: 13px; }
-.idea .del { align-self: flex-start; border: 1px solid var(--warn); color: var(--warn); background: transparent; border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 12.5px; cursor: pointer; }
+.ideatext { font-size: 16px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.ideaby { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 15px; }
+.idea .del { align-self: flex-start; border: 1.5px solid #a3362a; color: #a3362a; background: transparent; border-radius: 999px; padding: 5px 13px; font: inherit; font-size: 12.5px; font-weight: 700; }
+.tot { color: var(--muted); font-size: 14.5px; }
+
+/* aviat: tauler de cotxes */
+.soon { position: relative; border: 2.5px dashed var(--wine); border-radius: 26px; padding: clamp(26px, 5vw, 54px); display: grid; grid-template-columns: auto 1fr; gap: 20px 34px; align-items: center; background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(88,26,16,.05) 14px 16px); }
+.soon .car { width: 104px; height: 104px; border-radius: 50%; background: var(--wine); color: var(--cream); display: grid; place-items: center; }
+.soon h3 { font-family: var(--serif); font-size: clamp(30px, 4.6vw, 54px); font-weight: 400; line-height: .98; letter-spacing: -.035em; }
+.soon h3 i { font-weight: 600; }
+.soon p { margin-top: 10px; max-width: 54ch; color: var(--muted); }
+.soon .tag { position: absolute; top: -16px; right: 26px; transform: rotate(4deg); background: var(--wine); color: var(--cream); font-weight: 800; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; padding: 7px 16px; border-radius: 999px; }
+@media (max-width: 640px) { .soon { grid-template-columns: 1fr; } .soon .car { width: 80px; height: 80px; } }
+
+/* peu */
+footer { margin-top: clamp(56px, 9vw, 120px); background: var(--wine); color: var(--cream); padding-block: 54px 36px; overflow: hidden; }
+footer .big { font-family: var(--serif); font-weight: 400; font-size: clamp(60px, 15vw, 210px); line-height: .8; letter-spacing: -.05em; }
+footer .big i { font-weight: 600; }
+footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; margin-top: 34px; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; }
+.admlink { background: none; border: 0; color: inherit; opacity: .55; font: inherit; letter-spacing: .14em; cursor: pointer; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; }
+.admlink:hover { opacity: 1; }
+#admform { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; }
+#admform input { font: inherit; font-size: 14px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--cream); background: transparent; color: var(--cream); width: 200px; max-width: 100%; }
+#admform .pill { background: var(--cream); color: var(--wine); border-color: var(--cream); min-height: 36px; }
+.admerr { color: #ffb3a5; }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marq .track, .sticker.s1 { animation: none; } }
 </style>
 </head>
 <body>
-
-
-<div class="dots" aria-hidden="true"></div>
-<canvas class="conf" id="conf" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
 
 <header class="nav">
   <div class="page"><div class="wrap">
-    <a class="logo" href="#top">Pas d'<b>Equador</b></a>
-    <nav class="links"><a href="#detalls">Les cases</a><a href="#cara">Cara a cara</a><a href="#cases">Vota</a><a href="#butlleti">Bústia</a></nav>
+    <a class="logo" href="#top">Halfway There</a>
+    <nav class="links"><a href="#info">Info</a><a href="#lloc">On</a><a href="#butlleti">Bústia</a><a href="#cotxes">Cotxes</a></nav>
     <span class="sp"></span>
-    <a class="btn sm" href="#cases">Vota ara</a>
+    <a class="pill" href="#butlleti">Suggeriments</a>
   </div></div>
 </header>
 
-<main class="page" id="top">
-  <div class="wrap">
-    <div id="notice" class="notice" hidden></div>
+<main id="top">
+  <section class="hero">
+    <div class="hero-l">
+      <p class="kick">Pas d'Equador de Publicitat<br>i Relacions Públiques · 2026-27<em>Mitja carrera feta. Ara toca una bona festa.</em></p>
+      <h1>Halfway<i>There</i></h1>
+      <div>
+        <div class="date"><b>30 de gener de 2027</b><div class="cd" id="cd" aria-label="Temps que falta"><div><b id="cd-d">--</b><span>dies</span></div><div><b id="cd-h">--</b><span>hores</span></div><div><b id="cd-m">--</b><span>min</span></div></div></div>
+      </div>
+    </div>
+    <div class="hero-r">
+      <div class="sticker s1"><span>Pas d'<b>Equador</b>2026·27</span></div>
+      <div class="arch"><img src="img/aliberch-1.jpg" alt="Mas Aliberch" fetchpriority="high"></div>
+      <div class="sticker s2">Mas Aliberch</div>
+    </div>
+  </section>
 
-    <section class="hero">
-      <img src="img/aliberch-1.jpg" alt="" fetchpriority="high">
-      <span class="chipdate">Dissabte 30 de gener de 2027</span>
-      <div class="in">
-        <p class="eyebrow">3r de Publicitat i RRPP · UAB</p>
-        <h1><small>Pas d'</small><span>Equador</span></h1>
-        <p>Dues cases, una nit i una decisió. Mira les fotos i les condicions i vota la que et fa més gràcia. Un vot per persona, el pots canviar quan vulguis.</p>
-        <div class="cd" id="cd" aria-label="Temps que falta"><div><b id="cd-d">--</b><span>dies</span></div><div><b id="cd-h">--</b><span>hores</span></div><div><b id="cd-m">--</b><span>min</span></div><div><b id="cd-s">--</b><span>seg</span></div></div>
-        <div class="btns"><a class="btn" href="#cases">Vota la teva casa</a><a class="btn line" style="color:#f5f3ec;border-color:rgba(255,255,255,.4)" href="#cara">Compara-les</a></div>
+  <div class="marq" aria-hidden="true"><div class="track" id="marq"></div></div>
+
+  <div class="page"><div class="wrap">
+
+    <section class="sec" id="info">
+      <div class="sh"><p class="kicker">La nit</p><h2 class="h2">Tot el que <i>cal saber</i></h2><p class="sub">Informació de la festa. Si falta alguna cosa, la deixarem aquí.</p></div>
+      <div class="pl">
+        <div class="ticket dark c-5"><p class="tl">Arribada</p><p class="tv">Dissabte <i>30/01</i></p><p class="ts">A les 19:00 h</p><hr class="dash"><p class="tl">Sortida</p><p class="tv">Diumenge <i>31/01</i></p><p class="ts">A les 15:00 h</p></div>
+        <div class="ticket c-7">
+          <p class="tl">Dresscode</p>
+          <div class="dress">
+            <p class="h3">Una nit per treure la nostra <i>versió més elegant</i></p>
+            <div class="palette" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+          </div>
+          <hr class="dash">
+          <p class="ts" style="margin-top:0">Si necessites una mica d'inspiració, hi ha un tauler a Pinterest.</p>
+          <div style="margin-top:14px"><a class="pill out" href="https://es.pinterest.com/mdezoyysa/pas-dequador-board-inspo/" target="_blank" rel="noopener">Veure inspiració ↗</a></div>
+        </div>
+      </div>
+
+      <div class="pl" style="margin-top:26px">
+        <div class="c-5">
+          <p class="kicker" style="margin-bottom:6px">Don't forget</p>
+          <h3 class="h2" style="font-size:clamp(34px,5vw,60px)">Què hauràs <i>de portar?</i></h3>
+        </div>
+        <ul class="todo c-7">
+          <li><span>Llençols<small>Per al llit de la casa de colònies</small></span></li>
+          <li><span>Funda de coixí</span></li>
+          <li><span>Sac de dormir</span></li>
+          <li><span>Ganes de passar-ho bé<small>I el dresscode, és clar ✦</small></span></li>
+        </ul>
       </div>
     </section>
 
-    <section class="sec" id="detalls">
-      <div class="sechead"><p class="eyebrow">Les dues cases</p><h2 class="title">Mira-les una per una</h2><p class="lead-p">Dades segons el que ens han contestat. Preus amb IVA.</p></div>
-      <div class="dcards" id="dcards"></div>
-      <p class="foot">Les fiances es tornen el dia de marxar si no hi ha desperfectes. Fotos de les webs de cada casa (molinoucalabuig.cat i casacolonies.com).</p>
-    </section>
-
-    <section class="sec" id="cara">
-      <div class="sechead"><p class="eyebrow">Cara a cara</p><h2 class="title">Com es comparen</h2><p class="lead-p" id="cmpsub"></p></div>
-      <div class="glass cmp"><table id="cmp"></table></div>
-      <p class="cmpnote">En verd, la casa que va per davant en cada fila.</p>
-    </section>
-
-    <section class="sec">
-      <div class="sechead"><p class="eyebrow">Com funciona</p><h2 class="title">Tres passos, un sol vot</h2></div>
-      <div class="how">
-        <div class="glass step"><i>1</i><h4>Mira les cases</h4><p>Fotos, preu, fiança, horaris i com és la festa a cadascuna.</p></div>
-        <div class="glass step"><i>2</i><h4>Vota la que vols</h4><p>Un vot per persona. Qui vota compta com a assistent. El pots treure o canviar.</p></div>
-        <div class="glass step"><i>3</i><h4>Reservem la guanyadora</h4><p>El preu per persona es recalcula amb la gent que va votant.</p></div>
+    <section class="sec" id="lloc">
+      <div class="sh"><p class="kicker">On?</p><h2 class="h2">A la casa de colònies <i>Mas Aliberch</i></h2></div>
+      <div class="pl">
+        <div class="place ticket c-5">
+          <h3>Mas <i>Aliberch</i></h3>
+          <address>Mas l'Aliberch s/n<br>08529 Muntanyola, Barcelona<br><span class="tot">A 1 h en cotxe de la uni</span></address>
+          <div class="facts">
+            <div><b>30 €</b><span>per persona</span></div>
+            <div><b>109</b><span>places</span></div>
+            <div><b>Sala</b><span>de música i llums</span></div>
+            <div><b>Pista</b><span>i piscina</span></div>
+          </div>
+          <div class="row"><a class="pill" href="https://www.google.com/maps/search/?api=1&query=Mas+l%27Aliberch+Muntanyola" target="_blank" rel="noopener">Obre el mapa ↗</a></div>
+        </div>
+        <div class="c-7 gal">
+          <div class="strip" id="strip"></div>
+          <div class="gnav">
+            <button type="button" id="gprev" aria-label="Foto anterior"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" id="gnext" aria-label="Foto següent"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+            <span id="gcount">1 / 8</span>
+          </div>
+        </div>
       </div>
-      <div class="stats">
-        <div class="glass stat"><b>2</b><span>cases</span></div>
-        <div class="glass stat"><b>1</b><span>nit</span></div>
-        <div class="glass stat"><b id="nvot">0</b><span>votants</span></div>
-      </div>
-    </section>
-
-    <section class="sec" id="cases">
-      <div class="sechead"><p class="eyebrow">Votació en directe</p><h2 class="title">Quina casa triem?</h2><p class="tot" id="totalv"></p></div>
-      <div class="glass namebox">
-        <label for="nom">El teu nom i cognoms</label>
-        <input id="nom" type="text" maxlength="60" autocomplete="name" placeholder="Nom i cognoms" enterkeyhint="done">
-        <p id="nomhint">Només l'organitzador sap qui ha votat: el nom no es mostra a ningú ni es veu què has votat. Un vot per persona.</p>
-      </div>
-      <div class="pcards" id="pcards"></div>
+      <p class="tot" style="margin-top:22px;max-width:70ch">Entrada a partir de les 15:00 i sortida el diumenge a les 15:00. Fiança de 400 € en efectiu, que es torna si no hi ha desperfectes. Fotos de la web de la casa.</p>
     </section>
 
     <section class="sec" id="butlleti">
-      <div class="sechead"><p class="eyebrow">Bústia</p><h2 class="title">Què hi aportes?</h2><p class="lead-p">Deixa una idea per a la festa o digues què saps fer i et ve de gust fer a la casa: punxar, cuinar, portar jocs, un altaveu, fer fotos... El nom és opcional.</p></div>
+      <div class="sh"><p class="kicker">Bústia</p><h2 class="h2">Suggeriments <i>i idees</i></h2><p class="sub">Deixa una idea per a la festa o digues què saps fer i et ve de gust fer a la casa: punxar, cuinar, portar jocs, un altaveu, fer fotos... El nom és opcional.</p></div>
       <div class="mail">
-        <form class="glass mailform" id="ideaform" autocomplete="off">
+        <form class="ticket mailform" id="ideaform" autocomplete="off">
           <div class="chips2" role="group" aria-label="Tipus de proposta">
             <button type="button" class="chipsel" data-t="aporto" aria-pressed="true">Jo puc fer…</button>
             <button type="button" class="chipsel" data-t="idea" aria-pressed="false">Idea per a la festa</button>
@@ -369,270 +307,82 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
           <textarea id="idea-text" maxlength="400" rows="4" placeholder="Per exemple: sé punxar i porto el meu equip"></textarea>
           <label for="idea-nom">El teu nom (opcional)</label>
           <input id="idea-nom" type="text" maxlength="40" placeholder="Si ho deixes buit, serà anònim">
-          <div class="mailrow"><span id="idea-count">0 / 400</span><button class="btn" type="submit">Envia a la bústia</button></div>
+          <div class="mailrow"><span id="idea-count">0 / 400</span><button class="pill big" type="submit">Envia a la bústia</button></div>
           <p class="mailmsg" id="idea-msg" hidden></p>
         </form>
         <div class="ideas" id="ideas" aria-live="polite"><p class="tot">Carregant propostes…</p></div>
       </div>
     </section>
-  </div>
+
+    <section class="sec" id="cotxes">
+      <div class="soon">
+        <span class="tag">Aviat</span>
+        <div class="car" aria-hidden="true"><svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V11l2-5h10l2 5v5M3 16h18M7 16v2M17 16v2"/><circle cx="8" cy="13" r=".6" fill="currentColor"/><circle cx="16" cy="13" r=".6" fill="currentColor"/></svg></div>
+        <div><h3>Tauler de <i>cotxes</i></h3><p>Molt aviat: aquí podràs dir si tens places lliures al cotxe o demanar-ne una per anar a Muntanyola.</p></div>
+      </div>
+    </section>
+  </div></div>
 </main>
+
 <footer class="page">
-  <div class="wrap foot2">
-    <button type="button" id="admlink" class="admlink">Organitzador</button>
-    <form id="admform" hidden autocomplete="off">
-      <input id="admkey" type="password" placeholder="Clau d'organitzador" autocomplete="current-password" aria-label="Clau d'organitzador">
-      <button class="btn sm" type="submit">Entra</button>
-      <span id="admerr" class="admerr" hidden></span>
-    </form>
+  <div class="wrap">
+    <p class="big">Halfway <i>There</i></p>
+    <div class="fl">
+      <span>Pas d'Equador · Publicitat i RRPP · 2026-27</span>
+      <span>30.01.2027 · Muntanyola</span>
+      <span><button type="button" id="admlink" class="admlink">Organitzador</button>
+        <form id="admform" hidden autocomplete="off"><input id="admkey" type="password" placeholder="Clau d'organitzador" autocomplete="current-password" aria-label="Clau d'organitzador"><button class="pill" type="submit">Entra</button><span id="admerr" class="admerr" hidden></span></form></span>
+    </div>
   </div>
 </footer>
 
 <script>
 (function () {
   "use strict";
-  var HOUSES = [
-    {
-      id: "aliberch", name: "Mas Aliberch", place: "Muntanyola, Barcelona", drive: "1 h en cotxe", pill: "30 € per pers.", driveMin: 60,
-      photos: ["img/aliberch-1.jpg", "img/aliberch-jocs.jpg", "img/aliberch-piscina.jpg", "img/aliberch-pista.jpg", "img/aliberch-3.jpg", "img/aliberch-4.jpg", "img/aliberch-capella.jpg", "img/aliberch-escala.jpg"],
-      status: "ok", statusText: "Disponible",
-      priceBig: "30 €", priceSmall: "per persona, mínim 40 persones",
-      calc: function (n) { return 30 * Math.max(n, 40); },
-      cmp: { fianca: 400, minP: 40, festaCasa: true, sortida: "Diumenge 15:00" },
-      info: [["Fiança", "400 € en efectiu"], ["Entrada", "A partir de les 15:00"], ["Sortida", "Diumenge a les 15:00"], ["Festa", "Sala de música a la mateixa casa, amb altaveu i llums de festa"], ["Capacitat", "109 places"]],
-      pros: ["Tot en un sol lloc, sense desplaçaments", "Sala de música, altaveu i llums inclosos", "Horari de sortida llarg", "Si som molts més de 40, abaixen el preu"],
-      cons: ["La més cara per persona", "Fiança de 400 €"]
-    },
-    {
-      id: "molinou", name: "Molí Nou de Calabuig", place: "Girona", drive: "1 h 11 min en cotxe", pill: "29 € per pers.", driveMin: 71,
-      photos: ["img/molinou-2.jpg", "img/molinou-5.jpg", "img/molinou-nau.jpg", "img/molinou-1.jpg", "img/molinou-4.jpg", "img/molinou-3.jpg", "img/molinou-menjador.jpg", "img/molinou-cuina.jpg"],
-      status: "wait", statusText: "Pendent de confirmar",
-      priceBig: "29 €", priceSmall: "per persona, mínim 50 persones",
-      calc: function (n) { return 29 * Math.max(n, 50); },
-      min: 50, escenaris: [40, 50],
-      cmp: { fianca: null, minP: 50, festaCasa: true, sortida: "17:00" },
-      info: [["Fiança", "Per confirmar"], ["Entrada", "A les 10:00"], ["Sortida", "A les 17:00"], ["Festa", "Sala de 230 m² sense columnes. Música a l'interior fins que surti el sol, amb volum moderat"], ["Dormir", "Fins a 83 persones. Habitacions de 4, 8, 10 i 12 places, lavabos fora de les habitacions"], ["Cuina", "Dret a cuina. Podem portar càtering"]],
-      pros: ["Sala enorme dins de la mateixa casa", "Permeten música fins l'hora que vulguem", "Cuina disponible", "Espais exteriors i capella"],
-      cons: ["Mínim de 50: si som menys, paguem igualment com si fóssim 50", "Encara no està confirmada, hi ha un altre grup esperant", "Prohibits confeti i petards"]
-    }
-  ];
-  var SIZES = [40, 45, 50];
-  var state = { canVote: false, canEdit: false, by: {}, total: 0, mine: null, busy: false, nombre: "" };
+  var PHOTOS = ["img/aliberch-1.jpg", "img/aliberch-jocs.jpg", "img/aliberch-piscina.jpg", "img/aliberch-pista.jpg", "img/aliberch-3.jpg", "img/aliberch-4.jpg", "img/aliberch-capella.jpg", "img/aliberch-escala.jpg"];
   var $ = function (id) { return document.getElementById(id); };
-  var el = { pcards: $("pcards"), dcards: $("dcards"), notice: $("notice"), totalv: $("totalv"), nvot: $("nvot"), cmp: $("cmp"), cmpsub: $("cmpsub") };
-  var P = {}, D = {};
-
-  function fmt2(n) { return n.toLocaleString("ca-ES", { minimumFractionDigits: 0, maximumFractionDigits: 2 }); }
-  function fmt(n) { return Math.round(n).toLocaleString("ca-ES"); }
   function h(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-  function showNotice(msg, warn) { el.notice.textContent = msg; el.notice.className = "notice" + (warn ? " warn" : ""); el.notice.hidden = !msg; }
+
+  // marquesina
+  (function () {
+    var t = $("marq"), items = ["Halfway There", "✦", "30 de gener de 2027", "✦", "Mas Aliberch", "✦", "Publicitat i RRPP", "✦", "Dresscode elegant", "✦"], html = "";
+    for (var k = 0; k < 8; k++) items.forEach(function (x) { html += x === "✦" ? '<span class="st">✦</span>' : "<span>" + x + "</span>"; });
+    t.innerHTML = html;
+  })();
 
   // compte enrere
   (function () {
-    var target = new Date(2027, 0, 30, 18, 0, 0).getTime();
-    var d = $("cd-d"), hh = $("cd-h"), m = $("cd-m"), s = $("cd-s");
+    var target = new Date(2027, 0, 30, 19, 0, 0).getTime();
+    var d = $("cd-d"), hh = $("cd-h"), m = $("cd-m");
     function two(n) { return n < 10 ? "0" + n : String(n); }
     function tick() {
       var left = Math.max(0, target - Date.now()) / 1000;
       d.textContent = String(Math.floor(left / 86400));
       hh.textContent = two(Math.floor(left % 86400 / 3600));
       m.textContent = two(Math.floor(left % 3600 / 60));
-      s.textContent = two(Math.floor(left % 60));
     }
-    tick(); setInterval(tick, 1000);
+    tick(); setInterval(tick, 20000);
   })();
 
-  function buildP(hs) {
-    var c = h("article", "pcard"); var r = {};
-    r.img = document.createElement("img"); r.img.alt = "Foto de " + hs.name; r.img.loading = "lazy"; c.appendChild(r.img);
-    var pt = h("div", "pt");
-    pt.appendChild(h("span", "badge " + hs.status, hs.statusText));
-    pt.appendChild(h("span", "badge", hs.pill));
-    c.appendChild(pt);
-    var pb = h("div", "pb");
-    r.lead = h("span", "lead", "Va al davant"); r.lead.hidden = true; pb.appendChild(r.lead);
-    pb.appendChild(h("h3", null, hs.name));
-    pb.appendChild(h("p", "meta", hs.place + " · " + hs.drive));
-    var row = h("div", "row");
-    r.num = h("span", "num", "0");
-    var bar = h("div", "bar"); r.fill = document.createElement("i"); bar.appendChild(r.fill);
-    row.appendChild(r.num); row.appendChild(bar); pb.appendChild(row);
-    r.btn = h("button", "vote", "Voto aquesta casa"); r.btn.type = "button"; r.btn.setAttribute("aria-pressed", "false");
-    r.btn.addEventListener("click", function (e) { castVote(hs.id, e); });
-    pb.appendChild(r.btn);
-    c.appendChild(pb);
-    r.card = c; P[hs.id] = r; el.pcards.appendChild(c);
-  }
-
-  function buildD(hs) {
-    var c = h("article", "glass dcard"); var r = {};
-    r.pic = h("div", "pic"); c.appendChild(r.pic);
-    var b = h("div", "dbody");
-    var hd = h("div"); hd.appendChild(h("p", "place", hs.place)); hd.appendChild(h("h3", null, hs.name)); b.appendChild(hd);
-    var pb = h("div", "pricebox"); pb.appendChild(h("span", "big", hs.priceBig)); pb.appendChild(h("span", "small", hs.priceSmall)); b.appendChild(pb);
-    if (hs.extra) b.appendChild(h("p", "extra", hs.extra));
-    if (hs.escenaris) {
-      var sc = h("div", "scen");
-      sc.appendChild(h("p", "scenhead", "Preu segons la gent que vingui"));
-      var grid = h("div", "scengrid");
-      hs.escenaris.forEach(function (n) {
-        var tot = hs.calc(n), pp = tot / n, t = h("div", "scenbox" + (n < hs.min ? " pen" : ""));
-        t.appendChild(h("span", "scenlab", "Si som " + n));
-        t.appendChild(h("strong", "scenpp", fmt2(pp) + " € per persona"));
-        t.appendChild(h("span", "scentot", "Total: " + fmt(tot) + " €"));
-        if (n < hs.min) t.appendChild(h("span", "scennote", "Cal pagar igualment com si fóssim " + hs.min + "."));
-        grid.appendChild(t);
-      });
-      sc.appendChild(grid);
-      b.appendChild(sc);
-    }
-    var dl = document.createElement("dl");
-    hs.info.forEach(function (x) { var d = document.createElement("div"); d.appendChild(h("dt", null, x[0])); d.appendChild(h("dd", null, x[1])); dl.appendChild(d); });
-    b.appendChild(dl);
-    var pc = h("div", "pc");
-    var pro = h("div", "pro"); pro.appendChild(h("h4", null, "Avantatges")); var u1 = document.createElement("ul"); hs.pros.forEach(function (t) { u1.appendChild(h("li", null, t)); }); pro.appendChild(u1);
-    var con = h("div", "con"); con.appendChild(h("h4", null, "Inconvenients")); var u2 = document.createElement("ul"); hs.cons.forEach(function (t) { u2.appendChild(h("li", null, t)); }); con.appendChild(u2);
-    pc.appendChild(pro); pc.appendChild(con); b.appendChild(pc);
-    r.cost = h("div", "cost"); b.appendChild(r.cost);
-    c.appendChild(b);
-    D[hs.id] = r; el.dcards.appendChild(c);
-  }
-
-  function counts() {
-    var by = {};
-    HOUSES.forEach(function (x) { by[x.id] = state.by[x.id] || 0; });
-    return { by: by, total: state.total };
-  }
-  function srcsFor(hs) { return { ids: [], srcs: hs.photos }; }
-  function renderPic(hs) {
-    var r = D[hs.id], s = srcsFor(hs);
-    var key = s.srcs.join("|") + "|" + state.canEdit;
-    if (r.key === key) return;
-    r.key = key; r.pic.textContent = "";
-    var strip = h("div", "strip");
-    s.srcs.forEach(function (src, idx) {
+  // galeria
+  (function () {
+    var strip = $("strip"), cnt = $("gcount"), total = PHOTOS.length;
+    PHOTOS.forEach(function (src, i) {
       var w = h("div", "ph"), img = document.createElement("img");
-      img.src = src; img.alt = "Foto de " + hs.name; img.loading = idx ? "lazy" : "eager"; w.appendChild(img);
-      if (state.canEdit && s.ids.length) { var rm = h("button", "rm", "Treu"); rm.type = "button"; rm.addEventListener("click", function () { removePhoto(hs.id, s.ids[idx]); }); w.appendChild(rm); }
-      strip.appendChild(w);
+      img.src = src; img.alt = "Foto de Mas Aliberch"; img.loading = i ? "lazy" : "eager"; w.appendChild(img); strip.appendChild(w);
     });
-    r.pic.appendChild(strip);
-    if (s.srcs.length > 1) {
-      var total = s.srcs.length, cnt = h("span", "count", "1 / " + total);
-      function go(dir) {
-        var w = strip.clientWidth, i = Math.round(strip.scrollLeft / w) + dir;
-        if (i < 0) i = total - 1; else if (i >= total) i = 0;
-        strip.scrollTo({ left: i * w, behavior: "smooth" });
-      }
-      function arrow(cls, label, dir, d) {
-        var b = h("button", "arrow " + cls); b.type = "button"; b.setAttribute("aria-label", label);
-        b.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + d + '"/></svg>';
-        b.addEventListener("click", function () { go(dir); });
-        return b;
-      }
-      r.pic.appendChild(arrow("prev", "Foto anterior", -1, "M15 5l-7 7 7 7"));
-      r.pic.appendChild(arrow("next", "Foto següent", 1, "M9 5l7 7-7 7"));
-      r.pic.appendChild(cnt);
-      strip.addEventListener("scroll", function () { cnt.textContent = (Math.round(strip.scrollLeft / strip.clientWidth) + 1) + " / " + total; }, { passive: true });
+    cnt.textContent = "1 / " + total;
+    function step() { var f = strip.firstElementChild; return f ? f.getBoundingClientRect().width + 14 : strip.clientWidth; }
+    function go(dir) {
+      var i = Math.round(strip.scrollLeft / step()) + dir;
+      if (i < 0) i = total - 1; else if (i >= total) i = 0;
+      strip.scrollTo({ left: i * step(), behavior: "smooth" });
     }
-  }
-  function renderCost(hs, n) {
-    var r = D[hs.id], t = document.createElement("table");
-    var th = document.createElement("thead"), tr = document.createElement("tr");
-    ["Persones", "Total", "Per persona"].forEach(function (x) { tr.appendChild(h("th", null, x)); });
-    th.appendChild(tr); t.appendChild(th);
-    var tb = document.createElement("tbody");
-    function row(k, live) {
-      var tot = hs.calc(k), r2 = document.createElement("tr"); if (live) r2.className = "live";
-      r2.appendChild(h("td", null, live ? k + " (votants)" : String(k)));
-      r2.appendChild(h("td", null, fmt(tot) + " €")); r2.appendChild(h("td", null, fmt(tot / k) + " €")); tb.appendChild(r2);
-    }
-    SIZES.forEach(function (k) { row(k, false); });
-    if (n > 0 && SIZES.indexOf(n) === -1) row(n, true);
-    t.appendChild(tb); r.cost.textContent = ""; r.cost.appendChild(t);
-  }
+    $("gprev").addEventListener("click", function () { go(-1); });
+    $("gnext").addEventListener("click", function () { go(1); });
+    strip.addEventListener("scroll", function () { cnt.textContent = (Math.min(total, Math.round(strip.scrollLeft / step()) + 1)) + " / " + total; }, { passive: true });
+  })();
 
-  function renderCompare(total) {
-    var n = total >= 30 ? total : 45;
-    el.cmpsub.textContent = total >= 30 ? "Càlculs amb els " + total + " votants actuals." : "Càlculs amb 45 persones, perquè encara hi ha pocs vots.";
-    var rows = [
-      { label: "Preu de la casa, per persona", best: null, vals: HOUSES.map(function (x) { return { t: x.priceBig + " per persona", n: null }; }) },
-      { label: "Preu real amb " + n + " persones", best: "min", vals: HOUSES.map(function (x) {
-          var v = x.calc(n) / n, pen = x.cmp.minP && n < x.cmp.minP;
-          return { t: fmt2(v) + " €" + (pen ? " (paga com " + x.cmp.minP + ")" : ""), n: v };
-        }) },
-      { label: "Fiança", best: "min", vals: HOUSES.map(function (x) { var f = x.cmp.fianca; return f == null ? { t: "Per confirmar", n: null } : { t: f + " €", n: f }; }) },
-      { label: "Mínim de persones", best: "min", vals: HOUSES.map(function (x) { var m = x.cmp.minP; return { t: m ? String(m) : "Cap", n: m }; }) },
-      { label: "Distància a la uni", best: "min", vals: HOUSES.map(function (x) { return { t: x.drive.replace(" en cotxe", ""), n: x.driveMin }; }) },
-      { label: "Festa dins la casa", best: "max", vals: HOUSES.map(function (x) { return { t: x.cmp.festaCasa ? "Sí" : "No", n: x.cmp.festaCasa ? 1 : 0 }; }) },
-      { label: "Sortida", best: null, vals: HOUSES.map(function (x) { return { t: x.cmp.sortida, n: null }; }) }
-    ];
-    var t = el.cmp; t.textContent = "";
-    var thead = document.createElement("thead"), hr = document.createElement("tr");
-    hr.appendChild(h("th", null, ""));
-    HOUSES.forEach(function (x) { hr.appendChild(h("th", null, x.name)); });
-    thead.appendChild(hr); t.appendChild(thead);
-    var tb = document.createElement("tbody");
-    rows.forEach(function (row) {
-      var tr = document.createElement("tr");
-      var th = h("th", null, row.label); th.scope = "row"; tr.appendChild(th);
-      var nums = row.vals.map(function (v) { return v.n; }).filter(function (v) { return v != null; });
-      var bestV = null;
-      if (row.best && nums.length) { bestV = row.best === "min" ? Math.min.apply(null, nums) : Math.max.apply(null, nums); if (nums.every(function (v) { return v === nums[0]; })) bestV = null; }
-      row.vals.forEach(function (v) { tr.appendChild(h("td", bestV != null && v.n === bestV ? "best" : "", v.t)); });
-      tb.appendChild(tr);
-    });
-    t.appendChild(tb);
-  }
-
-  function render() {
-    var c = counts(), me = state.mine || {};
-    var max = 0; HOUSES.forEach(function (x) { if (c.by[x.id] > max) max = c.by[x.id]; });
-    var leaders = HOUSES.filter(function (x) { return max > 0 && c.by[x.id] === max; });
-    el.nvot.textContent = String(c.total);
-    el.totalv.textContent = c.total ? c.total + (c.total === 1 ? " persona ha votat" : " persones han votat") : "Encara no hi ha vots. Sigues el primer!";
-    HOUSES.forEach(function (hs) {
-      var p = P[hs.id], n = c.by[hs.id], mine = me.casa === hs.id;
-      var first = srcsFor(hs).srcs[0];
-      if (p.img.getAttribute("src") !== first) p.img.src = first;
-      p.card.className = "pcard" + (mine ? " mine" : "");
-      p.num.textContent = String(n);
-      p.fill.style.width = (max ? Math.round(n * 100 / max) : 0) + "%";
-      p.lead.hidden = !(leaders.length === 1 && leaders[0].id === hs.id);
-      p.btn.setAttribute("aria-pressed", String(mine));
-      p.btn.textContent = mine ? "El teu vot ✓ · toca per treure'l" : "Voto aquesta casa";
-      p.btn.disabled = !state.canVote;
-      renderPic(hs); renderCost(hs, c.total >= 30 ? c.total : 0);
-    });
-    if (nameInput) { nameInput.readOnly = !!(state.mine && state.nom); if (state.mine && state.nom) nameInput.value = state.nom; }
-    renderCompare(c.total);
-  }
-
-  var conf = $("conf"), cctx = conf.getContext && conf.getContext("2d"), parts = [], raf = 0;
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function burst(x, y) {
-    if (reduce || !cctx) return;
-    conf.width = innerWidth; conf.height = innerHeight;
-    var cols = ["#ffd24a", "#ff9f1c", "#ffffff", "#55e8b0"];
-    for (var i = 0; i < 70; i++) { var a = Math.random() * 6.283, s = 3 + Math.random() * 7; parts.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 4, r: 3 + Math.random() * 4, c: cols[i % 4], life: 60 + Math.random() * 30 }); }
-    if (!raf) raf = requestAnimationFrame(tick);
-  }
-  function tick() {
-    cctx.clearRect(0, 0, conf.width, conf.height);
-    parts = parts.filter(function (p) { return p.life > 0; });
-    parts.forEach(function (p) { p.x += p.vx; p.y += p.vy; p.vy += .28; p.vx *= .99; p.life--; cctx.fillStyle = p.c; cctx.globalAlpha = Math.min(1, p.life / 25); cctx.fillRect(p.x, p.y, p.r, p.r * 1.6); });
-    cctx.globalAlpha = 1;
-    if (parts.length) raf = requestAnimationFrame(tick); else { raf = 0; cctx.clearRect(0, 0, conf.width, conf.height); }
-  }
-
-  var configured = true;
-  var nameInput = $("nom");
-  function cleanNom(v) { return String(v || "").replace(/\s+/g, " ").trim().slice(0, 60); }
-  function nomOk(v) { var w = cleanNom(v).split(" ").filter(function (x) { return x.length >= 2; }); return w.length >= 2; }
-  try { state.nom = cleanNom(localStorage.getItem("eq_nom")); } catch (e) { state.nom = ""; }
-  nameInput.value = state.nom;
-  nameInput.addEventListener("input", function () { if (!nameInput.readOnly) state.nom = cleanNom(nameInput.value); });
-  // Identificador aleatori d'aquest dispositiu (sense dades personals). Un vot per identificador.
   var DEV = (function () {
     var k = "eq_dev", v = "";
     try { v = localStorage.getItem(k) || ""; } catch (e) {}
@@ -642,81 +392,9 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     }
     return v;
   })();
-
   function api(fn, body) {
     return fetch("/api/vote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ fn: fn }, body || {})) })
       .then(function (r) { if (!r.ok) return r.text().then(function (t) { throw new Error(t || r.status); }); return r.text().then(function (t) { return t ? JSON.parse(t) : null; }); });
-  }
-  state.seq = 0; state.inflight = 0; state.chain = Promise.resolve();
-  function applyState(res, mine) {
-    var by = {}, t = 0;
-    (res || []).forEach(function (r) { by[r.casa] = Number(r.n); t += Number(r.n); });
-    state.by = by; state.total = t;
-    if (mine !== undefined) state.mine = mine ? { casa: mine } : null;
-    render();
-  }
-  function loadState() {
-    return api("estado", { p_dev: DEV }).then(function (r) { if (!state.inflight) applyState(r.res, r.mine); });
-  }
-  function bump(casa, d) {
-    if (!casa) return;
-    state.by[casa] = Math.max(0, (state.by[casa] || 0) + d);
-    state.total = Math.max(0, state.total + d);
-  }
-
-  // Interfície optimista: el vot es veu al moment i el servidor es posa al dia en segon pla.
-  function castVote(id, ev) {
-    if (!state.canVote) return;
-    var prev = state.mine;
-    var on = !prev || prev.casa !== id;
-    if (on) {
-      var nm = cleanNom(nameInput.value || state.nom);
-      if (!nomOk(nm)) { showNotice("Escriu el teu nom i cognoms abans de votar.", true); nameInput.focus(); return; }
-      state.nom = nm;
-    }
-    if (prev) bump(prev.casa, -1);
-    if (on) bump(id, 1);
-    state.mine = on ? { casa: id } : null;
-    showNotice("", false); render();
-    if (on && ev) burst(ev.clientX, ev.clientY);
-    var seq = ++state.seq;
-    state.inflight++;
-    var nomEnviat = state.nom;
-    state.chain = state.chain
-      .then(function () {
-        var crida = function () { return on ? api("votar", { p_dev: DEV, p_casa: id, nom: nomEnviat }) : api("quitar_voto", { p_dev: DEV }); };
-        // Si hi ha molta gent votant alhora, el servidor pot respondre "ocupat": es torna a provar sol.
-        var prova = function (n) { return crida().catch(function (e) { if (n < 3 && /ocupat/.test(String(e && e.message))) return new Promise(function (r) { setTimeout(r, 1200 * (n + 1)); }).then(function () { return prova(n + 1); }); throw e; }); };
-        return prova(0);
-      })
-      .then(function (r) {
-        if (on) { try { localStorage.setItem("eq_nom", nomEnviat); } catch (e) {} }
-        if (seq === state.seq && r && r.res) applyState(r.res);
-        return false;
-      })
-      .catch(function (e) {
-        var m = String(e && e.message);
-        showNotice(
-          /nom_ja_votat/.test(m) ? "Aquest nom ja ha votat des d'un altre dispositiu. Si ets tu, parla amb l'organitzador perquè t'ho desbloquegi." :
-          /dispositiu_ja_votat/.test(m) ? "Aquest dispositiu ja ha votat amb un altre nom. Si t'has equivocat, treu primer el teu vot tocant la mateixa casa." :
-          /nom_no_valid/.test(m) ? "Escriu el teu nom i cognoms, només amb lletres." :
-          /massa/.test(m) ? "Hi ha massa vots des d'aquesta connexió. Prova-ho amb dades mòbils." :
-          "No s'ha pogut desar el vot. Torna-ho a provar d'aquí a un moment.", true);
-        return true;
-      })
-      .then(function (failed) {
-        state.inflight = Math.max(0, state.inflight - 1);
-        if (failed) return loadState().catch(function () {});
-      });
-  }
-  HOUSES.forEach(buildP); HOUSES.forEach(buildD);
-  if (!configured) {
-    showNotice("La votació encara no està configurada (falta la base de dades). Mentrestant pots mirar les cases.", true);
-    render();
-  } else {
-    state.canVote = true; render();
-    loadState().catch(function () { showNotice("No s'han pogut carregar els vots.", true); });
-    setInterval(function () { if (!document.hidden && !state.inflight) loadState().catch(function () {}); }, 30000);
   }
 
   // ---------- Bústia de propostes ----------
@@ -741,7 +419,7 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
     elIdeas.textContent = "";
     if (!ideaState.list.length) { elIdeas.appendChild(h("p", "tot", "Encara no hi ha cap proposta. Sigues el primer! Per exemple: «sé punxar» o «porto un altaveu».")); return; }
     ideaState.list.forEach(function (it) {
-      var c = h("article", "glass idea");
+      var c = h("article", "idea");
       var top = h("div", "ideatop");
       top.appendChild(h("span", "tagi " + it.tipus, TIPUS_TXT[it.tipus] || "Altres"));
       top.appendChild(h("span", "when", ago(it.t)));
@@ -785,13 +463,11 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
   });
   loadIdeas().catch(function () { elIdeas.textContent = ""; elIdeas.appendChild(h("p", "tot", "No s'han pogut carregar les propostes.")); });
 
-  // ---------- Accés a l'organitzador ----------
+  // ---------- Accés d'organitzador (només per moderar la bústia) ----------
   var admLink = $("admlink"), admForm = $("admform"), admKeyIn = $("admkey"), admErr = $("admerr");
   if (ideaState.admin) {
-    admLink.textContent = "Anar al panell";
-    admLink.addEventListener("click", function () { var p = $("admin"); if (p) p.scrollIntoView({ behavior: "smooth" }); });
-    var nl = document.querySelector(".links");
-    if (nl) { var an = h("a", null, "Admin"); an.href = "#admin"; nl.appendChild(an); }
+    admLink.textContent = "Tanca la sessió d'organitzador";
+    admLink.addEventListener("click", function () { try { localStorage.removeItem("eq_admin"); } catch (e) {} location.reload(); });
   } else {
     admLink.addEventListener("click", function () { admForm.hidden = !admForm.hidden; if (!admForm.hidden) admKeyIn.focus(); });
     admForm.addEventListener("submit", function (ev) {
@@ -800,83 +476,11 @@ canvas.conf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-even
       if (!k) return;
       admErr.hidden = true;
       api("admin_votants", { key: k })
-        .then(function () { try { localStorage.setItem("eq_admin", k); } catch (e) {} location.hash = "admin"; location.reload(); })
+        .then(function () { try { localStorage.setItem("eq_admin", k); } catch (e) {} location.reload(); })
         .catch(function () { admErr.textContent = "Clau incorrecta."; admErr.hidden = false; });
     });
   }
-
-  // ---------- Panell de l'organitzador (només amb la clau) ----------
-  if (ideaState.admin) {
-    var admSec = h("section", "sec"); admSec.id = "admin";
-    var admBox = h("div", "glass adm");
-    admBox.appendChild(h("h3", null, "Panell de l'organitzador"));
-    admBox.appendChild(h("p", "tot", "Només el veus tu. Mostra qui ha votat, però no què ha votat cada persona."));
-    var admTa = document.createElement("textarea"); admTa.id = "adm-llista";
-    admTa.placeholder = "Enganxa aquí la llista de la classe, un nom per línia, per saber qui falta";
-    var admBtn = h("button", "btn", "Desa la llista i comprova"); admBtn.type = "button";
-    var admMsg = h("p", "tot"); admMsg.setAttribute("aria-live", "polite");
-    var admCols = h("div", "admcols");
-    var admOut = h("button", "admout", "Tanca la sessió d'organitzador"); admOut.type = "button";
-    admOut.addEventListener("click", function () { try { localStorage.removeItem("eq_admin"); sessionStorage.removeItem("eq_admin"); } catch (e) {} location.hash = ""; location.reload(); });
-    admBox.appendChild(admTa); admBox.appendChild(admBtn); admBox.appendChild(admMsg); admBox.appendChild(admCols); admBox.appendChild(admOut);
-    admSec.appendChild(admBox);
-    document.querySelector("main .wrap").appendChild(admSec);
-
-    var admKey = ideaState.admin;
-    var quand = function (t) { return t ? new Date(t).toLocaleString("ca-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : ""; };
-    var admCol = function (titol, files) {
-      var c = h("div"); c.appendChild(h("h4", null, titol));
-      var l = h("div", "admlist");
-      if (!files.length) l.appendChild(h("p", "tot", "Ningú."));
-      files.forEach(function (f) { l.appendChild(f); });
-      c.appendChild(l); return c;
-    };
-    var admFila = function (nom, sub, id, xarxa) {
-      var r = h("div", "admrow"), t = h("span", null, nom);
-      if (sub) { t.appendChild(document.createTextNode(" ")); t.appendChild(h("small", null, sub)); }
-      if (xarxa) { t.appendChild(document.createTextNode(" ")); var tg = h("small", "xarxa", "xarxa " + xarxa); tg.title = "Ha votat des de la mateixa connexió que altres votants (pot ser la wifi de la uni)"; t.appendChild(tg); }
-      r.appendChild(t);
-      if (id) {
-        var b = h("button", null, "Esborra"); b.type = "button";
-        var timer = 0;
-        b.addEventListener("click", function () {
-          if (!b.dataset.sure) {
-            // Primer toc: demana confirmació. Segon toc (en 4 s): esborra el vot.
-            b.dataset.sure = "1"; b.textContent = "Segur? Esborra"; b.classList.add("sure");
-            timer = setTimeout(function () { delete b.dataset.sure; b.textContent = "Esborra"; b.classList.remove("sure"); }, 4000);
-            return;
-          }
-          clearTimeout(timer); b.disabled = true; b.textContent = "Esborrant…";
-          api("admin_esborrar_vot", { key: admKey, id: id }).then(admCarrega).catch(function () { admMsg.textContent = "No s'ha pogut esborrar."; b.disabled = false; b.textContent = "Esborra"; });
-        });
-        r.appendChild(b);
-      }
-      return r;
-    };
-    var admPinta = function (d) {
-      admCols.textContent = "";
-      if (!admTa.value && d.noms && d.noms.length) admTa.value = d.noms.join("\n");
-      var sense = {}; (d.senseCoincidencia || []).forEach(function (id) { sense[id] = true; });
-      admMsg.textContent = d.votants.length + " votant" + (d.votants.length === 1 ? "" : "s") + (d.noms.length ? " de " + d.noms.length + " a la llista." : ". Enganxa la llista de la classe per veure qui falta.");
-      admCols.appendChild(admCol("Han votat (" + d.votants.length + ")", d.votants.map(function (v) { return admFila(v.nom, quand(v.t), v.id, v.xarxa); })));
-      if (d.noms.length) {
-        admCols.appendChild(admCol("Falten per votar (" + d.falten.length + ")", d.falten.map(function (n) { return admFila(n); })));
-        var sc = d.votants.filter(function (v) { return sense[v.id]; });
-        admCols.appendChild(admCol("Han votat però no surten a la llista (" + sc.length + ")", sc.map(function (v) { return admFila(v.nom, quand(v.t), v.id, v.xarxa); })));
-      }
-    };
-    var admCarrega = function () {
-      return api("admin_votants", { key: admKey }).then(admPinta).catch(function (e) { admMsg.textContent = /403|autoritzat/.test(String(e && e.message)) ? "Clau incorrecta." : "No s'ha pogut carregar el panell."; });
-    };
-    admBtn.addEventListener("click", function () {
-      var noms = admTa.value.split(/\n+/).map(function (x) { return x.trim(); }).filter(Boolean);
-      admBtn.disabled = true;
-      api("admin_roster_desar", { key: admKey, noms: noms }).then(admCarrega).catch(function () { admMsg.textContent = "No s'ha pogut desar la llista."; }).then(function () { admBtn.disabled = false; });
-    });
-    admCarrega();
-  }
 })();
 </script>
-
 </body>
 </html>
