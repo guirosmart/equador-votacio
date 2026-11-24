@@ -174,10 +174,25 @@ a { color: inherit; }
 /* bustia */
 .pls { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 34px; align-items: center; }
 @media (max-width: 860px) { .pls { grid-template-columns: 1fr; } }
-.vinyl { position: relative; width: min(100%, 300px); aspect-ratio: 1; margin: 0 auto; border-radius: 50%; background: repeating-radial-gradient(circle, #2b0d08 0 3px, #3a130b 3px 5px); border: 3px solid var(--wine); box-shadow: 8px 8px 0 var(--wine); animation: spin3 9s linear infinite; display: grid; place-items: center; }
-.vinyl::before { content: ""; position: absolute; width: 36%; aspect-ratio: 1; border-radius: 50%; background: var(--cream); border: 3px solid var(--wine); }
-.vinyl::after { content: ""; position: absolute; width: 7%; aspect-ratio: 1; border-radius: 50%; background: var(--wine); }
-.vinyl span { position: absolute; z-index: 1; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 17px; color: var(--wine); transform: translateY(-34px); }
+.deck { position: relative; width: min(100%, 440px); aspect-ratio: 1.1; margin: 0 auto; border-radius: 18px; border: 3px solid var(--wine); background: linear-gradient(135deg, #7b2a19, #5a1d11 55%, #4a160d); box-shadow: 9px 9px 0 var(--wine); }
+.deck::before { content: ""; position: absolute; inset: 8px; border-radius: 11px; border: 1.5px solid rgba(246,239,216,.28); pointer-events: none; }
+.platter { position: absolute; left: 5%; top: 8%; width: 71%; aspect-ratio: 1; border-radius: 50%; background: #1d0907; border: 3px solid #c9a96a; box-shadow: inset 0 0 0 5px #2a0f0a, 0 4px 0 rgba(0,0,0,.35); }
+.vinyl { position: absolute; inset: 6%; border-radius: 50%; background: repeating-radial-gradient(circle, #160604 0 2px, #2c0e08 2px 4px); animation: spin3 3.6s linear infinite; display: grid; place-items: center; }
+.vinyl::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 20deg, transparent 0 18%, rgba(255,255,255,.16) 24%, transparent 32% 68%, rgba(255,255,255,.12) 74%, transparent 82%); }
+.vinyl .lab { position: absolute; width: 34%; aspect-ratio: 1; border-radius: 50%; background: var(--cream); border: 2px solid #c9a96a; display: grid; place-items: center; text-align: center; font-family: var(--serif); font-style: italic; font-weight: 600; color: var(--wine); font-size: 15px; line-height: 1; }
+.vinyl .lab::after { content: ""; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--wine); box-shadow: 0 0 0 3px var(--cream); }
+.vinyl .lab small { position: absolute; bottom: 17%; font-family: var(--sans); font-style: normal; font-size: 8px; letter-spacing: .2em; font-weight: 800; }
+.arm { position: absolute; right: 0; top: 0; width: 40%; height: 78%; pointer-events: none; }
+.arm svg { width: 100%; height: 100%; overflow: visible; }
+.arm .swing { transform-origin: 122px 48px; transform-box: view-box; animation: sway 7s ease-in-out infinite; }
+@keyframes sway { 0%,100% { transform: rotate(17deg); } 50% { transform: rotate(18.6deg); } }
+.deck .knob { position: absolute; width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f6efd8, #c9a96a 70%); border: 2px solid #2b0d08; box-shadow: 0 3px 0 rgba(0,0,0,.4); }
+.deck .knob::after { content: ""; position: absolute; left: 50%; top: 3px; width: 2px; height: 9px; background: #2b0d08; transform: translateX(-50%); }
+.deck .k1 { right: 6%; bottom: 7%; } .deck .k2 { right: 17%; bottom: 7%; transform: rotate(40deg); }
+.deck .slot { position: absolute; right: 8%; top: 48%; width: 8px; height: 22%; border-radius: 4px; background: #1d0907; border: 1.5px solid rgba(246,239,216,.4); }
+.deck .slot::after { content: ""; position: absolute; left: -7px; top: 22%; width: 20px; height: 12px; border-radius: 3px; background: var(--cream); border: 1.5px solid #2b0d08; }
+.deck .rpm { position: absolute; left: 7%; bottom: 5%; font-size: 9px; font-weight: 800; letter-spacing: .24em; color: var(--cream); opacity: .8; text-transform: uppercase; }
+.deck .led { position: absolute; left: 33%; bottom: 5.6%; width: 7px; height: 7px; border-radius: 50%; background: #ff6a3d; box-shadow: 0 0 8px #ff6a3d; }
 @keyframes spin3 { to { transform: rotate(360deg); } }
 .plframe { border: 2px solid var(--wine); border-radius: 22px; overflow: hidden; box-shadow: 7px 7px 0 var(--wine); background: var(--wine); }
 .plframe iframe { display: block; width: 100%; height: 380px; border: 0; }
@@ -325,7 +340,15 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
     <section class="sec" id="playlist">
       <div class="sh"><p class="kicker">Banda sonora</p><h2 class="h2">La <i>playlist</i> de la nit</h2><p class="sub">Escolta-la i afegeix-hi directament les cançons que vols que sonin: obre-la a Spotify i toca «Afegeix cançons».</p></div>
       <div class="pls">
-        <div class="vinyl" aria-hidden="true"><span>Halfway</span></div>
+        <div class="deck" aria-hidden="true">
+          <div class="platter"><div class="vinyl"><div class="lab">Half<br>way<small>33⅓</small></div></div></div>
+          <div class="arm"><svg viewBox="0 0 160 280"><g class="swing">
+            <circle cx="122" cy="48" r="22" fill="#c9a96a" stroke="#2b0d08" stroke-width="3"/><circle cx="122" cy="48" r="9" fill="#2b0d08"/>
+            <path d="M122 48L116 186" stroke="#f6efd8" stroke-width="7" stroke-linecap="round"/><path d="M122 48L116 186" stroke="#2b0d08" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+            <path d="M113 182l14 -3 6 30 -18 6z" fill="#f6efd8" stroke="#2b0d08" stroke-width="2.5" stroke-linejoin="round"/><rect x="108" y="206" width="9" height="12" fill="#2b0d08"/>
+            <circle cx="122" cy="48" r="38" fill="none" stroke="#f6efd8" stroke-opacity=".25" stroke-width="2" stroke-dasharray="3 6"/></g></svg></div>
+          <i class="slot"></i><i class="knob k1"></i><i class="knob k2"></i><i class="led"></i><span class="rpm">33 · 45</span>
+        </div>
         <div>
           <div class="plframe"><iframe title="Playlist del Pas d'Equador a Spotify" src="https://open.spotify.com/embed/playlist/4nFxaG4gqNTghZlPAsSg2P?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>
           <div style="margin-top:18px"><a class="pill out" href="https://open.spotify.com/playlist/4nFxaG4gqNTghZlPAsSg2P?si=9ef4b4bb8d8e4ade&pt=030e1b06da3175987795a735b4477198" target="_blank" rel="noopener">Afegeix cançons a Spotify ↗</a></div>
