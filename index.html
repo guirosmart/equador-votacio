@@ -7,7 +7,7 @@
 <meta name="description" content="Pas d'Equador de Publicitat i Relacions Públiques. 30 de gener de 2027, Mas Aliberch (Muntanyola).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter+Tight:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Caveat:wght@600;700&family=Inter+Tight:wght@400;500;600;700;800;900&display=swap">
 <style>
 [hidden]{display:none!important}img{max-width:100%;display:block}
 /* Paleta del PDF: granat fosc i crema. Detalls: marquesina, adhesius girats, targetes tipus entrada, arcs per a les fotos. */
@@ -21,6 +21,7 @@
   --muted: #8a5f4f;
   --line: rgba(88,26,16,.28);
   --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --hand: "Caveat", "Comic Sans MS", cursive;
   --sans: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif;
 }
 * { box-sizing: border-box; }
@@ -119,12 +120,24 @@ a { color: inherit; }
 .dress { display: grid; grid-template-columns: 1fr auto; gap: 18px 36px; align-items: center; }
 .dress .h3 { font-family: var(--serif); font-size: clamp(30px, 4vw, 48px); line-height: .98; letter-spacing: -.03em; }
 .dress .h3 i { font-weight: 600; }
-.palette { display: flex; gap: 0; border: 2px solid var(--cream); border-radius: 999px; overflow: hidden; }
-.palette span { width: 54px; height: 54px; }
-.palette span:nth-child(1) { background: var(--cream); } .palette span:nth-child(2) { background: #a3362a; } .palette span:nth-child(3) { background: #2b0d08; } .palette span:nth-child(4) { background: #c9a96a; }
+.seal { color: var(--wine); animation: spin2 30s linear infinite; }
+@keyframes spin2 { to { transform: rotate(360deg); } }
 @media (max-width: 600px) { .dress { grid-template-columns: 1fr; } }
 
 /* llista de coses */
+.note { position: relative; background: #f3e3ad; border: 2px solid var(--wine); padding: 26px 28px 20px; transform: rotate(1.4deg); box-shadow: 8px 8px 0 var(--wine); border-radius: 4px; }
+.note::before { content: ""; position: absolute; top: -15px; left: 50%; width: 110px; height: 30px; transform: translateX(-50%) rotate(2deg); background: rgba(88,26,16,.82); opacity: .9; }
+.note::after { content: "✓ no t'ho deixis!"; position: absolute; right: 22px; bottom: 12px; font-family: var(--hand); font-size: 26px; transform: rotate(-4deg); color: var(--wine2); }
+.note .todo { margin-top: 0; padding-bottom: 28px; }
+.note .todo li { border-top: 2px dashed rgba(88,26,16,.3); font-family: var(--hand); font-weight: 700; font-size: 29px; line-height: 1.1; }
+.note .todo li small { font-family: var(--sans); font-size: 13px; font-weight: 500; }
+.note .todo li::before { font-family: var(--hand); font-size: 26px; font-style: normal; color: var(--wine2); }
+.hand { font-family: var(--hand); font-weight: 700; font-size: 26px; line-height: 1; color: var(--wine2); display: inline-flex; align-items: center; gap: 6px; transform: rotate(-4deg); }
+.stars { position: absolute; pointer-events: none; font-family: var(--serif); color: var(--cream); opacity: .9; }
+.stub { display: flex; align-items: stretch; border: 2px solid var(--cream); border-radius: 12px; overflow: hidden; max-width: 330px; }
+.stub .a { padding: 8px 14px; font-weight: 800; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; line-height: 1.4; border-right: 2px dashed var(--cream); }
+.stub .a b { display: block; font-family: var(--serif); font-style: italic; font-weight: 600; letter-spacing: 0; text-transform: none; font-size: 20px; }
+.stub .bc { flex: 1; min-width: 70px; background: repeating-linear-gradient(90deg, var(--cream) 0 2px, transparent 2px 5px, var(--cream) 5px 6px, transparent 6px 9px, var(--cream) 9px 12px, transparent 12px 14px); opacity: .9; margin: 8px; }
 .todo { list-style: none; padding: 0; display: flex; flex-direction: column; margin-top: 10px; counter-reset: t; }
 .todo li { counter-increment: t; display: grid; grid-template-columns: 44px 1fr; gap: 6px; align-items: baseline; padding: 14px 0; border-top: 1.5px solid var(--line); font-size: 18px; font-weight: 600; }
 .todo li:first-child { border-top: 0; }
@@ -146,9 +159,13 @@ a { color: inherit; }
 .gal { position: relative; }
 .strip { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 14px; }
 .strip::-webkit-scrollbar { display: none; }
-.strip .ph { flex: 0 0 min(78%, 520px); scroll-snap-align: start; aspect-ratio: 4 / 3; border: 2.5px solid var(--wine); border-radius: 18px; overflow: hidden; background: var(--cream2); box-shadow: 6px 6px 0 var(--wine); margin: 0 6px 8px 0; }
-.strip .ph:nth-child(even) { border-radius: 120px 120px 18px 18px; }
-.strip img { width: 100%; height: 100%; object-fit: cover; }
+.strip { padding: 22px 10px 14px; }
+.strip .ph { flex: 0 0 min(72%, 420px); scroll-snap-align: center; position: relative; background: #fffbee; padding: 11px 11px 46px; border: 1.5px solid var(--wine); border-radius: 4px; box-shadow: 6px 8px 0 rgba(88,26,16,.9); transform: rotate(-2.2deg); margin-right: 8px; }
+.strip .ph:nth-child(even) { transform: rotate(1.8deg); }
+.strip .ph:nth-child(3n) { transform: rotate(-.8deg); }
+.strip .ph::before { content: ""; position: absolute; top: -14px; left: 50%; width: 92px; height: 28px; transform: translateX(-50%) rotate(-3deg); background: rgba(201,169,106,.78); border-left: 2px dashed rgba(88,26,16,.25); border-right: 2px dashed rgba(88,26,16,.25); z-index: 2; }
+.strip .ph::after { content: attr(data-cap); position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font-family: var(--hand); font-size: 24px; line-height: 1; color: var(--wine); }
+.strip img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; filter: sepia(.18) contrast(1.02); }
 .gnav { display: flex; gap: 10px; margin-top: 18px; align-items: center; }
 .gnav button { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--wine); background: transparent; color: var(--wine); display: grid; place-items: center; padding: 0; transition: background .15s, color .15s; }
 .gnav button:hover { background: var(--wine); color: var(--cream); }
@@ -203,7 +220,7 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
 #admform .pill { background: var(--cream); color: var(--wine); border-color: var(--cream); min-height: 36px; }
 .admerr { color: #ffb3a5; }
 
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marq .track, .sticker.s1 { animation: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marq .track, .sticker.s1, .seal { animation: none; } }
 </style>
 </head>
 <body>
@@ -222,8 +239,10 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
   <section class="hero">
     <div class="hero-l">
       <p class="kick">Pas d'Equador de Publicitat<br>i Relacions Públiques · 2026-27<em>Mitja carrera feta. Ara toca una bona festa.</em></p>
+      <span class="stars" style="top:16%;right:9%;font-size:44px">✦</span><span class="stars" style="top:46%;right:4%;font-size:22px">✦</span><span class="stars" style="bottom:44%;left:46%;font-size:16px">✦</span>
       <h1>Halfway<i>There</i></h1>
       <div>
+        <div class="stub" style="margin-bottom:18px"><div class="a">Admit<b>One</b></div><div class="bc"></div><div class="a" style="border-right:0;border-left:2px dashed var(--cream)">Nº<b>0130</b></div></div>
         <div class="date"><b>30 de gener de 2027</b><div class="cd" id="cd" aria-label="Temps que falta"><div><b id="cd-d">--</b><span>dies</span></div><div><b id="cd-h">--</b><span>hores</span></div><div><b id="cd-m">--</b><span>min</span></div></div></div>
       </div>
     </div>
@@ -241,16 +260,16 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
     <section class="sec" id="info">
       <div class="sh"><p class="kicker">La nit</p><h2 class="h2">Tot el que <i>cal saber</i></h2><p class="sub">Informació de la festa. Si falta alguna cosa, la deixarem aquí.</p></div>
       <div class="pl">
-        <div class="ticket dark c-5"><p class="tl">Arribada</p><p class="tv">Dissabte <i>30/01</i></p><p class="ts">A les 19:00 h</p><hr class="dash"><p class="tl">Sortida</p><p class="tv">Diumenge <i>31/01</i></p><p class="ts">A les 15:00 h</p></div>
+        <div class="ticket dark c-5"><p class="tl">Arribada</p><p class="tv">Dissabte <i>30/01</i></p><p class="ts">A partir de les 15:00 h</p><hr class="dash"><p class="tl">Sortida</p><p class="tv">Diumenge <i>31/01</i></p><p class="ts">A les 15:00 h</p></div>
         <div class="ticket c-7">
           <p class="tl">Dresscode</p>
           <div class="dress">
             <p class="h3">Una nit per treure la nostra <i>versió més elegant</i></p>
-            <div class="palette" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            <div class="seal" aria-hidden="true"><svg viewBox="0 0 160 160" width="150" height="150"><defs><path id="c" d="M80 80m-60 0a60 60 0 1 1 120 0a60 60 0 1 1-120 0"/></defs><text><textPath href="#c" font-size="13" font-weight="800" letter-spacing="3.4" fill="currentColor">DRESS TO IMPRESS · ELEGANT ONLY · </textPath></text><path d="M80 52l6.5 19.5L106 78l-19.5 6.5L80 104l-6.5-19.5L54 78l19.5-6.5z" fill="currentColor"/></svg></div>
           </div>
           <hr class="dash">
           <p class="ts" style="margin-top:0">Si necessites una mica d'inspiració, hi ha un tauler a Pinterest.</p>
-          <div style="margin-top:14px"><a class="pill out" href="https://es.pinterest.com/mdezoyysa/pas-dequador-board-inspo/" target="_blank" rel="noopener">Veure inspiració ↗</a></div>
+          <div style="margin-top:14px"><a class="pill out" href="https://es.pinterest.com/mdezoyysa/pas-dequador-board-inspo/" target="_blank" rel="noopener">Veure inspiració ↗</a> <span class="hand"><svg width="46" height="30" viewBox="0 0 46 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M44 6C30 0 12 4 6 24M6 24l-1-9M6 24l9-4"/></svg>(si la necessites)</span></div>
         </div>
       </div>
 
@@ -259,12 +278,12 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
           <p class="kicker" style="margin-bottom:6px">Don't forget</p>
           <h3 class="h2" style="font-size:clamp(34px,5vw,60px)">Què hauràs <i>de portar?</i></h3>
         </div>
-        <ul class="todo c-7">
+        <div class="note c-7"><ul class="todo">
           <li><span>Llençols<small>Per al llit de la casa de colònies</small></span></li>
           <li><span>Funda de coixí</span></li>
           <li><span>Sac de dormir</span></li>
           <li><span>Ganes de passar-ho bé<small>I el dresscode, és clar ✦</small></span></li>
-        </ul>
+        </ul></div>
       </div>
     </section>
 
@@ -291,7 +310,7 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
           </div>
         </div>
       </div>
-      <p class="tot" style="margin-top:22px;max-width:70ch">Entrada a partir de les 15:00 i sortida el diumenge a les 15:00. Fiança de 400 € en efectiu, que es torna si no hi ha desperfectes. Fotos de la web de la casa.</p>
+      <p class="tot" style="margin-top:22px;max-width:70ch">Arribada a partir de les 15:00 i sortida el diumenge a les 15:00. Fiança de 400 € en efectiu, que es torna si no hi ha desperfectes. Fotos de la web de la casa.</p>
     </section>
 
     <section class="sec" id="butlleti">
@@ -329,7 +348,7 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
     <p class="big">Halfway <i>There</i></p>
     <div class="fl">
       <span>Pas d'Equador · Publicitat i RRPP · 2026-27</span>
-      <span>30.01.2027 · Muntanyola</span>
+      <span class="stub" style="max-width:200px;letter-spacing:0"><span class="bc" style="min-height:34px"></span></span><span>30.01.2027 · Muntanyola</span>
       <span><button type="button" id="admlink" class="admlink">Organitzador</button>
         <form id="admform" hidden autocomplete="off"><input id="admkey" type="password" placeholder="Clau d'organitzador" autocomplete="current-password" aria-label="Clau d'organitzador"><button class="pill" type="submit">Entra</button><span id="admerr" class="admerr" hidden></span></form></span>
     </div>
@@ -352,7 +371,7 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
 
   // compte enrere
   (function () {
-    var target = new Date(2027, 0, 30, 19, 0, 0).getTime();
+    var target = new Date(2027, 0, 30, 15, 0, 0).getTime();
     var d = $("cd-d"), hh = $("cd-h"), m = $("cd-m");
     function two(n) { return n < 10 ? "0" + n : String(n); }
     function tick() {
@@ -366,13 +385,14 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
 
   // galeria
   (function () {
+    var CAPS = ["la casa ✦", "jocs", "piscina", "pista", "hi cap tothom", "festa!", "capella", "escala"];
     var strip = $("strip"), cnt = $("gcount"), total = PHOTOS.length;
     PHOTOS.forEach(function (src, i) {
-      var w = h("div", "ph"), img = document.createElement("img");
+      var w = h("div", "ph"), img = document.createElement("img"); w.setAttribute("data-cap", CAPS[i % CAPS.length]);
       img.src = src; img.alt = "Foto de Mas Aliberch"; img.loading = i ? "lazy" : "eager"; w.appendChild(img); strip.appendChild(w);
     });
     cnt.textContent = "1 / " + total;
-    function step() { var f = strip.firstElementChild; return f ? f.getBoundingClientRect().width + 14 : strip.clientWidth; }
+    function step() { var f = strip.firstElementChild; return f ? f.getBoundingClientRect().width + 22 : strip.clientWidth; }
     function go(dir) {
       var i = Math.round(strip.scrollLeft / step()) + dir;
       if (i < 0) i = total - 1; else if (i >= total) i = 0;
