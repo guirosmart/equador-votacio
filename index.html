@@ -752,9 +752,11 @@ footer .fl { display: flex; flex-wrap: wrap; justify-content: space-between; ali
   var KEY = "eq_inv", root = document.documentElement;
   var reinv = document.getElementById("reinv");
   if (reinv) reinv.addEventListener("click", function () { try { localStorage.removeItem(KEY); } catch (e) {} window.scrollTo(0, 0); location.reload(); });
-  // La invitació es mostra a cada visita (ja no es recorda que s'ha vist).
+  var seen = false; try { seen = localStorage.getItem(KEY) === "1"; } catch (e) {}
+  if (seen) { inv.remove(); return; }
   root.style.overflow = "hidden";
   function close() {
+    try { localStorage.setItem(KEY, "1"); } catch (e) {}
     inv.classList.add("gone"); root.style.overflow = ""; window.scrollTo(0, 0);
     setTimeout(function () { inv.remove(); }, 800);
   }
